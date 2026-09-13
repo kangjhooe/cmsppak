@@ -1,0 +1,216 @@
+/* Theme Consistency CSS untuk Frontend */
+
+/* CSS Variables untuk Tema Konsisten */
+:root {
+    /* Primary Colors */
+    --color-primary: #008000;
+    --color-primary-dark: #006600;
+    --color-primary-light: #00A000;
+    
+    /* Secondary Colors */
+    --color-secondary: #CCFF99;
+    --color-secondary-dark: #B3FF80;
+    --color-secondary-light: #E0FFB3;
+    
+    /* Surface Colors */
+    --color-surface: #ffffff;
+    --color-surface-secondary: #f9fff9;
+    --color-background: #f0fff0;
+    
+    /* Text Colors */
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-muted: #94a3b8;
+    
+    /* Border Colors */
+    --color-border: #e2e8f0;
+    --color-border-light: #f1f5f9;
+    
+    /* Status Colors */
+    --color-success: #008000;
+    --color-warning: #FFFF00;
+    --color-error: #ef4444;
+    --color-info: #008000;
+}
+
+/* Base Styles untuk Konsistensi */
+body {
+    background-color: var(--color-background) !important;
+    color: var(--color-text-primary) !important;
+}
+
+/* Header Styles */
+.header-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+}
+
+.header-secondary {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+}
+
+/* Card Styles */
+.card-primary {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+}
+
+.card-gradient {
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-secondary) 100%);
+}
+
+/* Button Styles */
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--color-warning) 0%, #d97706 100%);
+    color: white;
+}
+
+.btn-error {
+    background: linear-gradient(135deg, var(--color-error) 0%, #dc2626 100%);
+    color: white;
+}
+
+/* Section Headers */
+.section-header-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+}
+
+.section-header-secondary {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    color: white;
+}
+
+.section-header-success {
+    background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
+    color: white;
+}
+
+.section-header-warning {
+    background: linear-gradient(135deg, var(--color-warning) 0%, #d97706 100%);
+    color: white;
+}
+
+.section-header-error {
+    background: linear-gradient(135deg, var(--color-error) 0%, #dc2626 100%);
+    color: white;
+}
+
+/* Background Gradients */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+}
+
+.bg-gradient-surface {
+    background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface-secondary) 50%, var(--color-primary-light) 100%);
+}
+
+/* Text Colors */
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+.text-secondary {
+    color: var(--color-secondary) !important;
+}
+
+.text-success {
+    color: var(--color-success) !important;
+}
+
+.text-warning {
+    color: var(--color-warning) !important;
+}
+
+.text-error {
+    color: var(--color-error) !important;
+}
+
+/* Border Colors */
+.border-primary {
+    border-color: var(--color-primary) !important;
+}
+
+.border-secondary {
+    border-color: var(--color-secondary) !important;
+}
+
+.border-default {
+    border-color: var(--color-border) !important;
+}
+
+/* Hover Effects */
+.hover-primary:hover {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+}
+
+.hover-secondary:hover {
+    background-color: var(--color-secondary) !important;
+    color: white !important;
+}
+
+/* Focus States */
+.focus-primary:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.focus-secondary:focus {
+    border-color: var(--color-secondary) !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .mobile-primary {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    }
+    
+    .mobile-secondary {
+        background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-surface: #1e293b;
+        --color-surface-secondary: #334155;
+        --color-background: #0f172a;
+        --color-text-primary: #f1f5f9;
+        --color-text-secondary: #cbd5e1;
+        --color-text-muted: #94a3b8;
+        --color-border: #334155;
+        --color-border-light: #475569;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-primary {
+        color: var(--color-primary) !important;
+    }
+}

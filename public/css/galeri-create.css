@@ -1,0 +1,136 @@
+/* Galeri Create Form Styles */
+
+.media-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.media-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.media-item .file-upload-area {
+    border: 2px dashed #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.media-item .file-upload-area:hover {
+    border-color: #8b5cf6;
+    background-color: #faf5ff;
+}
+
+.media-item .file-upload-area.dragover {
+    border-color: #8b5cf6;
+    background-color: #faf5ff;
+}
+
+/* Animation for new items */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.media-item {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Remove button hover effect */
+.media-item .remove-btn {
+    transition: all 0.2s ease;
+}
+
+.media-item .remove-btn:hover {
+    transform: scale(1.05);
+}
+
+/* File info display */
+.file-info {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+/* Form field focus states */
+.media-item input:focus,
+.media-item select:focus,
+.media-item textarea:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .media-item {
+        padding: 16px;
+    }
+    
+    .media-item .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #8b5cf6;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Success/Error states */
+.field-success {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+
+.field-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* File type badges */
+.badge-image {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-video {
+    background-color: #e0e7ff;
+    color: #3730a3;
+}
+
+/* Hover effects for interactive elements */
+.interactive-element {
+    transition: all 0.2s ease;
+}
+
+.interactive-element:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

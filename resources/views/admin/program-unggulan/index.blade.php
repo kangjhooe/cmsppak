@@ -1,0 +1,152 @@
+@extends('layouts.admin-simple')
+
+@section('title', 'Manajemen Program Unggulan - ' . $schoolName)
+
+@section('content')
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30">
+    <!-- Header Section -->
+    <div class="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                <div class="mb-8 lg:mb-0">
+                    <h1 class="text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                        Manajemen Program Unggulan
+                    </h1>
+                    <p class="text-xl lg:text-2xl text-green-100 font-medium">
+                        Kelola program unggulan yang ditampilkan di halaman beranda
+                    </p>
+                </div>
+                
+                <div class="flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20">
+                    <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                        <i class="fas fa-star text-white text-3xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-green-100 font-medium">Total</p>
+                        <p class="text-2xl font-bold text-white">{{ $programUnggulan->total() }}</p>
+                        <p class="text-sm text-green-100">Program</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Main Content -->
+        <div class="card-modern">
+            <div class="card-modern-header">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Daftar Program Unggulan</h3>
+                        <p class="text-sm text-gray-600">Kelola program unggulan yang ditampilkan di halaman beranda</p>
+                    </div>
+                    <a href="{{ route('admin.program-unggulan.create') }}" class="btn-primary">
+                        <i class="fas fa-plus mr-2"></i>Tambah Program
+                    </a>
+                </div>
+
+                @if(session('success'))
+                    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mt-4 flex items-center">
+                        <i class="fas fa-check-circle mr-2 text-green-600"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mt-4 flex items-center">
+                        <i class="fas fa-exclamation-circle mr-2 text-red-600"></i>
+                        {{ session('error') }}
+                    </div>
+                @endif
+            </div>
+
+            <div class="card-modern-body">
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urutan</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Icon</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Warna</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse($programUnggulan as $program)
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $program->urutan }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-{{ $program->warna }}-500 to-{{ $program->warna }}-600 rounded-xl flex items-center justify-center">
+                                        <i class="{{ $program->icon }} text-white text-xl"></i>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ $program->judul }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-500">{{ Str::limit($program->deskripsi, 80) }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ $program->warna }}-100 text-{{ $program->warna }}-800">
+                                        {{ ucfirst($program->warna) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $program->status == 'aktif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ ucfirst($program->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <a href="{{ route('admin.program-unggulan.edit', $program) }}" 
+                                           class="text-indigo-600 hover:text-indigo-800 p-2 rounded-lg hover:bg-indigo-50 transition-colors duration-150"
+                                           title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('admin.program-unggulan.destroy', $program) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus program ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition-colors duration-150" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                    <div class="py-8">
+                                        <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+                                        <p class="text-lg font-medium">Belum ada program unggulan</p>
+                                        <p class="text-sm">Mulai dengan menambahkan program unggulan pertama</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                @if($programUnggulan->hasPages())
+                <div class="mt-6">
+                    {{ $programUnggulan->links() }}
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+

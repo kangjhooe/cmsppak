@@ -1,0 +1,2566 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* CSS Variables untuk Tema Pondok Pesantren Al-Falah */
+:root {
+    /* Pondok Pesantren Al-Falah Brand Colors */
+    --color-primary: #008000;   /* hijau dominan - untuk navbar, header, footer */
+    --color-secondary: #CCFF99; /* hijau muda - untuk section headers, card outlines */
+    --color-accent: #FFFF00;    /* kuning - untuk hover states, small highlights */
+    --color-highlight: #FFFFFF; /* putih - untuk call-to-action buttons */
+    --color-neutral: #FFFFFF;   /* white - untuk main page background */
+    --color-text-dark: #222222; /* fallback text color untuk light backgrounds */
+    --color-text-light: #FFFFFF; /* text color untuk dark backgrounds */
+    
+    /* Extended Color Palette */
+    --color-primary-light: #00A000;
+    --color-primary-dark: #006600;
+    --color-secondary-light: #E0FFB3;
+    --color-secondary-dark: #B3FF80;
+    --color-accent-light: #FFFF33;
+    --color-accent-dark: #E6E600;
+    --color-highlight-light: #FFFFFF;
+    --color-highlight-dark: #F0F0F0;
+    
+    /* Surface Colors */
+    --color-surface: #ffffff;
+    --color-surface-secondary: #f9fff9;
+    --color-background: #f0fff0;
+    --color-background-primary: #f0fff0; /* light green background */
+    --color-background-secondary: #f9fff9; /* very light green background */
+    
+    /* Text Colors */
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-muted: #94a3b8;
+    --color-text-on-primary: #ffffff;
+    --color-text-on-secondary: #ffffff;
+    --color-text-on-accent: #ffffff;
+    --color-text-on-highlight: #1a1a1a;
+    
+    /* Border Colors */
+    --color-border: #e2e8f0;
+    --color-border-light: #f1f5f9;
+    --color-border-primary: #008000;
+    --color-border-secondary: #CCFF99;
+    --color-border-accent: #FFFF00;
+    
+    /* Status Colors */
+    --color-success: #008000;
+    --color-warning: #FFFF00;
+    --color-error: #ef4444;
+    --color-info: #008000;
+    
+    /* Shadow Colors */
+    --shadow-primary: 0 4px 14px 0 rgba(0, 128, 0, 0.15);
+    --shadow-secondary: 0 4px 14px 0 rgba(204, 255, 153, 0.15);
+    --shadow-accent: 0 4px 14px 0 rgba(255, 255, 0, 0.25);
+    --shadow-highlight: 0 4px 14px 0 rgba(255, 255, 255, 0.15);
+    
+    /* Footer Colors */
+    --color-footer-bg: #003300; /* Very dark green for footer background */
+    --color-footer-border: var(--color-primary-light); /* Light border for footer sections */
+}
+
+/* Base Styles */
+@layer base {
+    html {
+        font-family: 'Inter', system-ui, sans-serif;
+        scroll-behavior: smooth;
+    }
+    
+    body {
+        @apply bg-gray-50 text-gray-900;
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
+    }
+}
+
+/* ===== SIDEBAR COMPONENTS ===== */
+@layer components {
+    /* Sidebar Container - Pondok Pesantren Al-Falah Krui Theme */
+    .sidebar-container {
+        @apply fixed inset-y-0 left-0 z-50 shadow-2xl transform transition-all duration-300 ease-in-out;
+        background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-dark), var(--color-primary));
+    }
+    
+    /* Sidebar Header */
+    .sidebar-header {
+        @apply flex items-center justify-between h-20 px-6 border-b;
+        border-color: var(--color-primary-light);
+        background: linear-gradient(to right, var(--color-primary-dark), var(--color-primary));
+    }
+    
+    /* Sidebar Navigation */
+    .sidebar-nav {
+        @apply mt-6 px-4 pb-6 overflow-y-auto h-[calc(100vh-5rem)] scrollbar-thin;
+    }
+    
+    /* Main Menu Items - Pondok Pesantren Al-Falah Krui Theme */
+    .sidebar-link {
+        @apply flex items-center px-4 py-3 rounded-xl transition-all duration-200 font-semibold text-sm cursor-pointer group;
+        color: var(--color-text-light);
+    }
+    
+    .sidebar-link:hover {
+        background: var(--color-primary-light);
+        color: var(--color-text-light);
+        transform: translateX(4px);
+    }
+    
+    .sidebar-link-active {
+        background: linear-gradient(to right, var(--color-secondary), var(--color-accent));
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-secondary);
+    }
+    
+    /* Submenu Container & Items - Pondok Pesantren Al-Falah Krui Theme */
+    .sidebar-submenu-container {
+        @apply ml-0 space-y-1;
+    }
+    
+    .sidebar-submenu-link {
+        @apply flex items-center px-6 py-2.5 rounded-lg transition-all duration-200 text-sm;
+        color: var(--color-accent-light);
+    }
+    
+    .sidebar-submenu-link:hover {
+        background: var(--color-secondary-light);
+        color: var(--color-text-light);
+        transform: translateX(4px);
+    }
+    
+    .sidebar-submenu-link-active {
+        background: var(--color-accent);
+        color: var(--color-text-light);
+    }
+    
+    /* Section Headers - Pondok Pesantren Al-Falah Krui Theme */
+    .sidebar-section-header {
+        @apply px-3 text-xs font-bold uppercase tracking-wider mb-4;
+        color: var(--color-highlight-light);
+    }
+    
+    /* Chevron Icons */
+    .sidebar-chevron {
+        @apply fas fa-chevron-down text-xs transition-transform duration-200;
+        color: var(--color-accent-light);
+    }
+    
+    .sidebar-chevron-rotated {
+        @apply rotate-180;
+    }
+    
+    /* Active State Indicators */
+    .sidebar-active-indicator {
+        @apply relative;
+    }
+    
+    .sidebar-active-indicator::before {
+        @apply content-[''] absolute left-0 top-0 bottom-0 w-1 rounded-r;
+        background: var(--color-highlight);
+    }
+    
+    /* Responsive Classes */
+    .sidebar-mobile {
+        @apply lg:hidden;
+    }
+    
+    .sidebar-desktop {
+        @apply hidden lg:block;
+    }
+    
+    /* Overlay */
+    .sidebar-overlay {
+        @apply fixed inset-0 z-40 bg-gray-600 bg-opacity-75 transition-opacity duration-300;
+    }
+    
+    /* Collapsible States */
+    .sidebar-collapsible {
+        @apply transition-all duration-300 ease-in-out;
+    }
+    
+    .sidebar-collapsed {
+        @apply w-20;
+    }
+    
+    .sidebar-expanded {
+        @apply w-72;
+    }
+    
+    /* Toggle Button - Pondok Pesantren Al-Falah Krui Theme */
+    .sidebar-toggle-btn {
+        @apply flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200;
+        color: var(--color-accent-light);
+    }
+    
+    .sidebar-toggle-btn:hover {
+        background: var(--color-primary-light);
+        color: var(--color-text-light);
+    }
+    
+    /* Content Area Adjustment */
+    .content-area {
+        @apply transition-all duration-300 ease-in-out;
+    }
+    
+    .content-area-collapsed {
+        @apply lg:ml-20;
+    }
+    
+    .content-area-expanded {
+        @apply lg:ml-72;
+    }
+}
+
+/* ===== CUSTOM SCROLLBAR - Pondok Pesantren Al-Falah Krui Theme ===== */
+@layer utilities {
+    .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-accent) transparent;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: var(--color-accent);
+        border-radius: 3px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-accent-light);
+    }
+}
+
+/* ===== ANIMATION CLASSES ===== */
+@layer utilities {
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    .animate-slide-up {
+        animation: slideUp 0.5s ease-out;
+    }
+    
+    .animate-slide-down {
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    .animate-bounce-gentle {
+        animation: bounceGentle 2s infinite;
+    }
+    
+    .animate-rotate-90 {
+        animation: rotate90 0.3s ease-in-out;
+    }
+    
+    .animate-bounce-in {
+        animation: bounceIn 0.6s ease-out;
+    }
+    
+    .animate-slide-in-right {
+        animation: slideInRight 0.4s ease-out;
+    }
+}
+
+/* ===== CONTRAST TESTING & ICON VISIBILITY ===== */
+@layer utilities {
+    /* Icon visibility utilities */
+    .icon-on-dark {
+        color: var(--color-text-light);
+    }
+    
+    .icon-on-light {
+        color: var(--color-text-dark);
+    }
+    
+    .icon-on-primary {
+        color: var(--color-text-light);
+    }
+    
+    .icon-on-secondary {
+        color: var(--color-text-light);
+    }
+    
+    .icon-on-accent {
+        color: var(--color-text-light);
+    }
+    
+    .icon-on-highlight {
+        color: var(--color-text-dark);
+    }
+    
+    /* Text contrast utilities */
+    .text-on-dark {
+        color: var(--color-text-light);
+    }
+    
+    .text-on-light {
+        color: var(--color-text-dark);
+    }
+    
+    .text-on-primary {
+        color: var(--color-text-light);
+    }
+    
+    .text-on-secondary {
+        color: var(--color-text-light);
+    }
+    
+    .text-on-accent {
+        color: var(--color-text-light);
+    }
+    
+    .text-on-highlight {
+        color: var(--color-text-dark);
+    }
+    
+    /* Background utilities with proper text color */
+    .bg-primary {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+    }
+    
+    .bg-secondary {
+        background: var(--color-secondary);
+        color: var(--color-text-light);
+    }
+    
+    .bg-accent {
+        background: var(--color-accent);
+        color: var(--color-text-light);
+    }
+    
+    .bg-highlight {
+        background: var(--color-highlight);
+        color: var(--color-text-dark);
+    }
+    
+    /* Hover states with proper contrast */
+    .hover-bg-primary:hover {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+    }
+    
+    .hover-bg-secondary:hover {
+        background: var(--color-secondary);
+        color: var(--color-text-light);
+    }
+    
+    .hover-bg-accent:hover {
+        background: var(--color-accent);
+        color: var(--color-text-light);
+    }
+    
+    .hover-bg-highlight:hover {
+        background: var(--color-highlight);
+        color: var(--color-text-dark);
+    }
+    
+    /* Footer Components - Pondok Pesantren Al-Falah Krui Theme */
+    .footer-dark {
+        background: linear-gradient(to right, var(--color-primary-dark), var(--color-footer-bg), var(--color-primary-dark));
+        color: var(--color-text-light);
+    }
+    
+    .footer-text {
+        color: var(--color-accent-light);
+    }
+    
+    .footer-link {
+        color: var(--color-accent-light);
+        transition: color 0.3s ease;
+    }
+    
+    .footer-link:hover {
+        color: var(--color-text-light);
+    }
+    
+    .footer-link:focus {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon:focus {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-icon-bg:focus-visible,
+    .footer-icon-bg-accent:focus-visible,
+    .footer-icon-bg-primary:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    /* Footer Accessibility */
+    .footer-link:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover {
+        color: var(--color-text-light);
+    }
+    
+    .footer-social-icon:focus-visible:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .footer-icon-bg:focus-visible:hover,
+    .footer-icon-bg-accent:focus-visible:hover,
+    .footer-icon-bg-primary:focus-visible:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Footer Hover States */
+    .footer-link:active {
+        color: var(--color-accent);
+    }
+    
+    .footer-social-icon:active {
+        transform: scale(0.95);
+    }
+    
+    .footer-icon-bg:active,
+    .footer-icon-bg-accent:active,
+    .footer-icon-bg-primary:active {
+        transform: scale(0.95);
+    }
+    
+    .footer-link:focus-visible:active {
+        color: var(--color-accent);
+    }
+    
+    .footer-social-icon:focus-visible:active {
+        transform: scale(0.95);
+    }
+    
+    /* Footer Loading States */
+    .footer-link:disabled {
+        color: var(--color-text-secondary);
+        cursor: not-allowed;
+    }
+    
+    .footer-social-icon:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .footer-social-icon:disabled:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .footer-link:focus-visible:disabled {
+        outline: none;
+    }
+    
+    .footer-social-icon:focus-visible:disabled {
+        outline: none;
+    }
+    
+    /* Footer Error States */
+    .footer-link.error {
+        color: var(--color-error);
+    }
+    
+    .footer-link.error:hover {
+        color: var(--color-error-light);
+    }
+    
+    .footer-social-icon.error {
+        background: var(--color-error);
+    }
+    
+    .footer-social-icon.error:hover {
+        background: var(--color-error-light);
+    }
+    
+    .footer-link.error:focus-visible {
+        outline: 2px solid var(--color-error);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon.error:focus-visible {
+        outline: 2px solid var(--color-error);
+        outline-offset: 2px;
+    }
+    
+    /* Footer Success States */
+    .footer-link.success {
+        color: var(--color-success);
+    }
+    
+    .footer-link.success:hover {
+        color: var(--color-success-light);
+    }
+    
+    .footer-social-icon.success {
+        background: var(--color-success);
+    }
+    
+    .footer-social-icon.success:hover {
+        background: var(--color-success-light);
+    }
+    
+    .footer-link.success:focus-visible {
+        outline: 2px solid var(--color-success);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon.success:focus-visible {
+        outline: 2px solid var(--color-success);
+        outline-offset: 2px;
+    }
+    
+    /* Footer Warning States */
+    .footer-link.warning {
+        color: var(--color-warning);
+    }
+    
+    .footer-link.warning:hover {
+        color: var(--color-warning-light);
+    }
+    
+    .footer-social-icon.warning {
+        background: var(--color-warning);
+    }
+    
+    .footer-social-icon.warning:hover {
+        background: var(--color-warning-light);
+    }
+    
+    .footer-link.warning:focus-visible {
+        outline: 2px solid var(--color-warning);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon.warning:focus-visible {
+        outline: 2px solid var(--color-warning);
+        outline-offset: 2px;
+    }
+    
+    /* Footer Info States */
+    .footer-link.info {
+        color: var(--color-info);
+    }
+    
+    .footer-link.info:hover {
+        color: var(--color-info-light);
+    }
+    
+    .footer-social-icon.info {
+        background: var(--color-info);
+    }
+    
+    .footer-social-icon.info:hover {
+        background: var(--color-info-light);
+    }
+    
+    .footer-link.info:focus-visible {
+        outline: 2px solid var(--color-info);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon.info:focus-visible {
+        outline: 2px solid var(--color-info);
+        outline-offset: 2px;
+    }
+    
+    /* Footer Animation States */
+    .footer-link.animate {
+        animation: footer-link-pulse 2s infinite;
+    }
+    
+    .footer-social-icon.animate {
+        animation: footer-icon-bounce 1s infinite;
+    }
+    
+    @keyframes footer-link-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+    
+    @keyframes footer-icon-bounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    .footer-link.animate:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon.animate:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-border {
+        border-color: var(--color-footer-border);
+    }
+    
+    .footer-icon-bg {
+        background: var(--color-secondary);
+        transition: all 0.3s ease;
+    }
+    
+    .footer-icon-bg-accent {
+        background: var(--color-accent);
+        transition: all 0.3s ease;
+    }
+    
+    .footer-icon-bg-primary {
+        background: var(--color-primary);
+        transition: all 0.3s ease;
+    }
+    
+    .footer-icon-bg:hover {
+        background: var(--color-secondary-light);
+        transform: scale(1.05);
+    }
+    
+    .footer-icon-bg-accent:hover {
+        background: var(--color-accent-light);
+        transform: scale(1.05);
+    }
+    
+    .footer-icon-bg-primary:hover {
+        background: var(--color-primary-light);
+        transform: scale(1.05);
+    }
+    
+    /* Social Media Icons in Footer */
+    .footer-social-icon {
+        transition: all 0.3s ease;
+    }
+    
+    .footer-social-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Instagram icon special hover */
+    .footer-social-icon[style*="background: var(--color-highlight)"]:hover {
+        background: var(--color-highlight-light) !important;
+    }
+    
+    /* Simple Social Media Icons - No Background */
+    .footer-social-icon-simple {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        transition: all 0.3s ease;
+        border-radius: 50%;
+    }
+    
+    .footer-social-icon-simple:hover {
+        transform: scale(1.2);
+        color: var(--color-accent-light) !important;
+    }
+    
+    .footer-social-icon-simple:focus {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon-simple:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    /* Footer Responsive Design */
+    @media (max-width: 768px) {
+        .footer-social-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        
+        .footer-social-icon-simple {
+            width: 2rem;
+            height: 2rem;
+        }
+        
+        .footer-text {
+            font-size: 0.875rem;
+        }
+        
+        .footer-link {
+            font-size: 0.875rem;
+        }
+        
+        .footer-icon-bg,
+        .footer-icon-bg-accent,
+        .footer-icon-bg-primary {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .footer-social-icon {
+            width: 2rem;
+            height: 2rem;
+        }
+        
+        .footer-social-icon-simple {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+        
+        .footer-text {
+            font-size: 0.75rem;
+        }
+        
+        .footer-link {
+            font-size: 0.75rem;
+        }
+        
+        .footer-icon-bg,
+        .footer-icon-bg-accent,
+        .footer-icon-bg-primary {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+        
+        .footer-link:focus-visible {
+            outline-width: 1px;
+        }
+        
+        .footer-social-icon:focus-visible {
+            outline-width: 1px;
+        }
+        
+        .footer-social-icon-simple:focus-visible {
+            outline-width: 1px;
+        }
+    }
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceGentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes rotate90 {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(90deg); }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% { transform: scale(0.9); }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== FOCUS STATES - Pondok Pesantren Al-Falah Krui Theme ===== */
+@layer utilities {
+    .focus-ring {
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+        --tw-ring-color: var(--color-primary);
+        --tw-ring-offset-color: var(--color-primary-dark);
+    }
+    
+    .focus-ring-light {
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+        --tw-ring-color: var(--color-accent);
+        --tw-ring-offset-color: var(--color-primary);
+    }
+    
+    .focus-ring-secondary {
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+        --tw-ring-color: var(--color-secondary);
+        --tw-ring-offset-color: var(--color-primary);
+    }
+    
+    .focus-ring-accent {
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+        --tw-ring-color: var(--color-accent);
+        --tw-ring-offset-color: var(--color-primary);
+    }
+    
+    .focus-ring-highlight {
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+        --tw-ring-color: var(--color-highlight);
+        --tw-ring-offset-color: var(--color-primary);
+    }
+}
+
+/* ===== BUTTON COMPONENTS ===== */
+@layer components {
+    /* Pondok Pesantren Al-Falah Krui Theme Buttons */
+    .btn-primary {
+        @apply bg-primary text-text-light px-6 py-3 rounded-xl font-semibold shadow-primary hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-primary);
+    }
+    
+    .btn-secondary {
+        @apply bg-secondary text-text-light px-6 py-3 rounded-xl font-semibold shadow-secondary hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2;
+        background: var(--color-secondary);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-secondary);
+    }
+    
+    .btn-accent {
+        @apply bg-accent text-text-light px-6 py-3 rounded-xl font-semibold shadow-accent hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+        background: var(--color-accent);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-accent);
+    }
+    
+    .btn-highlight {
+        @apply bg-highlight text-text-dark px-6 py-3 rounded-xl font-semibold shadow-highlight hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-highlight focus:ring-offset-2;
+        background: var(--color-highlight);
+        color: var(--color-text-dark);
+        box-shadow: var(--shadow-highlight);
+    }
+    
+    .btn-outline-primary {
+        @apply border-2 border-primary text-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-primary hover:text-text-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+    
+    .btn-outline-secondary {
+        @apply border-2 border-secondary text-secondary px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-secondary hover:text-text-light focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2;
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+    }
+    
+    .btn-outline-accent {
+        @apply border-2 border-accent text-accent px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-accent hover:text-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+    
+    /* Legacy Button Variants (untuk kompatibilitas) */
+    .btn-outline {
+        @apply border-2 border-current text-current px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-current hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+    
+    /* Modern Button Variants */
+    .btn-modern {
+        @apply px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+    
+    .btn-modern-primary {
+        @apply bg-primary text-text-light shadow-primary hover:shadow-xl focus:ring-primary;
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-primary);
+    }
+    
+    .btn-modern-secondary {
+        @apply bg-secondary text-text-light shadow-secondary hover:shadow-xl focus:ring-secondary;
+        background: var(--color-secondary);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-secondary);
+    }
+    
+    .btn-modern-accent {
+        @apply bg-accent text-text-light shadow-accent hover:shadow-xl focus:ring-accent;
+        background: var(--color-accent);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-accent);
+    }
+    
+    .btn-modern-highlight {
+        @apply bg-highlight text-text-dark shadow-highlight hover:shadow-xl focus:ring-highlight;
+        background: var(--color-highlight);
+        color: var(--color-text-dark);
+        box-shadow: var(--shadow-highlight);
+    }
+    
+    .btn-modern-success {
+        @apply bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl focus:ring-green-500;
+    }
+    
+    .btn-modern-danger {
+        @apply bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg hover:shadow-xl focus:ring-red-500;
+    }
+}
+
+/* ===== CARD COMPONENTS ===== */
+@layer components {
+    /* Pondok Pesantren Al-Falah Krui Theme Cards */
+    .card {
+        @apply bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300;
+    }
+    
+    .card-primary {
+        @apply bg-white rounded-2xl shadow-primary border border-primary-100 hover:shadow-xl transition-all duration-300;
+        border-color: var(--color-primary-light);
+        box-shadow: var(--shadow-primary);
+    }
+    
+    .card-secondary {
+        @apply bg-white rounded-2xl shadow-secondary border border-secondary-100 hover:shadow-xl transition-all duration-300;
+        border-color: var(--color-secondary-light);
+        box-shadow: var(--shadow-secondary);
+    }
+    
+    .card-accent {
+        @apply bg-white rounded-2xl shadow-accent border border-accent-100 hover:shadow-xl transition-all duration-300;
+        border-color: var(--color-accent-light);
+        box-shadow: var(--shadow-accent);
+    }
+    
+    .card-header {
+        @apply px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100 rounded-t-2xl;
+    }
+    
+    .card-header-primary {
+        @apply px-6 py-4 border-b border-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 rounded-t-2xl;
+        border-color: var(--color-primary-light);
+        background: linear-gradient(to right, var(--color-primary-light), var(--color-primary));
+        color: var(--color-text-light);
+    }
+    
+    .card-header-secondary {
+        @apply px-6 py-4 border-b border-secondary-100 bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-t-2xl;
+        border-color: var(--color-secondary-light);
+        background: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary));
+        color: var(--color-text-light);
+    }
+    
+    .card-body {
+        @apply px-6 py-6;
+    }
+    
+    .card-footer {
+        @apply px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100 rounded-b-2xl;
+    }
+    
+    .card-footer-primary {
+        @apply px-6 py-4 border-t border-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 rounded-b-2xl;
+        border-color: var(--color-primary-light);
+        background: linear-gradient(to right, var(--color-primary-light), var(--color-primary));
+        color: var(--color-text-light);
+    }
+    
+    .card-footer-secondary {
+        @apply px-6 py-4 border-t border-secondary-100 bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-b-2xl;
+        border-color: var(--color-secondary-light);
+        background: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary));
+        color: var(--color-text-light);
+    }
+    
+    /* Modern Card Variants */
+    .card-modern {
+        @apply bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300;
+    }
+    
+    .card-modern-primary {
+        @apply bg-white rounded-2xl shadow-primary border border-primary-100 hover:shadow-xl transition-all duration-300;
+        border-color: var(--color-primary-light);
+        box-shadow: var(--shadow-primary);
+    }
+    
+    .card-modern-secondary {
+        @apply bg-white rounded-2xl shadow-secondary border border-secondary-100 hover:shadow-xl transition-all duration-300;
+        border-color: var(--color-secondary-light);
+        box-shadow: var(--shadow-secondary);
+    }
+    
+    .card-modern-accent {
+        @apply bg-white rounded-2xl shadow-accent border border-accent-100 hover:shadow-xl transition-all duration-300;
+        border-color: var(--color-accent-light);
+        box-shadow: var(--shadow-accent);
+    }
+    
+    .card-modern-header {
+        @apply px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100 rounded-t-2xl;
+    }
+    
+    .card-modern-header-primary {
+        @apply px-6 py-4 border-b border-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 rounded-t-2xl;
+        border-color: var(--color-primary-light);
+        background: linear-gradient(to right, var(--color-primary-light), var(--color-primary));
+        color: var(--color-text-light);
+    }
+    
+    .card-modern-header-secondary {
+        @apply px-6 py-4 border-b border-secondary-100 bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-t-2xl;
+        border-color: var(--color-secondary-light);
+        background: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary));
+        color: var(--color-text-light);
+    }
+    
+    .card-modern-body {
+        @apply px-6 py-6;
+    }
+    
+    .card-modern-footer {
+        @apply px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100 rounded-b-2xl;
+    }
+    
+    .card-modern-footer-primary {
+        @apply px-6 py-4 border-t border-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 rounded-b-2xl;
+        border-color: var(--color-primary-light);
+        background: linear-gradient(to right, var(--color-primary-light), var(--color-primary));
+        color: var(--color-text-light);
+    }
+    
+    .card-modern-footer-secondary {
+        @apply px-6 py-4 border-t border-secondary-100 bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-b-2xl;
+        border-color: var(--color-secondary-light);
+        background: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary));
+        color: var(--color-text-light);
+    }
+}
+
+/* ===== FORM COMPONENTS ===== */
+@layer components {
+    /* Pondok Pesantren Al-Falah Krui Theme Forms */
+    .form-input-modern {
+        @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white shadow-sm;
+    }
+    
+    .form-input-primary {
+        @apply w-full px-4 py-3 border border-primary-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white shadow-sm;
+        border-color: var(--color-primary-light);
+    }
+    
+    .form-input-secondary {
+        @apply w-full px-4 py-3 border border-secondary-300 rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 bg-white shadow-sm;
+        border-color: var(--color-secondary-light);
+    }
+    
+    .form-input-accent {
+        @apply w-full px-4 py-3 border border-accent-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200 bg-white shadow-sm;
+        border-color: var(--color-accent-light);
+    }
+    
+    .form-select-modern {
+        @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white shadow-sm;
+    }
+    
+    .form-select-primary {
+        @apply w-full px-4 py-3 border border-primary-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white shadow-sm;
+        border-color: var(--color-primary-light);
+    }
+    
+    .form-select-secondary {
+        @apply w-full px-4 py-3 border border-secondary-300 rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 bg-white shadow-sm;
+        border-color: var(--color-secondary-light);
+    }
+    
+    .form-select-accent {
+        @apply w-full px-4 py-3 border border-accent-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200 bg-white shadow-sm;
+        border-color: var(--color-accent-light);
+    }
+    
+    .form-textarea-modern {
+        @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white shadow-sm resize-none;
+    }
+    
+    .form-textarea-primary {
+        @apply w-full px-4 py-3 border border-primary-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white shadow-sm resize-none;
+        border-color: var(--color-primary-light);
+    }
+    
+    .form-textarea-secondary {
+        @apply w-full px-4 py-3 border border-secondary-300 rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 bg-white shadow-sm resize-none;
+        border-color: var(--color-secondary-light);
+    }
+    
+    .form-textarea-accent {
+        @apply w-full px-4 py-3 border border-accent-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200 bg-white shadow-sm resize-none;
+        border-color: var(--color-accent-light);
+    }
+    
+    /* Form Labels */
+    .form-label-primary {
+        @apply block text-sm font-medium text-primary mb-2;
+        color: var(--color-primary);
+    }
+    
+    .form-label-secondary {
+        @apply block text-sm font-medium text-secondary mb-2;
+        color: var(--color-secondary);
+    }
+    
+    .form-label-accent {
+        @apply block text-sm font-medium text-accent mb-2;
+        color: var(--color-accent);
+    }
+    
+    /* Form Groups */
+    .form-group-primary {
+        @apply mb-6;
+    }
+    
+    .form-group-secondary {
+        @apply mb-6;
+    }
+    
+    .form-group-accent {
+        @apply mb-6;
+    }
+}
+
+/* ===== TABLE COMPONENTS ===== */
+@layer components {
+    .table-modern {
+        @apply w-full bg-white rounded-2xl shadow-lg overflow-hidden;
+    }
+    
+    .table-modern-header {
+        @apply bg-gradient-to-r from-gray-50 to-gray-100;
+    }
+    
+    .table-modern-header th {
+        @apply px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider;
+    }
+    
+    .table-modern-body tr {
+        @apply hover:bg-gray-50 transition-colors duration-200;
+    }
+    
+    .table-modern-body td {
+        @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+    }
+}
+
+/* ===== ALERT COMPONENTS - Pondok Pesantren Al-Falah Krui Theme ===== */
+@layer components {
+    .alert-modern {
+        @apply p-4 rounded-xl border-l-4 shadow-lg;
+    }
+    
+    .alert-modern-success {
+        @apply p-4 rounded-xl border-l-4 shadow-lg;
+        background: var(--color-secondary-light);
+        border-color: var(--color-secondary);
+        color: var(--color-text-dark);
+    }
+    
+    .alert-modern-warning {
+        @apply p-4 rounded-xl border-l-4 shadow-lg;
+        background: var(--color-highlight-light);
+        border-color: var(--color-highlight);
+        color: var(--color-text-dark);
+    }
+    
+    .alert-modern-error {
+        @apply bg-red-50 border-red-400 text-red-800 p-4 rounded-xl border-l-4 shadow-lg;
+    }
+    
+    .alert-modern-info {
+        @apply p-4 rounded-xl border-l-4 shadow-lg;
+        background: var(--color-primary-light);
+        border-color: var(--color-primary);
+        color: var(--color-text-dark);
+    }
+    
+    .alert-modern-accent {
+        @apply p-4 rounded-xl border-l-4 shadow-lg;
+        background: var(--color-accent-light);
+        border-color: var(--color-accent);
+        color: var(--color-text-dark);
+    }
+}
+
+/* ===== BADGE COMPONENTS - Pondok Pesantren Al-Falah Krui Theme ===== */
+@layer components {
+    .badge {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    }
+    
+    .badge-primary {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+    }
+    
+    .badge-secondary {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-secondary-light);
+        color: var(--color-secondary);
+    }
+    
+    .badge-accent {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-accent-light);
+        color: var(--color-accent);
+    }
+    
+    .badge-highlight {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-highlight-light);
+        color: var(--color-highlight-dark);
+    }
+    
+    .badge-success {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-secondary-light);
+        color: var(--color-secondary);
+    }
+    
+    .badge-warning {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-highlight-light);
+        color: var(--color-highlight-dark);
+    }
+    
+    .badge-danger {
+        @apply bg-red-100 text-red-800 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    }
+    
+    .badge-info {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+    }
+    
+    /* Modern Badge Variants */
+    .badge-modern {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    }
+    
+    .badge-modern-success {
+        @apply bg-green-100 text-green-800;
+    }
+    
+    .badge-modern-warning {
+        @apply bg-yellow-100 text-yellow-800;
+    }
+    
+    .badge-modern-error {
+        @apply bg-red-100 text-red-800;
+    }
+    
+    .badge-modern-info {
+        @apply bg-blue-100 text-blue-800;
+    }
+    
+    .badge-modern-purple {
+        @apply bg-purple-100 text-purple-800;
+    }
+    
+    .badge-modern-pink {
+        @apply bg-pink-100 text-pink-800;
+    }
+}
+
+/* ===== MODAL COMPONENTS ===== */
+@layer components {
+    .modal-overlay {
+        @apply fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+    }
+    
+    .modal-content {
+        @apply bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto transform transition-all duration-300;
+    }
+    
+    .modal-header {
+        @apply px-6 py-4 border-b border-gray-200 flex items-center justify-between;
+    }
+    
+    .modal-body {
+        @apply px-6 py-6;
+    }
+    
+    .modal-footer {
+        @apply px-6 py-4 border-t border-gray-200 flex items-center justify-end space-x-3;
+    }
+}
+
+/* ===== LOADING COMPONENTS ===== */
+@layer components {
+    .loading-spinner {
+        @apply animate-spin rounded-full border-4 border-gray-200 border-t-blue-500;
+    }
+    
+    .loading-dots {
+        @apply flex space-x-1;
+    }
+    
+    .loading-dot {
+        @apply w-2 h-2 bg-gray-400 rounded-full animate-bounce;
+    }
+    
+    .loading-dot:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+    
+    .loading-dot:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+}
+
+/* ===== NAVIGATION COMPONENTS ===== */
+@layer components {
+    /* Pondok Pesantren Al-Falah Krui Theme Navigation */
+    .nav-tabs {
+        @apply flex space-x-1 bg-gray-100 p-1 rounded-xl;
+    }
+    
+    .nav-tabs-primary {
+        @apply flex space-x-1 bg-primary-100 p-1 rounded-xl;
+        background: var(--color-primary-light);
+    }
+    
+    .nav-tabs-secondary {
+        @apply flex space-x-1 bg-secondary-100 p-1 rounded-xl;
+        background: var(--color-secondary-light);
+    }
+    
+    .nav-tab {
+        @apply px-4 py-2 text-sm font-medium text-gray-600 rounded-lg transition-all duration-200;
+    }
+    
+    .nav-tab-primary {
+        @apply px-4 py-2 text-sm font-medium text-primary rounded-lg transition-all duration-200;
+        color: var(--color-primary);
+    }
+    
+    .nav-tab-secondary {
+        @apply px-4 py-2 text-sm font-medium text-secondary rounded-lg transition-all duration-200;
+        color: var(--color-secondary);
+    }
+    
+    .nav-tab-active {
+        @apply bg-white text-gray-900 shadow-sm;
+    }
+    
+    .nav-tab-active-primary {
+        @apply bg-primary text-text-light shadow-sm;
+        background: var(--color-primary);
+        color: var(--color-text-light);
+    }
+    
+    .nav-tab-active-secondary {
+        @apply bg-secondary text-text-light shadow-sm;
+        background: var(--color-secondary);
+        color: var(--color-text-light);
+    }
+    
+    .nav-tab:hover:not(.nav-tab-active) {
+        @apply text-gray-900;
+    }
+    
+    .nav-tab-primary:hover:not(.nav-tab-active-primary) {
+        @apply text-primary-dark;
+        color: var(--color-primary-dark);
+    }
+    
+    .nav-tab-secondary:hover:not(.nav-tab-active-secondary) {
+        @apply text-secondary-dark;
+        color: var(--color-secondary-dark);
+    }
+    
+    /* Navigation Buttons dengan Tema */
+    .nav-button-primary {
+        @apply px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:scale-105;
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-primary);
+    }
+    
+    .nav-button-secondary {
+        @apply px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:scale-105;
+        background: var(--color-secondary);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-secondary);
+    }
+    
+    .nav-button-accent {
+        @apply px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:scale-105;
+        background: var(--color-accent);
+        color: var(--color-text-light);
+        box-shadow: var(--shadow-accent);
+    }
+    
+    .nav-button-highlight {
+        @apply px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 flex items-center shadow-md hover:shadow-lg transform hover:scale-105;
+        background: var(--color-highlight);
+        color: var(--color-text-dark);
+        box-shadow: var(--shadow-highlight);
+    }
+    
+    .nav-button-active {
+        @apply shadow-xl scale-105;
+    }
+}
+
+/* ===== PAGINATION COMPONENTS - Pondok Pesantren Al-Falah Krui Theme ===== */
+@layer components {
+    .pagination-modern {
+        @apply flex items-center space-x-1;
+    }
+    
+    .pagination-item {
+        @apply px-3 py-2 text-sm font-medium bg-white border rounded-lg transition-colors duration-200;
+        color: var(--color-text-dark);
+        border-color: var(--color-primary-light);
+    }
+    
+    .pagination-item:hover {
+        background: var(--color-primary-light);
+        color: var(--color-text-light);
+    }
+    
+    .pagination-item-active {
+        @apply text-white border;
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: var(--color-text-light);
+    }
+    
+    .pagination-item-disabled {
+        @apply cursor-not-allowed;
+        color: var(--color-text-muted);
+    }
+    
+    .pagination-item-disabled:hover {
+        background: white;
+        color: var(--color-text-muted);
+    }
+}
+
+/* ===== ASPECT RATIO UTILITIES ===== */
+@layer utilities {
+    /* Custom Aspect Ratios */
+    .aspect-w-4 {
+        position: relative;
+        padding-bottom: 75%; /* 4:3 ratio */
+    }
+    
+    .aspect-h-3 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* ===== UTILITY CLASSES - Pondok Pesantren Al-Falah Krui Theme ===== */
+@layer utilities {
+    /* Section Styles */
+    .section-title {
+        @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-4;
+        color: var(--color-text-dark);
+    }
+    
+    .section-subtitle {
+        @apply text-lg md:text-xl max-w-3xl mx-auto;
+        color: var(--color-text-secondary);
+    }
+    
+    /* Line Clamp Utilities */
+    .line-clamp-1 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+    
+    .line-clamp-2 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+    
+    .line-clamp-3 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+    
+    .line-clamp-4 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+    }
+    
+    .line-clamp-5 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+    }
+    
+    .line-clamp-6 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 6;
+    }
+    
+    /* Gradient Text - Pondok Pesantren Al-Falah Krui Theme */
+    .gradient-text {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .gradient-text-primary {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .gradient-text-secondary {
+        background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .gradient-text-accent {
+        background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    /* Glassmorphism Effects */
+    .glass-effect {
+        @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    }
+    
+    .glass-effect-dark {
+        @apply bg-slate-900/80 backdrop-blur-sm border border-slate-700/50;
+    }
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+@layer utilities {
+    /* Mobile */
+    @media (max-width: 767px) {
+        .sidebar-mobile {
+            @apply w-full;
+        }
+    }
+    
+    /* Tablet */
+    @media (min-width: 768px) {
+        .sidebar-tablet {
+            @apply w-72;
+        }
+    }
+    
+    /* Desktop */
+    @media (min-width: 1024px) {
+        .sidebar-desktop {
+            @apply w-72;
+        }
+        
+        .sidebar-desktop-collapsed {
+            @apply w-20;
+        }
+    }
+    
+    /* Large Desktop */
+    @media (min-width: 1280px) {
+        .sidebar-large {
+            @apply w-80;
+        }
+        
+        .sidebar-large-collapsed {
+            @apply w-24;
+        }
+    }
+}
+
+/* ===== ACCESSIBILITY & MEDIA QUERIES - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .sidebar-container {
+        background: linear-gradient(to bottom, var(--color-primary-dark), var(--color-primary), var(--color-primary-dark));
+    }
+    
+    .sidebar-header {
+        background: linear-gradient(to right, var(--color-primary-dark), var(--color-primary));
+        border-color: var(--color-primary);
+    }
+    
+    /* Ensure text remains visible in dark mode */
+    .sidebar-link,
+    .sidebar-submenu-link {
+        color: var(--color-text-light);
+    }
+    
+    .sidebar-section-header {
+        color: var(--color-highlight);
+    }
+    
+    /* Footer dark mode support */
+    .footer-dark {
+        background: linear-gradient(to right, var(--color-primary-dark), var(--color-footer-bg), var(--color-primary-dark));
+    }
+    
+    .footer-text {
+        color: var(--color-accent-light);
+    }
+    
+    .footer-link {
+        color: var(--color-accent-light);
+    }
+    
+    .footer-link:hover {
+        color: var(--color-text-light);
+    }
+    
+    .footer-border {
+        border-color: var(--color-primary-light);
+    }
+    
+    .footer-icon-bg {
+        background: var(--color-secondary);
+    }
+    
+    .footer-icon-bg-accent {
+        background: var(--color-accent);
+    }
+    
+    .footer-icon-bg-primary {
+        background: var(--color-primary);
+    }
+    
+    .footer-link:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-social-icon-simple:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* High Contrast Mode - Pondok Pesantren Al-Falah Krui Theme */
+@media (prefers-contrast: high) {
+    .sidebar-link,
+    .sidebar-submenu-link {
+        border: 1px solid transparent;
+    }
+    
+    .sidebar-link:hover,
+    .sidebar-submenu-link:hover {
+        border-color: var(--color-highlight);
+    }
+    
+    /* Ensure high contrast for all text */
+    .nav-button-primary,
+    .nav-button-secondary,
+    .nav-button-accent {
+        border: 2px solid var(--color-text-light);
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-accent {
+        border: 2px solid var(--color-text-light);
+    }
+    
+    /* Footer high contrast mode */
+    .footer-link {
+        border: 1px solid transparent;
+    }
+    
+    .footer-link:hover {
+        border-color: var(--color-accent);
+    }
+    
+    .footer-social-icon {
+        border: 2px solid var(--color-text-light);
+    }
+    
+    .footer-social-icon-simple {
+        border: 2px solid var(--color-text-light);
+    }
+    
+    .footer-icon-bg,
+    .footer-icon-bg-accent,
+    .footer-icon-bg-primary {
+        border: 2px solid var(--color-text-light);
+    }
+    
+    .footer-border {
+        border-color: var(--color-text-light);
+    }
+    
+    .footer-link:focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-social-icon:focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-container,
+    .sidebar-link,
+    .sidebar-submenu-link,
+    .sidebar-chevron {
+        @apply transition-none;
+    }
+    
+    .animate-slide-down,
+    .animate-slide-up,
+    .animate-fade-in,
+    .animate-rotate-90,
+    .animate-bounce-in,
+    .animate-slide-in-right {
+        animation: none;
+    }
+    
+    /* Footer reduced motion */
+    .footer-social-icon,
+    .footer-social-icon-simple,
+    .footer-link,
+    .footer-icon-bg,
+    .footer-icon-bg-accent,
+    .footer-icon-bg-primary {
+        transition: none;
+    }
+    
+    .footer-social-icon:hover,
+    .footer-social-icon-simple:hover,
+    .footer-icon-bg:hover,
+    .footer-icon-bg-accent:hover,
+    .footer-icon-bg-primary:hover {
+        transform: none;
+    }
+    
+    .footer-link.animate,
+    .footer-social-icon.animate,
+    .footer-social-icon-simple.animate {
+        animation: none;
+    }
+    
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Print Media - Footer */
+@media print {
+    .footer-dark {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .footer-text {
+        color: black !important;
+    }
+    
+    .footer-link {
+        color: black !important;
+    }
+    
+    .footer-social-icon {
+        background: white !important;
+        border: 1px solid black !important;
+    }
+    
+    .footer-social-icon-simple {
+        display: none;
+    }
+    
+    .footer-icon-bg,
+    .footer-icon-bg-accent,
+    .footer-icon-bg-primary {
+        background: white !important;
+        border: 1px solid black !important;
+    }
+    
+    .footer-border {
+        border-color: black !important;
+    }
+    
+    .footer-link {
+        text-decoration: underline;
+    }
+    
+    .footer-social-icon {
+        display: none;
+    }
+    
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: none;
+    }
+}
+
+/* Footer Accessibility Enhancements */
+.footer-link:focus-visible,
+.footer-social-icon:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:hover,
+.footer-social-icon:focus-visible:hover {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:active,
+.footer-social-icon:focus-visible:active {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:disabled,
+.footer-social-icon:focus-visible:disabled {
+    outline: none;
+}
+
+.footer-link:focus-visible.error,
+.footer-social-icon:focus-visible.error {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.success,
+.footer-social-icon:focus-visible.success {
+    outline: 2px solid var(--color-success);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.warning,
+.footer-social-icon:focus-visible.warning {
+    outline: 2px solid var(--color-warning);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.info,
+.footer-social-icon:focus-visible.info {
+    outline: 2px solid var(--color-info);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.animate,
+.footer-social-icon:focus-visible.animate {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Footer Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline-width: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline-width: 1px;
+    }
+}
+
+/* Footer Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Footer High Contrast Mode Enhancements */
+@media (prefers-contrast: high) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* ===== RESPONSIVE TYPOGRAPHY & SPACING ENHANCEMENTS ===== */
+@layer utilities {
+    /* Tablet adjustments */
+    @media (max-width: 1024px) {
+        .text-7xl,
+        .text-6xl {
+            font-size: 3.25rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .text-5xl {
+            font-size: 2.75rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem !important;
+            line-height: 1.25 !important;
+        }
+
+        .py-24,
+        .py-20 {
+            padding-top: 5rem !important;
+            padding-bottom: 5rem !important;
+        }
+
+        .px-12,
+        .px-10 {
+            padding-left: 2.5rem !important;
+            padding-right: 2.5rem !important;
+        }
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 640px) {
+        .text-7xl,
+        .text-6xl,
+        .text-5xl {
+            font-size: 2.25rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .text-4xl {
+            font-size: 1.9rem !important;
+            line-height: 1.25 !important;
+        }
+
+        .text-3xl {
+            font-size: 1.6rem !important;
+            line-height: 1.3 !important;
+        }
+
+        .text-2xl {
+            font-size: 1.35rem !important;
+            line-height: 1.4 !important;
+        }
+
+        .text-xl {
+            font-size: 1.2rem !important;
+            line-height: 1.5 !important;
+        }
+
+        .text-lg {
+            font-size: 1.05rem !important;
+            line-height: 1.6 !important;
+        }
+
+        .hero-title {
+            font-size: 2.1rem !important;
+            line-height: 1.25 !important;
+        }
+
+        .hero-subtitle {
+            font-size: 1.05rem !important;
+            line-height: 1.55 !important;
+        }
+
+        .py-24,
+        .py-20,
+        .py-16,
+        .py-12 {
+            padding-top: 3.25rem !important;
+            padding-bottom: 3.25rem !important;
+        }
+
+        .py-10,
+        .py-8 {
+            padding-top: 2.5rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+
+        .px-12,
+        .px-10,
+        .px-8 {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+        }
+
+        .px-6 {
+            padding-left: 1.25rem !important;
+            padding-right: 1.25rem !important;
+        }
+
+        .px-4 {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        .prose,
+        .prose-lg {
+            font-size: 1rem !important;
+            line-height: 1.7 !important;
+        }
+
+        .prose p,
+        .prose-lg p {
+            margin-bottom: 1.1rem !important;
+        }
+
+        .prose h1,
+        .prose-lg h1 {
+            font-size: 1.75rem !important;
+        }
+
+        .prose h2,
+        .prose-lg h2 {
+            font-size: 1.5rem !important;
+        }
+
+        .prose h3,
+        .prose-lg h3 {
+            font-size: 1.3rem !important;
+        }
+
+        .prose img,
+        .prose-lg img {
+            margin: 1rem 0 !important;
+        }
+
+        .prose blockquote,
+        .prose-lg blockquote {
+            padding: 1rem !important;
+            margin: 1.25rem 0 !important;
+            font-size: 0.95rem !important;
+        }
+
+        .prose ul,
+        .prose ol,
+        .prose-lg ul,
+        .prose-lg ol {
+            padding-left: 1.1rem !important;
+        }
+
+        .rounded-2xl,
+        .rounded-3xl {
+            border-radius: 1rem !important;
+        }
+
+        .shadow-xl,
+        .shadow-2xl,
+        .shadow-3xl {
+            box-shadow: 0 12px 24px -12px rgba(15, 23, 42, 0.2) !important;
+        }
+
+        .grid.gap-8 {
+            gap: 1.5rem !important;
+        }
+
+        .max-w-7xl.mx-auto {
+            padding-left: 1.25rem !important;
+            padding-right: 1.25rem !important;
+        }
+
+        .filter-section {
+            border-radius: 1.25rem !important;
+        }
+
+        .navigation-menu button,
+        .nav-link-clean,
+        .mobile-nav-link-clean {
+            min-height: 44px !important;
+        }
+    }
+}
+
+/* Footer Reduced Motion Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Footer Print Media Enhancements */
+@media print {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: none;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: none;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: none;
+    }
+}
+
+/* Footer Accessibility Enhancements */
+.footer-link:focus-visible,
+.footer-social-icon:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:hover,
+.footer-social-icon:focus-visible:hover {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:active,
+.footer-social-icon:focus-visible:active {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:disabled,
+.footer-social-icon:focus-visible:disabled {
+    outline: none;
+}
+
+.footer-link:focus-visible.error,
+.footer-social-icon:focus-visible.error {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.success,
+.footer-social-icon:focus-visible.success {
+    outline: 2px solid var(--color-success);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.warning,
+.footer-social-icon:focus-visible.warning {
+    outline: 2px solid var(--color-warning);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.info,
+.footer-social-icon:focus-visible.info {
+    outline: 2px solid var(--color-info);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.animate,
+.footer-social-icon:focus-visible.animate {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Footer Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline-width: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline-width: 1px;
+    }
+}
+
+/* Footer Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Footer High Contrast Mode Enhancements */
+@media (prefers-contrast: high) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* Footer Reduced Motion Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Footer Print Media Enhancements */
+@media print {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: none;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: none;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: none;
+    }
+}
+
+/* Footer Accessibility Enhancements */
+.footer-link:focus-visible,
+.footer-social-icon:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:hover,
+.footer-social-icon:focus-visible:hover {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:active,
+.footer-social-icon:focus-visible:active {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:disabled,
+.footer-social-icon:focus-visible:disabled {
+    outline: none;
+}
+
+.footer-link:focus-visible.error,
+.footer-social-icon:focus-visible.error {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.success,
+.footer-social-icon:focus-visible.success {
+    outline: 2px solid var(--color-success);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.warning,
+.footer-social-icon:focus-visible.warning {
+    outline: 2px solid var(--color-warning);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.info,
+.footer-social-icon:focus-visible.info {
+    outline: 2px solid var(--color-info);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.animate,
+.footer-social-icon:focus-visible.animate {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Footer Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline-width: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline-width: 1px;
+    }
+}
+
+/* Footer Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Footer High Contrast Mode Enhancements */
+@media (prefers-contrast: high) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* Footer Reduced Motion Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+}
+
+/* Footer Print Media Enhancements */
+@media print {
+    .footer-link:focus-visible,
+    .footer-social-icon:focus-visible {
+        outline: none;
+    }
+    
+    .footer-link:focus-visible:hover,
+    .footer-social-icon:focus-visible:hover {
+        outline: none;
+    }
+    
+    .footer-link:focus-visible:active,
+    .footer-social-icon:focus-visible:active {
+        outline: none;
+    }
+}
+
+/* Footer Accessibility Enhancements */
+.footer-link:focus-visible,
+.footer-social-icon:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:hover,
+.footer-social-icon:focus-visible:hover {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:active,
+.footer-social-icon:focus-visible:active {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible:disabled,
+.footer-social-icon:focus-visible:disabled {
+    outline: none;
+}
+
+.footer-link:focus-visible.error,
+.footer-social-icon:focus-visible.error {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.success,
+.footer-social-icon:focus-visible.success {
+    outline: 2px solid var(--color-success);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.warning,
+.footer-social-icon:focus-visible.warning {
+    outline: 2px solid var(--color-warning);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.info,
+.footer-social-icon:focus-visible.info {
+    outline: 2px solid var(--color-info);
+    outline-offset: 2px;
+}
+
+.footer-link:focus-visible.animate,
+.footer-social-icon:focus-visible.animate,
+.footer-social-icon-simple:focus-visible.animate {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
