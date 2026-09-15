@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\Agenda;
 use App\Models\Galeri;
-use App\Models\GuruStaf;
 use App\Models\Kategori;
 use App\Models\Profile;
 use App\Models\ProgramUnggulan;
 use App\Models\Feature;
+use App\Models\HeroSlide;
+use App\Models\HomepageWidget;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -41,10 +42,11 @@ class HomeController extends Controller
             }
         })->values()->take(5);
         
-        $guru_staf = GuruStaf::aktif()->limit(8)->get();
         $profile = Profile::first();
         $programUnggulan = ProgramUnggulan::aktif()->urut()->get();
         $features = Feature::aktif()->urut()->get();
+        $heroSlides = HeroSlide::aktif()->urut()->get();
+        $homepageWidgets = HomepageWidget::aktif()->urut()->get();
         
         // Ambil galeri terbaru dengan activeItems untuk thumbnail
         $galeri = Galeri::with(['activeItems' => function($query) {
@@ -55,50 +57,22 @@ class HomeController extends Controller
         ->limit(6)
         ->get();
 
-        return view('frontend.home', compact('berita', 'agenda', 'galeri', 'guru_staf', 'profile', 'programUnggulan', 'features'));
+        return view('frontend.home', compact(
+            'berita',
+            'agenda',
+            'galeri',
+            'profile',
+            'programUnggulan',
+            'features',
+            'heroSlides',
+            'homepageWidgets'
+        ));
     }
 
     public function profil()
     {
         $profile = Profile::first();
         return view('frontend.profil', compact('profile'));
-    }
-
-    public function guruStaf(Request $request)
-    {
-        $query = GuruStaf::where('status', 'aktif');
-        
-        // Filter berdasarkan jabatan
-        if ($request->has('jabatan') && $request->jabatan) {
-            $query->where('jabatan', $request->jabatan);
-        }
-        
-        // Pencarian berdasarkan nama
-        if ($request->has('search') && $request->search) {
-            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
-        }
-        
-        $guruStaf = $query->orderBy('nama_lengkap', 'asc')->paginate(12);
-        
-        // Ambil daftar jabatan untuk filter
-        $jabatan = GuruStaf::where('status', 'aktif')
-            ->distinct()
-            ->pluck('jabatan')
-            ->filter()
-            ->values();
-        
-        // Statistik untuk semua data (tidak difilter)
-        $totalGuruStaf = GuruStaf::where('status', 'aktif')->count();
-        $totalGuru = GuruStaf::where('status', 'aktif')
-            ->whereRaw('LOWER(jabatan) = ?', ['guru'])
-            ->count();
-        $totalStaf = GuruStaf::where('status', 'aktif')
-            ->whereRaw('LOWER(jabatan) != ?', ['guru'])
-            ->count();
-            
-        $profile = Profile::first();
-        
-        return view('frontend.guru-staf.index', compact('guruStaf', 'jabatan', 'profile', 'totalGuruStaf', 'totalGuru', 'totalStaf'));
     }
 
     public function berita()

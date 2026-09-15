@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\Agenda;
 use App\Models\Galeri;
-use App\Models\GuruStaf;
 use App\Models\Profile;
 use App\Models\Download;
 use Illuminate\Http\Request;
@@ -138,31 +137,6 @@ class FrontendApiController extends Controller
     }
 
     /**
-     * Get guru dan staf
-     */
-    public function getGuruStaf(Request $request): JsonResponse
-    {
-        $perPage = $request->get('per_page', 20);
-        $status = $request->get('status', 'aktif');
-
-        $guruStaf = GuruStaf::where('status', $status)
-                            ->orderBy('jabatan')
-                            ->orderBy('nama_lengkap')
-                            ->paginate($perPage);
-
-        return response()->json([
-            'success' => true,
-            'data' => $guruStaf->items(),
-            'pagination' => [
-                'current_page' => $guruStaf->currentPage(),
-                'last_page' => $guruStaf->lastPage(),
-                'per_page' => $guruStaf->perPage(),
-                'total' => $guruStaf->total(),
-            ]
-        ]);
-    }
-
-    /**
      * Get profile sekolah
      */
     public function getProfile(): JsonResponse
@@ -270,15 +244,6 @@ class FrontendApiController extends Controller
                            ->get(['id', 'judul', 'deskripsi', 'tanggal_mulai']);
             
             $results['agenda'] = $agenda;
-        }
-
-        if ($type === 'all' || $type === 'guru_staf') {
-            $guruStaf = GuruStaf::where('nama_lengkap', 'like', "%{$query}%")
-                                ->orWhere('jabatan', 'like', "%{$query}%")
-                                ->limit(5)
-                                ->get(['id', 'nama_lengkap', 'jabatan', 'mata_pelajaran']);
-            
-            $results['guru_staf'] = $guruStaf;
         }
 
         return response()->json([

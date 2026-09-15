@@ -19,7 +19,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset("favicon-256x256.png") }}">
     
     <!-- Web App Manifest -->
-    <link rel="manifest" href="{{ asset("site.webmanifest") }}">
+    <link rel="manifest" href="{{ route('webmanifest') }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">

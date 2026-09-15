@@ -3,307 +3,196 @@
 @section('title', 'Dashboard Admin - ' . $schoolName)
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30">
-    <!-- Header Dashboard dengan gradient yang menarik -->
-    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-2xl relative overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-        </div>
-        
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                <div class="mb-8 lg:mb-0">
-                    <h1 class="text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-                        Dashboard
-                    </h1>
-                    <p class="text-xl lg:text-2xl text-blue-100 font-medium">
-                        Selamat datang kembali, <span class="text-white font-bold">{{ Auth::user()->name }}</span>!
+<div class="min-h-screen bg-slate-50">
+    <div class="bg-gradient-to-r from-green-700 to-green-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Dashboard</h1>
+                    <p class="text-green-100 mt-1">
+                        Selamat datang, <span class="font-semibold text-white">{{ Auth::user()->name }}</span>
+                        · {{ now()->translatedFormat('l, d F Y') }}
                     </p>
-                    <p class="text-blue-100 mt-2">Kelola semua konten website pondok pesantren Anda dari sini</p>
                 </div>
-                
-                <div class="flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20">
-                    <div class="text-center">
-                        <p class="text-sm text-blue-100 font-medium">Hari ini</p>
-                        <p class="text-3xl font-bold text-white">{{ now()->format('d') }}</p>
-                        <p class="text-sm text-blue-100">{{ now()->format('M Y') }}</p>
-                    </div>
-                    <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                        <i class="fas fa-calendar-alt text-white text-3xl"></i>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-sm text-blue-100 font-medium">Jam</p>
-                        <p class="text-3xl font-bold text-white" id="current-time">{{ now()->format('H:i') }}</p>
-                        <p class="text-sm text-blue-100">{{ now()->format('l') }}</p>
-                    </div>
+                <div class="text-green-100 text-sm">
+                    <span id="current-time" class="font-semibold text-white text-lg">{{ now()->format('H:i') }}</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Stats Cards Grid dengan grid responsif -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            <!-- Total Users Card -->
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-users text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Total Users</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $data['total_users'] ?? 0 }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center text-sm text-green-600 font-semibold">
-                    <i class="fas fa-arrow-up mr-2"></i>
-                    <span>+12% dari bulan lalu</span>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        {{-- Stats --}}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Berita</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['total_berita'] ?? 0 }}</p>
+                <p class="text-xs text-green-700 mt-1">{{ $data['berita_published'] ?? 0 }} terbit · {{ $data['berita_draft'] ?? 0 }} draft</p>
             </div>
-
-            <!-- Total Berita Card -->
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-newspaper text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Total Berita</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $data['total_berita'] ?? 0 }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center text-sm text-green-600 font-semibold">
-                    <i class="fas fa-arrow-up mr-2"></i>
-                    <span>{{ $data['berita_published'] ?? 0 }} published</span>
-                </div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Agenda</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['total_agenda'] ?? 0 }}</p>
+                <p class="text-xs text-green-700 mt-1">{{ $data['agenda_upcoming'] ?? 0 }} akan datang</p>
             </div>
-
-            <!-- Total Agenda Card -->
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 via-purple-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-calendar-alt text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Total Agenda</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $data['total_agenda'] ?? 0 }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center text-sm text-blue-600 font-semibold">
-                    <i class="fas fa-clock mr-2"></i>
-                    <span>{{ $data['agenda_upcoming'] ?? 0 }} upcoming</span>
-                </div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Galeri</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['galeri_foto'] ?? 0 }}</p>
+                <p class="text-xs text-green-700 mt-1">foto aktif</p>
             </div>
-
-            <!-- Total Downloads Card -->
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-download text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Total Downloads</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $data['total_downloads'] ?? 0 }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center text-sm text-orange-600 font-semibold">
-                    <i class="fas fa-download mr-2"></i>
-                    <span>{{ $data['downloads_this_month'] ?? 0 }} bulan ini</span>
-                </div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Unduhan</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['total_downloads'] ?? 0 }}</p>
+                <p class="text-xs text-green-700 mt-1">{{ $data['downloads_bulan_ini'] ?? 0 }} diunggah bulan ini</p>
             </div>
         </div>
 
-        <!-- Quick Actions Section -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Aksi Cepat</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="{{ route('admin.berita.create') }}" class="group">
-                    <div class="card-modern text-center p-6 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-plus text-white text-2xl"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Tambah Berita</h3>
-                        <p class="text-sm text-gray-600">Buat berita baru untuk website</p>
+        {{-- Attention widgets --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="{{ route('admin.buku-tamu.index') }}" class="bg-white rounded-xl border border-gray-100 p-4 hover:border-green-300 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Buku Tamu belum dibaca</p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['pesan_baru'] ?? 0 }}</p>
                     </div>
+                    <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('admin.comments.index', ['status' => 'pending']) }}" class="bg-white rounded-xl border border-gray-100 p-4 hover:border-green-300 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Komentar menunggu</p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['komentar_pending'] ?? 0 }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('admin.berita.index') }}" class="bg-white rounded-xl border border-gray-100 p-4 hover:border-green-300 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-700">Berita draft</p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1">{{ $data['berita_draft'] ?? 0 }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-lg bg-green-100 text-green-700 flex items-center justify-center">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {{-- Quick actions --}}
+        <div>
+            <h2 class="text-sm font-semibold text-gray-700 mb-3">Aksi cepat</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <a href="{{ route('admin.berita.create') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 hover:border-green-300 transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-green-700 text-white flex items-center justify-center"><i class="fas fa-plus text-sm"></i></span>
+                    <span class="text-sm font-medium text-gray-900">Tulis Berita</span>
                 </a>
-                
-                <a href="{{ route('admin.agenda.create') }}" class="group">
-                    <div class="card-modern text-center p-6 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-calendar-plus text-white text-2xl"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Tambah Agenda</h3>
-                        <p class="text-sm text-gray-600">Jadwalkan acara baru</p>
-                    </div>
+                <a href="{{ route('admin.agenda.create') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 hover:border-green-300 transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-green-700 text-white flex items-center justify-center"><i class="fas fa-calendar-plus text-sm"></i></span>
+                    <span class="text-sm font-medium text-gray-900">Tambah Agenda</span>
                 </a>
-                
-                <a href="{{ route('admin.guru-staf.create') }}" class="group">
-                    <div class="card-modern text-center p-6 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-user-plus text-white text-2xl"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Tambah Guru</h3>
-                        <p class="text-sm text-gray-600">Tambah data guru/staf baru</p>
-                    </div>
+                <a href="{{ route('admin.galeri.create') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 hover:border-green-300 transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-green-700 text-white flex items-center justify-center"><i class="fas fa-image text-sm"></i></span>
+                    <span class="text-sm font-medium text-gray-900">Upload Galeri</span>
                 </a>
-                
-                <a href="{{ route('admin.galeri.create') }}" class="group">
-                    <div class="card-modern text-center p-6 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-image text-white text-2xl"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Upload Galeri</h3>
-                        <p class="text-sm text-gray-600">Tambah foto ke galeri</p>
-                    </div>
+                <a href="{{ route('admin.downloads.create') }}" class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 hover:border-green-300 transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-green-700 text-white flex items-center justify-center"><i class="fas fa-download text-sm"></i></span>
+                    <span class="text-sm font-medium text-gray-900">Tambah Unduhan</span>
                 </a>
             </div>
         </div>
 
-        <!-- Recent Activities & Quick Stats -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Recent Activities -->
-            <div class="card-modern">
-                <div class="card-modern-header">
-                    <h3 class="text-lg font-semibold text-gray-900">Aktivitas Terbaru</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {{-- Recent berita --}}
+            <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-900">Berita terbaru</h3>
+                    <a href="{{ route('admin.berita.index') }}" class="text-xs text-green-700 hover:underline">Kelola</a>
                 </div>
-                <div class="card-modern-body">
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-newspaper text-blue-600 text-sm"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">Berita baru ditambahkan</p>
-                                <p class="text-xs text-gray-500">2 jam yang lalu</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-green-600 text-sm"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">Guru baru ditambahkan</p>
-                                <p class="text-xs text-gray-500">4 jam yang lalu</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-calendar text-purple-600 text-sm"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">Agenda baru dijadwalkan</p>
-                                <p class="text-xs text-gray-500">6 jam yang lalu</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-download text-orange-600 text-sm"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">File baru diupload</p>
-                                <p class="text-xs text-gray-500">1 hari yang lalu</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="divide-y divide-gray-50">
+                    @forelse(($data['berita_terbaru'] ?? collect()) as $item)
+                        <a href="{{ route('admin.berita.edit', $item) }}" class="block px-4 py-3 hover:bg-gray-50">
+                            <p class="text-sm font-medium text-gray-900 line-clamp-1">{{ $item->judul }}</p>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                {{ $item->created_at?->diffForHumans() }}
+                                · <span class="capitalize">{{ $item->status }}</span>
+                            </p>
+                        </a>
+                    @empty
+                        <p class="px-4 py-8 text-sm text-gray-500 text-center">Belum ada berita</p>
+                    @endforelse
                 </div>
             </div>
 
-            <!-- Quick Stats -->
-            <div class="card-modern">
-                <div class="card-modern-header">
-                    <h3 class="text-lg font-semibold text-gray-900">Statistik Cepat</h3>
+            {{-- Upcoming agenda / pesan --}}
+            <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-900">Agenda terdekat</h3>
+                    <a href="{{ route('admin.agenda.index') }}" class="text-xs text-green-700 hover:underline">Kelola</a>
                 </div>
-                <div class="card-modern-body">
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Berita Diterbitkan</span>
-                            <span class="text-sm font-semibold text-gray-900">{{ $data['berita_published'] ?? 0 }}</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Agenda Mendatang</span>
-                            <span class="text-sm font-semibold text-gray-900">{{ $data['agenda_upcoming'] ?? 0 }}</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Total Guru & Staf</span>
-                            <span class="text-sm font-semibold text-gray-900">{{ $data['total_guru_staf'] ?? 0 }}</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">File Downloads</span>
-                            <span class="text-sm font-semibold text-gray-900">{{ $data['total_downloads'] ?? 0 }}</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Pesan Buku Tamu</span>
-                            <span class="text-sm font-semibold text-gray-900">{{ $data['total_buku_tamu'] ?? 0 }}</span>
-                        </div>
-                    </div>
+                <div class="divide-y divide-gray-50">
+                    @forelse(($data['agenda_terdekat'] ?? collect()) as $event)
+                        <a href="{{ route('admin.agenda.edit', $event) }}" class="flex gap-3 px-4 py-3 hover:bg-gray-50">
+                            <div class="shrink-0 w-12 text-center rounded-lg bg-green-50 text-green-800 py-1">
+                                <div class="text-sm font-bold leading-none">{{ $event->tanggal_mulai?->format('d') ?? '--' }}</div>
+                                <div class="text-[10px] uppercase">{{ $event->tanggal_mulai?->format('M') ?? '' }}</div>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-gray-900 line-clamp-1">{{ $event->judul }}</p>
+                                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">{{ $event->lokasi ?? 'Lokasi belum diatur' }}</p>
+                            </div>
+                        </a>
+                    @empty
+                        <p class="px-4 py-8 text-sm text-gray-500 text-center">Tidak ada agenda mendatang</p>
+                    @endforelse
                 </div>
             </div>
         </div>
 
-        <!-- System Status -->
-        <div class="mt-8">
-            <div class="card-modern">
-                <div class="card-modern-header">
-                    <h3 class="text-lg font-semibold text-gray-900">Status Sistem</h3>
-                </div>
-                <div class="card-modern-body">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-server text-green-600 text-2xl"></i>
+        {{-- Buku tamu terbaru --}}
+        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-gray-900">Pesan buku tamu terbaru</h3>
+                <a href="{{ route('admin.buku-tamu.index') }}" class="text-xs text-green-700 hover:underline">Lihat semua</a>
+            </div>
+            <div class="divide-y divide-gray-50">
+                @forelse(($data['pesan_terbaru'] ?? collect()) as $pesan)
+                    <a href="{{ route('admin.buku-tamu.show', $pesan) }}" class="block px-4 py-3 hover:bg-gray-50">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-gray-900">{{ $pesan->nama ?? 'Tamu' }}</p>
+                                <p class="text-xs text-gray-500 mt-0.5 line-clamp-1">{{ Str::limit(strip_tags($pesan->pesan ?? ''), 80) }}</p>
                             </div>
-                            <h4 class="text-sm font-semibold text-gray-900 mb-1">Server</h4>
-                            <span class="badge-modern-success">Online</span>
+                            <span class="shrink-0 text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full
+                                {{ ($pesan->status ?? '') === 'unread' ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-600' }}">
+                                {{ $pesan->status ?? '-' }}
+                            </span>
                         </div>
-                        
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-database text-blue-600 text-2xl"></i>
-                            </div>
-                            <h4 class="text-sm font-semibold text-gray-900 mb-1">Database</h4>
-                            <span class="badge-modern-success">Connected</span>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-shield-alt text-purple-600 text-2xl"></i>
-                            </div>
-                            <h4 class="text-sm font-semibold text-gray-900 mb-1">Security</h4>
-                            <span class="badge-modern-success">Protected</span>
-                        </div>
-                    </div>
-                </div>
+                    </a>
+                @empty
+                    <p class="px-4 py-8 text-sm text-gray-500 text-center">Belum ada pesan</p>
+                @endforelse
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Update time every minute
     function updateTime() {
-        const now = new Date();
-        const timeElement = document.getElementById('current-time');
-        if (timeElement) {
-            timeElement.textContent = now.toLocaleTimeString('id-ID', { 
-                hour: '2-digit', 
+        const el = document.getElementById('current-time');
+        if (el) {
+            el.textContent = new Date().toLocaleTimeString('id-ID', {
+                hour: '2-digit',
                 minute: '2-digit',
-                hour12: false 
+                hour12: false
             });
         }
     }
-    
-    // Update time every minute
     setInterval(updateTime, 60000);
-    
-    // Initial update
     updateTime();
 </script>
 @endsection

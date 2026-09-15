@@ -6,8 +6,7 @@ return [
     | Konfigurasi Gambar Berita
     |--------------------------------------------------------------------------
     |
-    | File ini berisi konfigurasi untuk gambar berita di aplikasi
-    | Pondok Pesantren Al-Falah Krui
+    | File ini berisi konfigurasi untuk gambar berita di aplikasi CMS sekolah.
     |
     */
 
@@ -71,7 +70,7 @@ return [
     // Watermark settings
     'watermark' => [
         'enabled' => false,
-        'text' => 'Pondok Pesantren Al-Falah Krui',
+        'text' => env('NEWS_WATERMARK_TEXT', env('DEFAULT_SCHOOL_NAME', env('APP_NAME', 'CMS Sekolah'))),
         'position' => 'bottom-right',
         'opacity' => 0.7,
     ],

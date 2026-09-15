@@ -1,282 +1,344 @@
 @extends('layouts.admin-simple')
 
 @section('title', 'Manajemen Users - ' . $schoolName)
-@section('page-title', 'Manajemen Users')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30">
-    <!-- Header Section -->
-    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-2xl relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-        </div>
-        
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                <div class="mb-8 lg:mb-0">
-                    <h1 class="text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-                        Manajemen Users
-                    </h1>
-                    <p class="text-xl lg:text-2xl text-blue-100 font-medium">
-                        Kelola semua user dan akses sistem
-                    </p>
-                    <p class="text-blue-100 mt-2">Atur hak akses dan keamanan pengguna</p>
+@php
+    $hasFilters = request()->filled('search') || request()->filled('role') || request()->filled('status');
+@endphp
+<div class="bg-slate-50 pb-10">
+    <!-- Banner: pertahankan gradasi blue → indigo → purple -->
+    <div class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.12] pointer-events-none" style="background-image: radial-gradient(circle at 20% 50%, #fff 0, transparent 45%), radial-gradient(circle at 80% 20%, #fff 0, transparent 35%);"></div>
+        <div class="relative w-full px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 max-w-7xl mx-auto">
+                <div>
+                    <p class="text-blue-100 text-sm font-medium mb-2">Administrasi Sistem</p>
+                    <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Manajemen Users</h1>
+                    <p class="mt-2 text-blue-50/90 text-base max-w-xl">Kelola user, role, dan akses sistem.</p>
                 </div>
-                
-                <div class="flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20">
-                    <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                        <i class="fas fa-users-cog text-white text-3xl"></i>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-sm text-blue-100 font-medium">Total Users</p>
-                        <p class="text-2xl font-bold text-white">{{ $users->total() ?? 0 }}</p>
-                        <p class="text-sm text-blue-100">Pengguna</p>
-                    </div>
-                </div>
+                <a href="{{ route('admin.users.create') }}"
+                   class="inline-flex items-center justify-center gap-2 self-start md:self-auto px-5 py-2.5 rounded-xl bg-white text-indigo-700 font-semibold text-sm shadow-lg shadow-indigo-900/20 hover:bg-indigo-50 transition-colors">
+                    <i class="fas fa-plus"></i>
+                    Tambah User
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-users text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Total Users</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $users->total() ?? 0 }}</p>
-                    </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-indigo-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-100 flex items-center justify-center">
+                    <i class="fas fa-users text-indigo-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-green-600 font-semibold">
-                    <i class="fas fa-arrow-up mr-2"></i>
-                    <span>Aktif</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Total Users</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['total'] }}</p>
                 </div>
             </div>
 
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-user-shield text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Admin</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $users->where('role', 'admin')->count() ?? 0 }}</p>
-                    </div>
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-blue-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-user-shield text-blue-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-emerald-600 font-semibold">
-                    <i class="fas fa-shield-alt mr-2"></i>
-                    <span>Super User</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Admin</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['admin'] }}</p>
                 </div>
             </div>
 
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 via-purple-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-user text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Regular</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $users->where('role', 'user')->count() ?? 0 }}</p>
-                    </div>
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-emerald-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                    <i class="fas fa-check-circle text-emerald-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-purple-600 font-semibold">
-                    <i class="fas fa-user mr-2"></i>
-                    <span>Standard</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Verified</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['verified'] }}</p>
                 </div>
             </div>
 
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-clock text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Pending</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $users->where('email_verified_at', null)->count() ?? 0 }}</p>
-                    </div>
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-amber-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-100 flex items-center justify-center">
+                    <i class="fas fa-clock text-amber-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-orange-600 font-semibold">
-                    <i class="fas fa-clock mr-2"></i>
-                    <span>Verifikasi</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Unverified</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['unverified'] }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="card-modern">
-            <div class="card-modern-header">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Daftar Users</h3>
-                        <p class="text-sm text-gray-600">Kelola semua user yang ada dalam sistem</p>
-                    </div>
-                    <a href="{{ route('admin.users.create') }}" class="btn-primary">
-                        <i class="fas fa-plus mr-2"></i>Tambah User
-                    </a>
-                </div>
-
-                @if(session('success'))
-                    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mt-4 flex items-center">
-                        <i class="fas fa-check-circle mr-2 text-green-600"></i>
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mt-4 flex items-center">
-                        <i class="fas fa-exclamation-circle mr-2 text-red-600"></i>
-                        {{ session('error') }}
-                    </div>
-                @endif
+        <!-- Main panel -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="px-5 sm:px-6 py-5 border-b border-slate-100">
+                <h2 class="text-lg font-semibold text-slate-900">Daftar Users</h2>
+                <p class="text-sm text-slate-500 mt-0.5">{{ $users->total() }} user terdaftar</p>
             </div>
 
-            <div class="card-modern-body">
-                <!-- Search and Filter -->
-                <div class="mb-6">
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <div class="flex-1">
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400"></i>
-                                </div>
-                                <input type="text" 
-                                       name="search" 
-                                       placeholder="Cari nama atau email..." 
-                                       class="form-input pl-10 w-full"
-                                       value="{{ request('search') }}">
+            @if(session('success'))
+                <div class="mx-5 sm:mx-6 mt-5 flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-emerald-800 text-sm">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="mx-5 sm:mx-6 mt-5 flex items-center gap-3 rounded-xl bg-rose-50 border border-rose-100 px-4 py-3 text-rose-800 text-sm">
+                    <i class="fas fa-exclamation-circle text-rose-500"></i>
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <div class="p-5 sm:p-6">
+                <!-- Search toolbar -->
+                <form method="GET" action="{{ route('admin.users.index') }}" class="mb-6">
+                    <div class="flex flex-col gap-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-slate-400"></i>
+                            </div>
+                            <input
+                                type="text"
+                                name="search"
+                                id="search"
+                                value="{{ request('search') }}"
+                                placeholder="Cari nama atau email..."
+                                class="w-full h-12 pl-11 {{ request('search') ? 'pr-11' : 'pr-4' }} rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800 placeholder:text-slate-400
+                                       focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
+                            >
+                            @if(request('search'))
+                                <a href="{{ route('admin.users.index', request()->except('search', 'page')) }}"
+                                   class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600"
+                                   title="Hapus pencarian">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            @endif
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative flex-1 sm:max-w-[180px]">
+                                <select name="role" id="role"
+                                        class="w-full h-11 appearance-none pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-slate-700
+                                               focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all">
+                                    <option value="">Semua Role</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
+                                            {{ ucfirst($role->name) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <div class="relative flex-1 sm:max-w-[180px]">
+                                <select name="status" id="status"
+                                        class="w-full h-11 appearance-none pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-slate-700
+                                               focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all">
+                                    <option value="">Semua Status</option>
+                                    <option value="verified" {{ request('status') == 'verified' ? 'selected' : '' }}>Verified</option>
+                                    <option value="unverified" {{ request('status') == 'unverified' ? 'selected' : '' }}>Unverified</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <div class="flex gap-2 sm:ml-auto">
+                                <button type="submit"
+                                        class="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-indigo-600 text-white text-sm font-semibold
+                                               hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                                               shadow-sm shadow-indigo-600/25 transition-colors whitespace-nowrap">
+                                    <i class="fas fa-sliders-h"></i>
+                                    Filter
+                                </button>
+                                @if($hasFilters)
+                                    <a href="{{ route('admin.users.index') }}"
+                                       class="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold
+                                              hover:bg-slate-50 hover:text-slate-800 transition-colors whitespace-nowrap">
+                                        <i class="fas fa-undo text-xs"></i>
+                                        Reset
+                                    </a>
+                                @endif
                             </div>
                         </div>
-                        <div>
-                            <select name="role" class="form-select">
-                                <option value="">Semua Role</option>
-                                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
-                            </select>
-                        </div>
-                        <div>
-                            <select name="status" class="form-select">
-                                <option value="">Semua Status</option>
-                                <option value="verified" {{ request('status') == 'verified' ? 'selected' : '' }}>Verified</option>
-                                <option value="unverified" {{ request('status') == 'unverified' ? 'selected' : '' }}>Unverified</option>
-                            </select>
-                        </div>
-                        <div>
-                            <button type="submit" class="btn-secondary w-full">
-                                <i class="fas fa-filter mr-2"></i>Filter
-                            </button>
-                        </div>
                     </div>
-                </div>
 
-                <!-- Users Table -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    User
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Role
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Bergabung
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($users as $user)
-                            <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                                                <span class="text-sm font-medium text-white">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                    @if($hasFilters)
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            <span class="text-xs text-slate-500">Filter:</span>
+                            @if(request('search'))
+                                <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-medium border border-indigo-100">
+                                    “{{ Str::limit(request('search'), 24) }}”
+                                </span>
+                            @endif
+                            @if(request('role'))
+                                <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
+                                    {{ ucfirst(request('role')) }}
+                                </span>
+                            @endif
+                            @if(request('status'))
+                                <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-sky-50 text-sky-700 text-xs font-medium border border-sky-100">
+                                    {{ ucfirst(request('status')) }}
+                                </span>
+                            @endif
+                            <span class="text-xs text-slate-400 sm:ml-auto">{{ $users->total() }} hasil</span>
+                        </div>
+                    @endif
+                </form>
+
+                @if($users->count() > 0)
+                    <!-- Table -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50/80">
+                                <tr>
+                                    <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-14">No</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">User</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Role</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Bergabung</th>
+                                    <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-100">
+                                @foreach($users as $user)
+                                @php
+                                    $roleName = $user->roles->pluck('name')->first();
+                                    $roleNames = $user->roles->pluck('name')->implode(', ');
+                                @endphp
+                                <tr class="hover:bg-slate-50/80 transition-colors">
+                                    <td class="px-4 py-4 whitespace-nowrap text-center">
+                                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-sm font-semibold text-slate-600">
+                                            {{ $users->firstItem() + $loop->index }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                                                <span class="text-xs font-semibold text-indigo-700">{{ strtoupper(substr($user->name ?? 'N', 0, 1)) }}</span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="text-sm font-medium text-slate-900 truncate">{{ $user->name }}</p>
+                                                <p class="text-xs text-slate-500 truncate">{{ $user->email }}</p>
                                             </div>
                                         </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
-                                            <div class="text-sm text-gray-500">{{ $user->email }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                        {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' }}">
-                                        {{ ucfirst($user->role) }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                        {{ $user->email_verified_at ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                        {{ $user->email_verified_at ? 'Verified' : 'Unverified' }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $user->created_at ? $user->created_at->format('d-m-Y') : '-' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <a href="{{ route('admin.users.show', $user) }}" 
-                                           class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors duration-150"
-                                           title="Lihat Detail">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.users.edit', $user) }}" 
-                                           class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50 transition-colors duration-150"
-                                           title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        @if($user->id !== auth()->id())
-                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors duration-150"
-                                                    onclick="return confirm('Yakin ingin menghapus user ini?')"
-                                                    title="Hapus">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        @if($roleNames)
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border
+                                                {{ $roleName === 'admin' ? 'bg-rose-50 text-rose-700 border-rose-100' : 'bg-indigo-50 text-indigo-700 border-indigo-100' }}">
+                                                {{ $roleNames }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs text-slate-400 italic">—</span>
                                         @endif
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-12 text-center">
-                                    <div class="text-gray-500">
-                                        <i class="fas fa-users text-4xl text-gray-400 mb-4"></i>
-                                        <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada user</h3>
-                                        <p class="text-gray-500">Mulai dengan menambahkan user pertama.</p>
-                                        <a href="{{ route('admin.users.create') }}" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                                            Tambah User Pertama
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        @if($user->email_verified_at)
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Verified
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Unverified
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-slate-800">{{ $user->created_at ? $user->created_at->format('d-m-Y') : '-' }}</div>
+                                        @if($user->created_at)
+                                            <div class="text-xs text-slate-500">{{ $user->created_at->format('H:i') }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="flex items-center justify-center gap-1">
+                                            <a href="{{ route('admin.users.edit', $user) }}"
+                                               class="inline-flex items-center justify-center w-9 h-9 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors"
+                                               title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            @if($user->id !== auth()->id())
+                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            class="inline-flex items-center justify-center w-9 h-9 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors"
+                                                            title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
-                <!-- Pagination -->
-                @if($users->hasPages())
-                <div class="mt-6">
-                    {{ $users->appends(request()->query())->links() }}
-                </div>
+                    <div class="mt-5 pt-5 border-t border-slate-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <p class="text-sm text-slate-500">
+                                Menampilkan
+                                <span class="font-semibold text-slate-800">{{ $users->firstItem() ?? 0 }}</span>
+                                –
+                                <span class="font-semibold text-slate-800">{{ $users->lastItem() ?? 0 }}</span>
+                                dari
+                                <span class="font-semibold text-slate-800">{{ $users->total() }}</span>
+                            </p>
+                            <div class="admin-list-pagination">
+                                {{ $users->onEachSide(1)->links() }}
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="rounded-xl border border-slate-200 px-6 py-16 text-center">
+                        <div class="mx-auto w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+                            <i class="fas fa-users text-2xl text-slate-400"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-1">
+                            {{ $hasFilters ? 'Tidak ada user yang cocok' : 'Belum ada user' }}
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-5">
+                            {{ $hasFilters ? 'Coba ubah kata kunci atau reset filter.' : 'Mulai dengan menambahkan user pertama.' }}
+                        </p>
+                        @if($hasFilters)
+                            <a href="{{ route('admin.users.index') }}"
+                               class="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold hover:bg-slate-50">
+                                <i class="fas fa-undo text-xs"></i> Reset Filter
+                            </a>
+                        @else
+                            <a href="{{ route('admin.users.create') }}"
+                               class="inline-flex items-center gap-2 h-10 px-5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700">
+                                <i class="fas fa-plus"></i> Tambah User
+                            </a>
+                        @endif
+                    </div>
                 @endif
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.admin-list-pagination nav > div:first-child { display: none; }
+.admin-list-pagination p { display: none; }
+.admin-list-pagination nav { display: flex; justify-content: flex-end; }
+.admin-list-pagination span[aria-current="page"] span {
+    background-color: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #fff !important;
+    border-radius: 0.5rem !important;
+}
+.admin-list-pagination a span,
+.admin-list-pagination span[aria-disabled="true"] span {
+    border-radius: 0.5rem !important;
+    min-width: 2.25rem;
+    justify-content: center;
+}
+.admin-list-pagination a:hover span {
+    background-color: #eef2ff !important;
+    color: #4338ca !important;
+    border-color: #c7d2fe !important;
+}
+</style>
 @endsection

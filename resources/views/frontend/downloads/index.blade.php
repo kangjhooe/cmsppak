@@ -3,7 +3,7 @@
 @section('title', 'Download Area - ' . $schoolName)
 
 @section('page-header')
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Download Area</h1>
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">Download Area</h1>
     <p class="text-xl text-green-100 max-w-3xl mx-auto">
         Unduh dokumen penting, silabus, kurikulum, dan formulir yang diperlukan
     </p>

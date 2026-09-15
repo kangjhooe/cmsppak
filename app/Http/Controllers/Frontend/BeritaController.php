@@ -14,11 +14,12 @@ class BeritaController extends Controller
     public function index(Request $request)
     {
         $query = Berita::with(['user', 'kategori'])
+            ->withCount('comments')
             ->where('status', 'published')
             ->where('published_at', '<=', now());
         
         // Search functionality
-        if ($request->has('search') && $request->search) {
+        if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('judul', 'like', '%' . $searchTerm . '%')
@@ -27,7 +28,7 @@ class BeritaController extends Controller
         }
         
         // Category filter
-        if ($request->has('kategori') && $request->kategori) {
+        if ($request->filled('kategori')) {
             $query->whereHas('kategori', function($q) use ($request) {
                 $q->where('nama', $request->kategori);
             });
@@ -48,16 +49,27 @@ class BeritaController extends Controller
                 break;
         }
         
-        $berita = $query->paginate(12);
+        $berita = $query->paginate(12)->withQueryString();
         
-        // Get categories for filter dropdown with caching
-        $kategoris = Cache::remember('berita_kategoris', 3600, function() {
+        // Get categories for filter with article counts
+        $kategoris = Cache::remember('berita_kategoris_counted', 3600, function() {
             return Kategori::active()
-                ->whereHas('berita', function($q) {
+                ->withCount(['berita' => function($q) {
                     $q->where('status', 'published')
                       ->where('published_at', '<=', now());
-                })
+                }])
+                ->having('berita_count', '>', 0)
                 ->orderBy('nama')
+                ->get();
+        });
+
+        // Popular news for sidebar
+        $beritaPopuler = Cache::remember('berita_populer_sidebar', 1800, function() {
+            return Berita::with(['kategori'])
+                ->where('status', 'published')
+                ->where('published_at', '<=', now())
+                ->orderBy('view_count', 'desc')
+                ->limit(5)
                 ->get();
         });
         
@@ -66,7 +78,7 @@ class BeritaController extends Controller
             return Profile::first();
         });
         
-        return view('frontend.berita.index', compact('berita', 'kategoris', 'profile'));
+        return view('frontend.berita.index', compact('berita', 'kategoris', 'beritaPopuler', 'profile'));
     }
 
     public function show($slug)
@@ -90,6 +102,16 @@ class BeritaController extends Controller
                 ->limit(5)
                 ->get();
         });
+
+        // Popular news for sidebar
+        $beritaPopuler = Cache::remember('berita_populer_sidebar', 1800, function() {
+            return Berita::with(['kategori'])
+                ->where('status', 'published')
+                ->where('published_at', '<=', now())
+                ->orderBy('view_count', 'desc')
+                ->limit(5)
+                ->get();
+        });
             
         // Get popular categories for sidebar
         $kategorisPopuler = Cache::remember('kategoris_populer', 3600, function() {
@@ -109,7 +131,7 @@ class BeritaController extends Controller
             return Profile::first();
         });
         
-        return view('frontend.berita.show', compact('berita', 'beritaTerbaru', 'kategorisPopuler', 'profile'));
+        return view('frontend.berita.show', compact('berita', 'beritaTerbaru', 'beritaPopuler', 'kategorisPopuler', 'profile'));
     }
 
     public function apiIndex(Request $request)

@@ -17,21 +17,21 @@ class KategoriSeeder extends Seeder
             [
                 'nama' => 'Berita Umum',
                 'slug' => 'berita-umum',
-                'deskripsi' => 'Berita umum tentang pondok pesantren',
+                'deskripsi' => 'Berita umum tentang lembaga',
                 'warna' => '#3B82F6',
                 'is_active' => true
             ],
             [
                 'nama' => 'Prestasi',
                 'slug' => 'prestasi',
-                'deskripsi' => 'Prestasi dan pencapaian santri',
+                'deskripsi' => 'Prestasi dan pencapaian siswa',
                 'warna' => '#10B981',
                 'is_active' => true
             ],
             [
                 'nama' => 'Kegiatan',
                 'slug' => 'kegiatan',
-                'deskripsi' => 'Kegiatan dan acara pondok pesantren',
+                'deskripsi' => 'Kegiatan dan acara lembaga',
                 'warna' => '#F59E0B',
                 'is_active' => true
             ],
@@ -50,9 +50,9 @@ class KategoriSeeder extends Seeder
                 'is_active' => true
             ],
             [
-                'nama' => 'Pesantren',
-                'slug' => 'pesantren',
-                'deskripsi' => 'Informasi tentang kehidupan pesantren',
+                'nama' => 'Komunitas',
+                'slug' => 'komunitas',
+                'deskripsi' => 'Kehidupan komunitas dan kegiatan bersama',
                 'warna' => '#06B6D4',
                 'is_active' => true
             ],

@@ -3,7 +3,7 @@
 @section('title', 'Galeri - ' . $schoolName)
 
 @section('page-header')
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Galeri Foto & Video</h1>
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">Galeri Foto & Video</h1>
     <p class="text-xl text-blue-100 max-w-3xl mx-auto">
         Dokumentasi visual kegiatan, prestasi, dan momen berharga di {{ $profile->nama_sekolah ?? $schoolName }}
     </p>
@@ -46,8 +46,8 @@
             <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl shadow-lg overflow-hidden border border-green-100">
                 <div class="md:flex">
                     <div class="md:w-1/2">
-                        @if($galeri->first()->thumbnailItem)
-                        <img src="{{ asset('storage/' . $galeri->first()->thumbnailItem->file_path) }}" 
+                        @if($galeri->first()->thumbnailItem && $galeri->first()->thumbnailItem->preview_url)
+                        <img src="{{ $galeri->first()->thumbnailItem->preview_url }}" 
                              alt="{{ $galeri->first()->judul }}" 
                              class="w-full h-64 object-cover">
                         @else
@@ -95,8 +95,8 @@
             @foreach($galeri->skip(1) as $item)
             <article class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
                 <div class="relative overflow-hidden">
-                    @if($item->thumbnailItem)
-                    <img src="{{ asset('storage/' . $item->thumbnailItem->file_path) }}" 
+                    @if($item->thumbnailItem && $item->thumbnailItem->preview_url)
+                    <img src="{{ $item->thumbnailItem->preview_url }}" 
                          alt="{{ $item->judul }}" 
                          class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700">
                     @else

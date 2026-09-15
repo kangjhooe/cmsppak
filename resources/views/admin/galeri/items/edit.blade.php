@@ -50,7 +50,7 @@
             <!-- Form Card -->
             <div class="bg-white overflow-hidden shadow-2xl rounded-2xl border border-gray-100">
                 <div class="p-8">
-                    <form action="{{ route('admin.galeri.items.update', $galeriItem) }}" method="POST" enctype="multipart/form-data" class="space-y-8" id="mediaItemForm">
+                    <form action="{{ route('admin.galeri.items.update', ['galeri' => $galeri, 'galeriItem' => $galeriItem]) }}" method="POST" enctype="multipart/form-data" class="space-y-8" id="mediaItemForm">
                         @csrf
                         @method('PUT')
                         
@@ -58,20 +58,38 @@
                         <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200 shadow-sm">
                             <div class="flex items-center mb-6">
                                 <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
-                                    <i class="fas fa-image text-white text-lg"></i>
+                                    @if($galeriItem->jenis === 'youtube')
+                                        <i class="fab fa-youtube text-white text-lg"></i>
+                                    @elseif($galeriItem->jenis === 'video')
+                                        <i class="fas fa-video text-white text-lg"></i>
+                                    @else
+                                        <i class="fas fa-image text-white text-lg"></i>
+                                    @endif
                                 </div>
                                 <div>
                                     <h3 class="text-xl font-bold text-gray-800">Jenis Media</h3>
-                                    <p class="text-gray-600 text-sm">Media item ini adalah foto</p>
+                                    <p class="text-gray-600 text-sm">Media item ini adalah {{ $galeriItem->jenis }}</p>
                                 </div>
                             </div>
                             
                             <div class="bg-white rounded-xl p-6 border-2 border-blue-200 text-center">
                                 <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                                    <i class="fas fa-image text-white text-2xl"></i>
+                                    @if($galeriItem->jenis === 'youtube')
+                                        <i class="fab fa-youtube text-white text-2xl"></i>
+                                    @elseif($galeriItem->jenis === 'video')
+                                        <i class="fas fa-video text-white text-2xl"></i>
+                                    @else
+                                        <i class="fas fa-image text-white text-2xl"></i>
+                                    @endif
                                 </div>
-                                <h4 class="text-lg font-semibold text-gray-800 mb-2">Foto</h4>
-                                <p class="text-sm text-gray-600">Format: JPG, PNG, GIF, WebP</p>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ ucfirst($galeriItem->jenis) }}</h4>
+                                <p class="text-sm text-gray-600">
+                                    @if($galeriItem->jenis === 'youtube')
+                                        Format: URL YouTube
+                                    @else
+                                        Format: JPG, PNG, GIF, WebP
+                                    @endif
+                                </p>
                             </div>
                         </div>
 
@@ -193,14 +211,42 @@
                             </div>
                             
                             <!-- Current Media Preview -->
-                            @if($galeriItem->file_path)
+                            @if($galeriItem->jenis === 'youtube')
+                                <div class="mb-6 p-4 bg-white rounded-xl border-2 border-gray-200">
+                                    <label class="block text-sm font-bold text-gray-800 mb-3">YouTube Saat Ini</label>
+                                    <div class="flex items-center space-x-4">
+                                        @if($galeriItem->youtube_thumbnail_url)
+                                            <img src="{{ $galeriItem->youtube_thumbnail_url }}" alt="{{ $galeriItem->judul }}" class="w-32 h-24 object-cover rounded-lg">
+                                        @endif
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-800">{{ $galeriItem->judul }}</p>
+                                            <p class="text-xs text-gray-600 break-all">{{ $galeriItem->youtube_url }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-6">
+                                    <label for="youtube_url" class="block text-sm font-bold text-gray-800 mb-3">
+                                        YouTube URL <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="url"
+                                           name="youtube_url"
+                                           id="youtube_url"
+                                           value="{{ old('youtube_url', $galeriItem->youtube_url) }}"
+                                           class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl"
+                                           required>
+                                    @error('youtube_url')
+                                        <div class="mt-3 text-red-600 text-sm">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @elseif($galeriItem->file_path)
                                 <div class="mb-6 p-4 bg-white rounded-xl border-2 border-gray-200">
                                     <label class="block text-sm font-bold text-gray-800 mb-3">Foto Saat Ini</label>
                                     <div class="flex items-center space-x-4">
                                         <img src="{{ asset('storage/' . $galeriItem->file_path) }}" alt="{{ $galeriItem->judul }}" class="w-32 h-32 object-cover rounded-lg">
                                         <div>
                                             <p class="text-sm font-semibold text-gray-800">{{ $galeriItem->judul }}</p>
-                                            <p class="text-xs text-gray-600">Jenis: Foto</p>
+                                            <p class="text-xs text-gray-600">Jenis: {{ ucfirst($galeriItem->jenis) }}</p>
                                             <p class="text-xs text-gray-500 mt-1">Upload file baru untuk mengganti</p>
                                         </div>
                                     </div>
@@ -208,6 +254,7 @@
                             @endif
                             
                             <!-- File Upload -->
+                            @if(in_array($galeriItem->jenis, ['foto', 'video'], true))
                             <div id="fileUploadSection">
                                 <div class="mb-6">
                                     <label for="file" class="block text-sm font-bold text-gray-800 mb-3 flex items-center">
@@ -280,7 +327,7 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            @endif
 
                             <!-- Preview Area -->
                             <div id="previewArea" class="hidden">

@@ -14,12 +14,13 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
+                display: ['Source Serif 4', 'Georgia', ...defaultTheme.fontFamily.serif],
             },
             colors: {
-                // Pondok Pesantren Al-Falah Brand Colors
+                // CMS Brand Colors
                 primary: {
-                    DEFAULT: '#008000', // Hijau dominan dari logo
+                    DEFAULT: '#008000', // Primary brand color
                     light: '#00A000',
                     dark: '#006600',
                     50: '#f0fff0',

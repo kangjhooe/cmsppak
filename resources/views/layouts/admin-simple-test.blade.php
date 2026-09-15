@@ -44,17 +44,6 @@
                         </a>
                     </div>
                     
-                    <!-- Guru & Staf Menu -->
-                    <div>
-                        <a href="{{ route('admin.guru-staf.index') }}" 
-                           class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.guru-staf*') ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
-                            <div class="w-10 h-10 {{ request()->routeIs('admin.guru-staf*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
-                                <i class="fas fa-users text-sm {{ request()->routeIs('admin.guru-staf*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
-                            </div>
-                            <span class="ml-3">Guru & Staf</span>
-                        </a>
-                    </div>
-                    
                     <!-- Berita Menu -->
                     <div>
                         <a href="{{ route('admin.berita.index') }}" 

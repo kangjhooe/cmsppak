@@ -1,0 +1,53 @@
+<?php
+
+return [
+    'default' => env('INSTITUTION_TYPE', 'pesantren'),
+
+    'types' => [
+        'sekolah' => [
+            'label' => 'Sekolah Umum',
+            'school' => 'Sekolah',
+            'kepala_sekolah' => 'Kepala Sekolah',
+            'wakil_kepala_sekolah' => 'Wakil Kepala Sekolah',
+            'siswa' => 'Siswa',
+            'guru' => 'Guru',
+            'npsn_label' => 'NPSN',
+            'npsn_hint' => 'Nomor Pokok Sekolah Nasional',
+            'program_subtitle' => 'Dirancang untuk mengembangkan potensi siswa secara utuh — pengetahuan, karakter, dan keterampilan.',
+            'keunggulan_subtitle' => 'Nilai dan pendekatan yang membedakan pendidikan di sekolah kami.',
+            'berita_heading' => 'Terbaru dari Sekolah',
+            'cta_join' => 'Bergabung dengan :name dan wujudkan generasi unggul yang berilmu serta berkarakter.',
+            'islamic_widgets' => false,
+        ],
+        'madrasah' => [
+            'label' => 'Madrasah',
+            'school' => 'Madrasah',
+            'kepala_sekolah' => 'Kepala Madrasah',
+            'wakil_kepala_sekolah' => 'Wakil Kepala Madrasah',
+            'siswa' => 'Siswa',
+            'guru' => 'Guru',
+            'npsn_label' => 'NSM',
+            'npsn_hint' => 'Nomor Statistik Madrasah',
+            'program_subtitle' => 'Dirancang untuk mengembangkan potensi siswa secara utuh — iman, ilmu, dan amal.',
+            'keunggulan_subtitle' => 'Nilai dan pendekatan yang membedakan pendidikan di madrasah kami.',
+            'berita_heading' => 'Terbaru dari Madrasah',
+            'cta_join' => 'Bergabung dengan :name dan wujudkan generasi unggul yang berilmu serta berakhlak mulia.',
+            'islamic_widgets' => true,
+        ],
+        'pesantren' => [
+            'label' => 'Pondok Pesantren',
+            'school' => 'Pondok Pesantren',
+            'kepala_sekolah' => 'Pengasuh Pondok',
+            'wakil_kepala_sekolah' => 'Wakil Pengasuh Pondok',
+            'siswa' => 'Santri',
+            'guru' => 'Guru',
+            'npsn_label' => 'NSPP',
+            'npsn_hint' => 'Nomor Statistik Pondok Pesantren',
+            'program_subtitle' => 'Dirancang untuk mengembangkan potensi santri secara utuh — iman, ilmu, dan amal.',
+            'keunggulan_subtitle' => 'Nilai dan pendekatan yang membedakan pendidikan di pondok pesantren kami.',
+            'berita_heading' => 'Terbaru dari Pondok',
+            'cta_join' => 'Bergabung dengan :name dan wujudkan generasi unggul yang berilmu serta berakhlak mulia.',
+            'islamic_widgets' => true,
+        ],
+    ],
+];

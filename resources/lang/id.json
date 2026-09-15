@@ -1,5 +1,13 @@
 {
     "school": "Pondok Pesantren",
-    "kepala_sekolah": "Kepala Pondok Pesantren",
-    "wakil_kepala_sekolah": "Wakil Kepala Pondok Pesantren"
+    "kepala_sekolah": "Pengasuh Pondok",
+    "wakil_kepala_sekolah": "Wakil Pengasuh Pondok",
+    "siswa": "Santri",
+    "guru": "Guru",
+    "npsn_label": "NSPP",
+    "npsn_hint": "Nomor Statistik Pondok Pesantren",
+    "program_subtitle": "Dirancang untuk mengembangkan potensi santri secara utuh — iman, ilmu, dan amal.",
+    "keunggulan_subtitle": "Nilai dan pendekatan yang membedakan pendidikan di pondok pesantren kami.",
+    "berita_heading": "Terbaru dari Pondok",
+    "cta_join": "Bergabung dengan :name dan wujudkan generasi unggul yang berilmu serta berakhlak mulia."
 }

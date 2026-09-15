@@ -8,10 +8,31 @@ use Illuminate\Http\Request;
 
 class FeatureController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $features = Feature::orderBy('urutan', 'asc')->paginate(10);
-        return view('admin.features.index', compact('features'));
+        $query = Feature::query()->orderBy('urutan', 'asc');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $features = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => Feature::count(),
+            'aktif' => Feature::where('status', 'aktif')->count(),
+            'nonaktif' => Feature::where('status', 'nonaktif')->count(),
+        ];
+
+        return view('admin.features.index', compact('features', 'stats'));
     }
 
     public function create()

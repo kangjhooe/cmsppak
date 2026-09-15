@@ -2,6 +2,14 @@
 
 @section('title', $agenda->judul . ' - ' . $schoolName)
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/agenda.css') }}">
+@endpush
+
+@push('scripts-head')
+<script src="{{ asset('js/agenda.js') }}" defer></script>
+@endpush
+
 @section('content')
 <div class="bg-gradient-to-br from-green-50 via-white to-green-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,13 +52,13 @@
                     <!-- Date Badge -->
                     <div class="mb-6">
                         <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-6 inline-block border border-white/30">
-                            <div class="text-5xl font-bold text-white">{{ $agenda->tanggal_mulai ? $agenda->tanggal_mulai->format('d') : '-' }}</div>
-                            <div class="text-xl text-white/90">{{ $agenda->tanggal_mulai ? $agenda->tanggal_mulai->format('M') : '-' }}</div>
+                            <div class="text-3xl lg:text-4xl font-bold text-white">{{ $agenda->tanggal_mulai ? $agenda->tanggal_mulai->format('d') : '-' }}</div>
+                            <div class="text-base text-white/90">{{ $agenda->tanggal_mulai ? $agenda->tanggal_mulai->format('M') : '-' }}</div>
                             <div class="text-sm">{{ $agenda->tanggal_mulai ? $agenda->tanggal_mulai->format('Y') : '-' }}</div>
                         </div>
                     </div>
                     
-                    <h1 class="text-4xl font-bold mb-4 text-white">{{ $agenda->judul }}</h1>
+                    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white">{{ $agenda->judul }}</h1>
                     
                     <!-- Countdown Timer -->
                     @if($agenda->tanggal_mulai && $agenda->tanggal_mulai->isFuture())

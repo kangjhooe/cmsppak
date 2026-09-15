@@ -78,11 +78,29 @@
             @php $fotoIndex = 0; @endphp
             @foreach($galeri->activeItems as $item)
             <article class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
-                @if($item->jenis == 'video')
+                @if($item->jenis == 'youtube' && $item->youtube_embed_url)
+                    <div class="relative overflow-hidden bg-black">
+                        <div class="aspect-video w-full">
+                            <iframe
+                                src="{{ $item->youtube_embed_url }}"
+                                title="{{ $item->judul }}"
+                                class="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                loading="lazy"
+                                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                        </div>
+                        <div class="absolute top-3 right-3 pointer-events-none">
+                            <span class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                                YOUTUBE
+                            </span>
+                        </div>
+                    </div>
+                @elseif($item->jenis == 'video')
                     <!-- Video Item -->
                     <div class="relative overflow-hidden">
-                        @if($item->thumbnail)
-                        <img src="{{ asset('storage/' . $item->thumbnail) }}" 
+                        @if($item->preview_url)
+                        <img src="{{ $item->preview_url }}" 
                             alt="{{ $item->judul }}" 
                             class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700">
                         @else
@@ -92,9 +110,7 @@
                             </svg>
                         </div>
                         @endif
-                        <!-- Gradient Overlay -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <!-- Play Button -->
                         <div class="absolute inset-0 flex items-center justify-center">
                             <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-4 shadow-lg transform scale-100 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -102,7 +118,6 @@
                                 </svg>
                             </div>
                         </div>
-                        <!-- Video Badge -->
                         <div class="absolute top-3 right-3">
                             <span class="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
                                 VIDEO
@@ -112,18 +127,15 @@
                 @else
                     <!-- Foto Item -->
                     <div class="relative overflow-hidden cursor-pointer" onclick="openLightbox({{ $fotoIndex }}, 'foto')">
-                        <img src="{{ asset('storage/' . $item->file_path) }}" 
+                        <img src="{{ $item->preview_url }}" 
                             alt="{{ $item->judul }}" 
                             class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700">
-                        <!-- Gradient Overlay -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <!-- Photo Badge -->
                         <div class="absolute top-3 right-3">
                             <span class="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
                                 FOTO
                             </span>
                         </div>
-                        <!-- Zoom Icon -->
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <div class="bg-white/90 rounded-full p-3 shadow-lg">
                                 <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,13 +160,6 @@
                     
                     <div class="flex items-center justify-between">
                         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200">
-                            <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                                @if($item->jenis == 'video')
-                                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
-                                @else
-                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
-                                @endif
-                            </svg>
                             {{ ucfirst($item->jenis) }}
                         </span>
                         <div class="flex items-center text-xs text-gray-500">
@@ -191,9 +196,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($galeriLainnya as $item)
                 <article class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
-                    @if($item->thumbnailItem)
+                    @if($item->thumbnailItem && $item->thumbnailItem->preview_url)
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/' . $item->thumbnailItem->file_path) }}" 
+                            <img src="{{ $item->thumbnailItem->preview_url }}" 
                                 alt="{{ $item->judul }}" 
                                 class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700">
                             <!-- Gradient Overlay -->

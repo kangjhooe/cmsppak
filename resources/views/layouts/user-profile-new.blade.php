@@ -110,7 +110,7 @@
                               :class="{'opacity-0 w-0': sidebarCollapsed, 'opacity-100 w-auto': !sidebarCollapsed}">Beranda</span>
                     </a>
                     
-                    <!-- Profile Madrasah -->
+                    <!-- Profile {{ __('school') }} -->
                     <a href="{{ route('profil') }}" 
                        class="group flex items-center px-4 py-3 text-slate-100 rounded-xl hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-purple-600/20 hover:text-white transition-all duration-200 font-medium text-sm cursor-pointer {{ request()->routeIs('profil') ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg' : '' }}"
                        :class="{'justify-center': sidebarCollapsed}">
@@ -118,7 +118,7 @@
                             <i class="fas fa-info-circle text-white text-sm"></i>
                         </div>
                         <span class="text-sm font-medium transition-all duration-300 ml-3" 
-                              :class="{'opacity-0 w-0': sidebarCollapsed, 'opacity-100 w-auto': !sidebarCollapsed}">Profil Madrasah</span>
+                              :class="{'opacity-0 w-0': sidebarCollapsed, 'opacity-100 w-auto': !sidebarCollapsed}">Profil {{ __('school') }}</span>
                     </a>
                     
                     <!-- Berita -->

@@ -20,9 +20,6 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // Galeri
     Route::get('/galeri', [FrontendApiController::class, 'getGaleri'])->name('galeri.index');
     
-    // Guru & Staf
-    Route::get('/guru-staf', [FrontendApiController::class, 'getGuruStaf'])->name('guru-staf.index');
-    
     // Profile Sekolah
     Route::get('/profile', [FrontendApiController::class, 'getProfile'])->name('profil.sekolah');
     

@@ -222,7 +222,7 @@
                                     <div class="text-center">
                                         <!-- Media Type Selection -->
                                         <div class="mb-4">
-                                            <select name="media_types[]" 
+                                            <select name="media_types[{{ $i }}]" 
                                                     class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 media-type-select bg-white hover:border-gray-300"
                                                     onchange="toggleMediaType(this)">
                                                 <option value="file">📁 Upload File</option>
@@ -233,10 +233,10 @@
                                         <!-- File Upload Area -->
                                         <div class="upload-area mb-4 file-upload-section">
                                             <input type="file" 
-                                                   name="media_files[]" 
+                                                   name="media_files[{{ $i }}]" 
                                                    id="media_file_{{ $i }}"
                                                    class="hidden media-file-input" 
-                                                   accept="image/*,video/*"
+                                                   accept="image/*"
                                                    >
                                             
                                             <label for="media_file_{{ $i }}" class="cursor-pointer block">
@@ -257,7 +257,7 @@
                                         <!-- YouTube URL Area -->
                                         <div class="youtube-url-section mb-4 hidden">
                                             <input type="url" 
-                                                   name="youtube_urls[]" 
+                                                   name="youtube_urls[{{ $i }}]" 
                                                    placeholder="Masukkan URL YouTube"
                                                    class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 youtube-url-input bg-white hover:border-gray-300"
                                                    >
@@ -272,7 +272,7 @@
                                             <!-- Judul Media -->
                                             <div>
                                                 <input type="text" 
-                                                       name="media_titles[]" 
+                                                       name="media_titles[{{ $i }}]" 
                                                        placeholder="Judul media"
                                                        class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 bg-white hover:border-gray-300"
                                                        >
@@ -281,7 +281,7 @@
                                             <!-- Urutan -->
                                             <div>
                                                 <input type="number" 
-                                                       name="media_orders[]" 
+                                                       name="media_orders[{{ $i }}]" 
                                                        value="{{ $i + 1 }}"
                                                        min="1" 
                                                        max="12"
@@ -524,26 +524,21 @@
                 isValid = false;
             }
             
-            // Validate media files (minimum 4 if any media is provided)
-            const fileInputs = document.querySelectorAll('.media-file-input');
-            const youtubeInputs = document.querySelectorAll('.youtube-url-input');
+            // Count filled slots by selected type (file or youtube)
             let mediaCount = 0;
-            
-            fileInputs.forEach(input => {
-                if (input.files && input.files.length > 0) {
-                    mediaCount++;
+            document.querySelectorAll('.media-upload-item').forEach(item => {
+                const type = item.querySelector('.media-type-select')?.value || 'file';
+                if (type === 'youtube') {
+                    const url = item.querySelector('.youtube-url-input')?.value?.trim();
+                    if (url) mediaCount++;
+                } else {
+                    const fileInput = item.querySelector('.media-file-input');
+                    if (fileInput?.files?.length > 0) mediaCount++;
                 }
             });
             
-            youtubeInputs.forEach(input => {
-                if (input.value.trim()) {
-                    mediaCount++;
-                }
-            });
-            
-            // Only require minimum 4 media if user is trying to upload media
-            if (mediaCount > 0 && mediaCount < 4) {
-                errorMessages.push('Minimal 4 media harus diupload');
+            if (mediaCount < 4) {
+                errorMessages.push('Minimal 4 media (foto atau YouTube) harus diisi');
                 isValid = false;
             }
             

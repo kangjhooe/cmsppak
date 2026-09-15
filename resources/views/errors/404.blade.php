@@ -34,7 +34,6 @@
                     <h4 class="font-medium text-gray-900 mb-3">Informasi Sekolah</h4>
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li><a href="{{ route('profil') }}" class="hover:text-blue-600 transition-colors duration-200">Profil Sekolah</a></li>
-                        <li><a href="{{ route('guru-staf') }}" class="hover:text-blue-600 transition-colors duration-200">Guru & Staf</a></li>
                         <li><a href="{{ route('kontak') }}" class="hover:text-blue-600 transition-colors duration-200">Kontak</a></li>
                     </ul>
                 </div>

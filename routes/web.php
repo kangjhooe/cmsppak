@@ -6,8 +6,8 @@ use App\Http\Controllers\Frontend\BukuTamuController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\AgendaController;
 use App\Http\Controllers\Frontend\GaleriController;
-use App\Http\Controllers\Frontend\GuruStafController;
 use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\LegalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +23,6 @@ use App\Http\Controllers\Frontend\PageController;
 // Frontend Routes (Public)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
-Route::get('/guru-staf', [HomeController::class, 'guruStaf'])->name('guru-staf');
-Route::get('/guru-staf/{id}', [GuruStafController::class, 'show'])->name('guru-staf.show');
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
 Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.show');
 
@@ -41,6 +39,40 @@ Route::get('/downloads/{download}/download', [App\Http\Controllers\Frontend\Down
 Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
 Route::post('/kontak', [HomeController::class, 'kirimPesan'])->name('kontak.kirim');
 
+// Legal / kebijakan publik
+Route::get('/kebijakan-privasi', [LegalController::class, 'privacy'])->name('privacy');
+Route::get('/syarat-layanan', [LegalController::class, 'terms'])->name('terms');
+Route::get('/kebijakan-cookie', [LegalController::class, 'cookies'])->name('cookies');
+
+// Dynamic PWA manifest dari data profil sekolah
+Route::get('/site.webmanifest', function () {
+    $profile = \App\Models\Profile::first();
+    $name = data_get($profile, 'nama_sekolah', config('app.name', 'CMS Sekolah'));
+    $shortName = \Illuminate\Support\Str::limit($name, 12, '');
+    $base = rtrim(request()->getBasePath(), '/') ?: '';
+
+    return response()->json([
+        'name' => $name,
+        'short_name' => $shortName,
+        'description' => 'Content Management System ' . $name,
+        'start_url' => $base . '/',
+        'display' => 'standalone',
+        'background_color' => '#ffffff',
+        'theme_color' => '#008000',
+        'icons' => [
+            ['src' => $base . '/favicon-16x16.png', 'sizes' => '16x16', 'type' => 'image/png'],
+            ['src' => $base . '/favicon-32x32.png', 'sizes' => '32x32', 'type' => 'image/png'],
+            ['src' => $base . '/favicon-48x48.png', 'sizes' => '48x48', 'type' => 'image/png'],
+            ['src' => $base . '/favicon-64x64.png', 'sizes' => '64x64', 'type' => 'image/png'],
+            ['src' => $base . '/favicon-128x128.png', 'sizes' => '128x128', 'type' => 'image/png'],
+            ['src' => $base . '/favicon-256x256.png', 'sizes' => '256x256', 'type' => 'image/png'],
+        ],
+    ], 200, [
+        'Content-Type' => 'application/manifest+json',
+        'Cache-Control' => 'public, max-age=3600',
+    ]);
+})->name('webmanifest');
+
 // Frontend Controller Routes (Alternative)
 Route::prefix('frontend')->name('frontend.')->group(function () {
     Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
@@ -49,8 +81,6 @@ Route::prefix('frontend')->name('frontend.')->group(function () {
     Route::get('/agenda/{id}', [AgendaController::class, 'show'])->name('agenda.show');
     Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri.index');
     Route::get('/galeri/{id}', [GaleriController::class, 'show'])->name('galeri.show');
-    Route::get('/guru-staf', [GuruStafController::class, 'index'])->name('guru-staf.index');
-    Route::get('/guru-staf/{id}', [GuruStafController::class, 'show'])->name('guru-staf.show');
 });
 
 // Buku Tamu (Public)
@@ -61,54 +91,44 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::prefix('admin')->name('admin.')->middleware(['role:admin|operator|editor'])->group(function () {
         // Dashboard
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-        
-        // Sidebar Preview (for development/testing)
-        Route::get('/sidebar-preview', function () {
-            return view('admin.sidebar-preview');
-        })->name('sidebar-preview');
-        
-        // Sidebar Demo (for testing new features)
-        Route::get('/sidebar-demo', function () {
-            return view('admin.sidebar-demo');
-        })->name('sidebar-demo');
-        
-        // Alpine.js Test Page
-        Route::get('/alpine-test', function () {
-            return view('admin.alpine-test');
-        })->name('alpine-test');
-        
-        // Test Sidebar Page
-        Route::get('/test-sidebar', function () {
-            return view('admin.test-sidebar');
-        })->name('test-sidebar');
-        
-        // Test Guru Staf Page
-        Route::get('/guru-staf/test', function () {
-            return view('admin.guru-staf.test');
-        })->name('guru-staf.test');
-        
-        // Test Guru Staf Simple Page
-        Route::get('/guru-staf/test-simple', function () {
-            return view('admin.guru-staf.test-simple');
-        })->name('guru-staf.test-simple');
-        
-        // Test Guru Staf Create Layout Page
-        Route::get('/guru-staf/test-create', function () {
-            return view('admin.guru-staf.test-create');
-        })->name('guru-staf.test-create');
-        
-        // Test Guru Staf Simple Alpine Page
-        Route::get('/guru-staf/test-simple-alpine', function () {
-            return view('admin.guru-staf.test-simple-alpine');
-        })->name('guru-staf.test-simple-alpine');
+
+        // Dev/test routes — hanya di local/debug
+        if (app()->environment('local') || config('app.debug')) {
+            Route::get('/sidebar-preview', function () {
+                return view('admin.sidebar-preview');
+            })->name('sidebar-preview');
+
+            Route::get('/sidebar-demo', function () {
+                return view('admin.sidebar-demo');
+            })->name('sidebar-demo');
+
+            Route::get('/alpine-test', function () {
+                return view('admin.alpine-test');
+            })->name('alpine-test');
+
+            Route::get('/test-sidebar', function () {
+                return view('admin.test-sidebar');
+            })->name('test-sidebar');
+
+            Route::get('/galeri-test', function () {
+                return view('admin.galeri.test');
+            })->name('galeri.test');
+
+            Route::get('/galeri-simple', function () {
+                return view('admin.galeri.index-simple');
+            })->name('galeri.simple');
+
+            Route::get('/galeri/test-method', [App\Http\Controllers\Admin\GaleriController::class, 'test'])->name('galeri.test-method');
+            Route::post('/galeri/test-form', [App\Http\Controllers\Admin\GaleriController::class, 'testForm'])->name('galeri.test-form');
+
+            Route::get('/galeri-test-index', [App\Http\Controllers\Admin\GaleriTestController::class, 'index'])->name('galeri.test-index');
+            Route::get('/galeri-test-create', [App\Http\Controllers\Admin\GaleriTestController::class, 'create'])->name('galeri.test-create');
+            Route::get('/galeri-test-edit/{id}', [App\Http\Controllers\Admin\GaleriTestController::class, 'edit'])->name('galeri.test-edit');
+        }
         
         // Profile Management
         Route::get('/profil', [App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
         Route::post('/profil', [App\Http\Controllers\Admin\ProfileController::class, 'store'])->name('profile.store');
-        
-        
-        // Guru & Staf Management
-        Route::resource('guru-staf', App\Http\Controllers\Admin\GuruStafController::class);
         
         // Berita Management
         Route::resource('berita', App\Http\Controllers\Admin\BeritaController::class)->parameters(['berita' => 'berita']);
@@ -123,14 +143,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         // Galeri Management
         Route::resource('galeri', App\Http\Controllers\Admin\GaleriController::class);
         Route::get('/galeri/create', [App\Http\Controllers\Admin\GaleriController::class, 'create'])->name('galeri.create');
-        Route::get('/galeri-test', function () {
-            return view('admin.galeri.test');
-        })->name('galeri.test');
-        Route::get('/galeri-simple', function () {
-            return view('admin.galeri.index-simple');
-        })->name('galeri.simple');
-        Route::get('/galeri/test-method', [App\Http\Controllers\Admin\GaleriController::class, 'test'])->name('galeri.test-method');
-        Route::post('/galeri/test-form', [App\Http\Controllers\Admin\GaleriController::class, 'testForm'])->name('galeri.test-form');
         
         // Galeri Items Management
         Route::prefix('galeri/{galeri}/items')->name('galeri.items.')->group(function () {
@@ -140,11 +152,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::put('/{galeriItem}', [App\Http\Controllers\Admin\GaleriItemController::class, 'update'])->name('update');
             Route::delete('/{galeriItem}', [App\Http\Controllers\Admin\GaleriItemController::class, 'destroy'])->name('destroy');
         });
-        
-        // Galeri Test Routes
-        Route::get('/galeri-test-index', [App\Http\Controllers\Admin\GaleriTestController::class, 'index'])->name('galeri.test-index');
-        Route::get('/galeri-test-create', [App\Http\Controllers\Admin\GaleriTestController::class, 'create'])->name('galeri.test-create');
-        Route::get('/galeri-test-edit/{id}', [App\Http\Controllers\Admin\GaleriTestController::class, 'edit'])->name('galeri.test-edit');
         
         // Download Management
         Route::resource('downloads', App\Http\Controllers\Admin\DownloadController::class);
@@ -161,6 +168,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         
         // Features Management
         Route::resource('features', App\Http\Controllers\Admin\FeatureController::class);
+
+        // Homepage Hero Slider & Widgets
+        Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
+        Route::get('homepage-widgets-kota-search', [App\Http\Controllers\Admin\HomepageWidgetController::class, 'searchKota'])
+            ->name('homepage-widgets.kota-search');
+        Route::resource('homepage-widgets', App\Http\Controllers\Admin\HomepageWidgetController::class);
         
         // Comments Management
         Route::resource('comments', App\Http\Controllers\Admin\CommentController::class);

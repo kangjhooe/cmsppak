@@ -9,10 +9,22 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::with('permissions')->paginate(10);
-        return view('admin.roles.index', compact('roles'));
+        $query = Role::with('permissions')->withCount('users');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $roles = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => Role::count(),
+            'permissions' => Permission::count(),
+        ];
+
+        return view('admin.roles.index', compact('roles', 'stats'));
     }
 
     public function create()

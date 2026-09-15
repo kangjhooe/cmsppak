@@ -2,6 +2,14 @@
 
 @section('title', 'Agenda - ' . $schoolName)
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/agenda.css') }}">
+@endpush
+
+@push('scripts-head')
+<script src="{{ asset('js/agenda.js') }}" defer></script>
+@endpush
+
 @php
     $profileData = $profile ?? null;
     
@@ -18,7 +26,7 @@
 
 @section('page-header')
     <div class="text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4" style="color: var(--color-text-primary);">
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3" style="color: var(--color-text-primary);">
             Agenda & Kegiatan
         </h1>
         <p class="text-xl max-w-3xl mx-auto" style="color: var(--color-text-secondary);">

@@ -7,7 +7,7 @@
 @endphp
 
 @section('page-header')
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Galeri Foto & Video</h1>
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">Galeri Foto & Video</h1>
     <p class="text-xl text-blue-100 max-w-3xl mx-auto">
         Dokumentasi kegiatan dan momen berharga {{ $profile->nama_sekolah ?? $schoolName }}
     </p>
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
 @push('styles')
 <style>
 .active-tab {
-    background-color: #008000;
+    background-color: var(--color-primary);
     color: white;
 }
 </style>

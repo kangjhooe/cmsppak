@@ -1,3 +1,3 @@
-# Terms of Service
+# Syarat Layanan
 
-Edit this file to define the terms of service for your application.
+Lihat halaman publik: `/syarat-layanan`

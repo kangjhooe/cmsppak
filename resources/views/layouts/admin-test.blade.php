@@ -213,13 +213,6 @@
                 </div>
                 
                 <div class="nav-item">
-                    <a href="{{ route('admin.guru-staf.index') }}" class="nav-link {{ request()->routeIs('admin.guru-staf*') ? 'active' : '' }}">
-                        <div class="nav-icon">👥</div>
-                        <span>Guru & Staf</span>
-                    </a>
-                </div>
-                
-                <div class="nav-item">
                     <a href="{{ route('admin.berita.index') }}" class="nav-link {{ request()->routeIs('admin.berita*') ? 'active' : '' }}">
                         <div class="nav-icon">📰</div>
                         <span>Berita</span>

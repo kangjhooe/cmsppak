@@ -11,10 +11,41 @@ use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $berita = Berita::with(['user', 'kategori'])->latest()->paginate(10);
-        return view('admin.berita.index', compact('berita'));
+        $query = Berita::with(['user', 'kategori'])->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('ringkasan', 'like', "%{$search}%")
+                    ->orWhere('konten', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('kategori')) {
+            $query->whereHas('kategori', function ($q) use ($request) {
+                $q->where('kategori.id', $request->kategori);
+            });
+        }
+
+        $berita = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => Berita::count(),
+            'published' => Berita::where('status', 'published')->count(),
+            'draft' => Berita::where('status', 'draft')->count(),
+            'views' => (int) Berita::sum('view_count'),
+        ];
+
+        $kategoriList = Kategori::active()->orderBy('nama')->get();
+
+        return view('admin.berita.index', compact('berita', 'stats', 'kategoriList'));
     }
 
     public function create()

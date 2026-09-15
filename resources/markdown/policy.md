@@ -1,3 +1,3 @@
-# Privacy Policy
+# Kebijakan Privasi
 
-Edit this file to define the privacy policy for your application.
+Lihat halaman publik: `/kebijakan-privasi`

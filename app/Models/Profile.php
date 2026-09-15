@@ -12,6 +12,7 @@ class Profile extends Model
 
     protected $fillable = [
         'nama_sekolah',
+        'jenis_lembaga',
         'npsn',
         'alamat',
         'telepon',
@@ -185,23 +186,13 @@ class Profile extends Model
         return $value === true || $value === 1 || $value === '1';
     }
 
-    /**
-     * Get kepala madrasah data from GuruStaf
-     */
-    public function getKepalaMadrasahData()
+    public function getJenisLembagaNormalizedAttribute(): string
     {
-        return \App\Models\GuruStaf::getKepalaMadrasah();
+        return \App\Helpers\InstitutionHelper::normalize($this->jenis_lembaga);
     }
 
-    /**
-     * Get kepala madrasah photo URL
-     */
-    public function getKepalaMadrasahPhotoUrl()
+    public function usesIslamicFeatures(): bool
     {
-        $kepalaMadrasah = $this->getKepalaMadrasahData();
-        if ($kepalaMadrasah && $kepalaMadrasah->foto) {
-            return StorageHelper::url($kepalaMadrasah->foto);
-        }
-        return null;
+        return \App\Helpers\InstitutionHelper::usesIslamicFeatures($this->jenis_lembaga, $this);
     }
 }

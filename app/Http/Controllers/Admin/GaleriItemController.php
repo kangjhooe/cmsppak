@@ -8,13 +8,13 @@ use App\Models\GaleriItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class GaleriItemController extends Controller
 {
     public function create(Galeri $galeri)
     {
         try {
-            Log::info('GaleriItem create form accessed', ['galeri_id' => $galeri->id]);
             return view('admin.galeri.items.create', compact('galeri'));
         } catch (\Exception $e) {
             Log::error('Error accessing galeri item create form', ['error' => $e->getMessage()]);
@@ -28,44 +28,61 @@ class GaleriItemController extends Controller
             $request->validate([
                 'judul' => 'required|string|max:255',
                 'deskripsi' => 'nullable|string',
-                'file' => 'required|file|mimes:jpeg,png,jpg,gif,webp|max:10240',
+                'jenis' => 'required|in:foto,video,youtube',
+                'file' => [
+                    Rule::requiredIf(fn () => in_array($request->jenis, ['foto', 'video'], true)),
+                    'nullable',
+                    'file',
+                    'mimes:jpeg,png,jpg,gif,webp,mp4,avi,mov,wmv',
+                    'max:10240',
+                ],
+                'youtube_url' => [
+                    Rule::requiredIf(fn () => $request->jenis === 'youtube'),
+                    'nullable',
+                    'string',
+                    'max:500',
+                ],
                 'thumbnail' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'urutan' => 'nullable|integer|min:1',
                 'status' => 'required|in:active,inactive'
             ]);
 
+            if ($galeri->items()->count() >= 12) {
+                return back()->withInput()->with('error', 'Maksimal 12 media per galeri');
+            }
+
             $data = [
                 'galeri_id' => $galeri->id,
                 'judul' => $request->judul,
                 'deskripsi' => $request->deskripsi,
-                'jenis' => 'foto',
-                'urutan' => $request->urutan ?? 1,
-                'status' => $request->status
+                'jenis' => $request->jenis,
+                'urutan' => $request->urutan ?? (($galeri->items()->max('urutan') ?? 0) + 1),
+                'status' => $request->status,
+                'file_path' => null,
+                'youtube_url' => null,
             ];
 
-            // Handle file upload
-            if ($request->hasFile('file')) {
+            if ($request->jenis === 'youtube') {
+                $normalized = GaleriItem::normalizeYoutubeUrl($request->youtube_url);
+                if (!$normalized) {
+                    return back()->withInput()->withErrors([
+                        'youtube_url' => 'URL YouTube tidak valid. Gunakan format youtube.com/watch?v=... atau youtu.be/...'
+                    ]);
+                }
+                $data['youtube_url'] = $normalized;
+            } elseif ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('galeri', $filename, 'public');
-                $data['file_path'] = $path;
+                $data['file_path'] = $file->storeAs('galeri', $filename, 'public');
             }
 
-            // Handle thumbnail upload
             if ($request->hasFile('thumbnail')) {
                 $thumbnail = $request->file('thumbnail');
                 $thumbnailName = 'thumb_' . time() . '_' . $thumbnail->getClientOriginalName();
-                $thumbnailPath = $thumbnail->storeAs('galeri/thumbnails', $thumbnailName, 'public');
-                $data['thumbnail'] = $thumbnailPath;
+                $data['thumbnail'] = $thumbnail->storeAs('galeri/thumbnails', $thumbnailName, 'public');
             }
 
-            $galeriItem = GaleriItem::create($data);
-
-            Log::info('GaleriItem created successfully', [
-                'id' => $galeriItem->id,
-                'galeri_id' => $galeri->id,
-                'judul' => $request->judul
-            ]);
+            GaleriItem::create($data);
 
             return redirect()->route('admin.galeri.edit', $galeri)
                             ->with('success', 'Media item berhasil ditambahkan');
@@ -75,24 +92,36 @@ class GaleriItemController extends Controller
         }
     }
 
-    public function edit(GaleriItem $galeriItem)
+    public function edit(Galeri $galeri, GaleriItem $galeriItem)
     {
         try {
-            Log::info('GaleriItem edit form accessed', ['id' => $galeriItem->id]);
-            return view('admin.galeri.items.edit', compact('galeriItem'));
+            if ($galeriItem->galeri_id !== $galeri->id) {
+                abort(404);
+            }
+            return view('admin.galeri.items.edit', compact('galeri', 'galeriItem'));
         } catch (\Exception $e) {
             Log::error('Error accessing galeri item edit form', ['error' => $e->getMessage()]);
             return back()->with('error', 'Terjadi kesalahan saat membuka form edit media item');
         }
     }
 
-    public function update(Request $request, GaleriItem $galeriItem)
+    public function update(Request $request, Galeri $galeri, GaleriItem $galeriItem)
     {
+        if ($galeriItem->galeri_id !== $galeri->id) {
+            abort(404);
+        }
+
         try {
             $request->validate([
                 'judul' => 'required|string|max:255',
                 'deskripsi' => 'nullable|string',
-                'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp|max:10240',
+                'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,mp4,avi,mov,wmv|max:10240',
+                'youtube_url' => [
+                    Rule::requiredIf(fn () => $galeriItem->jenis === 'youtube'),
+                    'nullable',
+                    'string',
+                    'max:500',
+                ],
                 'thumbnail' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'urutan' => 'nullable|integer|min:1',
                 'status' => 'required|in:active,inactive'
@@ -101,45 +130,43 @@ class GaleriItemController extends Controller
             $data = [
                 'judul' => $request->judul,
                 'deskripsi' => $request->deskripsi,
-                'jenis' => 'foto',
                 'urutan' => $request->urutan ?? $galeriItem->urutan,
                 'status' => $request->status
             ];
 
-            // Handle file upload
-            if ($request->hasFile('file')) {
-                // Delete old file
+            if ($galeriItem->jenis === 'youtube') {
+                $normalized = GaleriItem::normalizeYoutubeUrl($request->youtube_url);
+                if (!$normalized) {
+                    return back()->withInput()->withErrors([
+                        'youtube_url' => 'URL YouTube tidak valid.'
+                    ]);
+                }
+                $data['youtube_url'] = $normalized;
+            }
+
+            if ($request->hasFile('file') && in_array($galeriItem->jenis, ['foto', 'video'], true)) {
                 if ($galeriItem->file_path) {
                     Storage::disk('public')->delete($galeriItem->file_path);
                 }
-                
+
                 $file = $request->file('file');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('galeri', $filename, 'public');
-                $data['file_path'] = $path;
+                $data['file_path'] = $file->storeAs('galeri', $filename, 'public');
             }
 
-            // Handle thumbnail upload
             if ($request->hasFile('thumbnail')) {
-                // Delete old thumbnail
                 if ($galeriItem->thumbnail) {
                     Storage::disk('public')->delete($galeriItem->thumbnail);
                 }
-                
+
                 $thumbnail = $request->file('thumbnail');
                 $thumbnailName = 'thumb_' . time() . '_' . $thumbnail->getClientOriginalName();
-                $thumbnailPath = $thumbnail->storeAs('galeri/thumbnails', $thumbnailName, 'public');
-                $data['thumbnail'] = $thumbnailPath;
+                $data['thumbnail'] = $thumbnail->storeAs('galeri/thumbnails', $thumbnailName, 'public');
             }
 
             $galeriItem->update($data);
 
-            Log::info('GaleriItem updated successfully', [
-                'id' => $galeriItem->id,
-                'judul' => $request->judul
-            ]);
-
-            return redirect()->route('admin.galeri.edit', $galeriItem->galeri)
+            return redirect()->route('admin.galeri.edit', $galeri)
                             ->with('success', 'Media item berhasil diperbarui');
         } catch (\Exception $e) {
             Log::error('Error updating galeri item', ['error' => $e->getMessage()]);
@@ -147,22 +174,23 @@ class GaleriItemController extends Controller
         }
     }
 
-    public function destroy(GaleriItem $galeriItem)
+    public function destroy(Galeri $galeri, GaleriItem $galeriItem)
     {
         try {
+            if ($galeriItem->galeri_id !== $galeri->id) {
+                abort(404);
+            }
+
             $galeriId = $galeriItem->galeri_id;
-            
-            // Delete files
+
             if ($galeriItem->file_path) {
                 Storage::disk('public')->delete($galeriItem->file_path);
             }
             if ($galeriItem->thumbnail) {
                 Storage::disk('public')->delete($galeriItem->thumbnail);
             }
-            
+
             $galeriItem->delete();
-            
-            Log::info('GaleriItem deleted successfully', ['id' => $galeriItem->id]);
 
             return redirect()->route('admin.galeri.edit', $galeriId)
                             ->with('success', 'Media item berhasil dihapus');

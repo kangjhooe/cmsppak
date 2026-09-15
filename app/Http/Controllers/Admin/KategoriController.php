@@ -11,10 +11,35 @@ class KategoriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kategori = Kategori::withCount('berita')->latest()->paginate(10);
-        return view('admin.kategori.index', compact('kategori'));
+        $query = Kategori::withCount('berita')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $kategori = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => Kategori::count(),
+            'active' => Kategori::where('is_active', true)->count(),
+            'inactive' => Kategori::where('is_active', false)->count(),
+        ];
+
+        return view('admin.kategori.index', compact('kategori', 'stats'));
     }
 
     /**

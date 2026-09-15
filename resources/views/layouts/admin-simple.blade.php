@@ -31,14 +31,16 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ $faviconPng }}">
     
     <!-- Web App Manifest -->
-    <link rel="manifest" href="{{ asset("site.webmanifest") }}">
+    <link rel="manifest" href="{{ route('webmanifest') }}">
     
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    
-    <!-- Fallback CDN -->
+
+    {{-- CDN fallback jika Vite belum di-build --}}
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
@@ -46,7 +48,9 @@
     @stack('styles')
     
     <style>
-        /* Custom CSS to fix sidebar positioning and remove empty space */
+        body {
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        }
         @media (min-width: 1024px) {
             .lg\\:relative {
                 position: relative !important;
@@ -70,6 +74,22 @@
             /* Ensure main content doesn't overlap with fixed sidebar */
             main.flex-1.bg-gray-50 {
                 margin-left: 288px !important; /* 18rem = 288px */
+            }
+        }
+
+        /* Denser admin chrome on laptop / 1366-class widths */
+        @media (min-width: 1024px) and (max-width: 1440px) {
+            aside.w-72,
+            .fixed.inset-y-0.left-0.z-50.w-72 {
+                width: 15rem !important; /* 240px */
+            }
+
+            main.flex-1.bg-gray-50 {
+                margin-left: 15rem !important;
+            }
+
+            body {
+                font-size: 0.875rem;
             }
         }
         }
@@ -249,7 +269,7 @@
             <!-- Sidebar Header -->
             <div class="flex items-center justify-between h-20 px-6 border-b border-slate-600/50 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center shadow-xl">
                         <i class="fas fa-graduation-cap text-white text-xl"></i>
                     </div>
                     <div class="ml-4">
@@ -272,7 +292,7 @@
                     <div>
                         <a href="{{ route('admin.dashboard') }}" 
                            @click="activeMenu = 'dashboard'; openMenus = ['dashboard']"
-                           class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
+                           class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
                             <div class="w-10 h-10 {{ request()->routeIs('admin.dashboard') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
                                 <i class="fas fa-tachometer-alt text-sm {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
                             </div>
@@ -280,29 +300,15 @@
                         </a>
                     </div>
                     
-                    <!-- Alpine.js Test (Hidden for production) -->
-                    @if(config('app.debug') || app()->environment('local'))
-                    <div>
-                        <a href="{{ route('admin.alpine-test') }}" 
-                           @click="activeMenu = 'alpine-test'; openMenus = ['alpine-test']"
-                           class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.alpine-test') ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
-                            <div class="w-10 h-10 {{ request()->routeIs('admin.alpine-test') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
-                                <i class="fas fa-flask text-sm {{ request()->routeIs('admin.alpine-test') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
-                            </div>
-                            <span class="ml-3">Alpine.js Test</span>
-                        </a>
-                    </div>
-                    @endif
-                    
                     <!-- Profile Management -->
                     <div>
                         <a href="{{ route('admin.profile.index') }}" 
                            @click="activeMenu = 'profile'; openMenus = ['profile']"
-                           class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.profile*') ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
+                           class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.profile*') ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
                             <div class="w-10 h-10 {{ request()->routeIs('admin.profile*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
                                 <i class="fas fa-building text-sm {{ request()->routeIs('admin.profile*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
                             </div>
-                            <span class="ml-3">Profil Pondok Pesantren</span>
+                            <span class="ml-3">Profil {{ __('school') }}</span>
                         </a>
                     </div>
                     
@@ -311,43 +317,7 @@
                     <div class="pt-6">
                         <div class="px-3 mb-4">
                             <p class="text-xs font-bold text-slate-300 uppercase tracking-wider">Manajemen Konten</p>
-                            <div class="w-8 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 mt-2 rounded-full"></div>
-                        </div>
-                        
-                        <!-- Guru & Staf Menu with Submenu -->
-                        <div x-data="{ open: {{ request()->routeIs('admin.guru-staf*') ? 'true' : 'false' }} }">
-                            <button @click="open = !open; if(open) openMenus.push('guru-staf'); else openMenus = openMenus.filter(m => m !== 'guru-staf')"
-                                    @click="activeMenu = 'guru-staf'"
-                                    class="w-full flex items-center justify-between px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group hover:bg-slate-600/50 hover:text-white {{ request()->routeIs('admin.guru-staf*') ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg' : '' }}">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 {{ request()->routeIs('admin.guru-staf*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
-                                        <i class="fas fa-users text-sm {{ request()->routeIs('admin.guru-staf*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
-                                    </div>
-                                    <span class="ml-3">Guru & Staf</span>
-                                </div>
-                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
-                            </button>
-                            
-                            <!-- Submenu -->
-                            <div x-show="open" 
-                                 x-transition:enter="transition ease-out duration-200"
-                                 x-transition:enter-start="opacity-0 transform -translate-y-2"
-                                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                                 x-transition:leave="transition ease-in duration-150"
-                                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                                 x-transition:leave-end="opacity-0 transform -translate-y-2"
-                                 class="ml-8 mt-2 space-y-1">
-                                <a href="{{ route('admin.guru-staf.index') }}" 
-                                   class="flex items-center px-3 py-2 text-sm text-slate-300 rounded-lg hover:bg-slate-600/30 hover:text-white transition-colors {{ request()->routeIs('admin.guru-staf.index') ? 'bg-slate-600/30 text-white' : '' }}">
-                                    <i class="fas fa-list-ul w-4 text-center mr-3"></i>
-                                    Daftar Guru & Staf
-                                </a>
-                                <a href="{{ route('admin.guru-staf.create') }}" 
-                                   class="flex items-center px-3 py-2 text-sm text-slate-300 rounded-lg hover:bg-slate-600/30 hover:text-white transition-colors {{ request()->routeIs('admin.guru-staf.create') ? 'bg-slate-600/30 text-white' : '' }}">
-                                    <i class="fas fa-plus w-4 text-center mr-3"></i>
-                                    Tambah Baru
-                                </a>
-                            </div>
+                            <div class="w-8 h-0.5 bg-gradient-to-r from-green-400 to-emerald-400 mt-2 rounded-full"></div>
                         </div>
                         
                         <!-- Berita Menu with Submenu -->
@@ -478,7 +448,31 @@
                                 <div class="w-10 h-10 {{ request()->routeIs('admin.features*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
                                     <i class="fas fa-check-circle text-sm {{ request()->routeIs('admin.features*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
                                 </div>
-                                <span class="ml-3">Fitur (Mengapa Memilih Kami?)</span>
+                                <span class="ml-3">Fitur</span>
+                            </a>
+                        </div>
+
+                        <!-- Hero Slider Menu -->
+                        <div>
+                            <a href="{{ route('admin.hero-slides.index') }}"
+                               @click="activeMenu = 'hero-slides'; openMenus = ['hero-slides']"
+                               class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.hero-slides*') ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
+                                <div class="w-10 h-10 {{ request()->routeIs('admin.hero-slides*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
+                                    <i class="fas fa-images text-sm {{ request()->routeIs('admin.hero-slides*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
+                                </div>
+                                <span class="ml-3">Hero Slider</span>
+                            </a>
+                        </div>
+
+                        <!-- Homepage Widgets Menu -->
+                        <div>
+                            <a href="{{ route('admin.homepage-widgets.index') }}"
+                               @click="activeMenu = 'homepage-widgets'; openMenus = ['homepage-widgets']"
+                               class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.homepage-widgets*') ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
+                                <div class="w-10 h-10 {{ request()->routeIs('admin.homepage-widgets*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
+                                    <i class="fas fa-th-large text-sm {{ request()->routeIs('admin.homepage-widgets*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
+                                </div>
+                                <span class="ml-3">Widget Beranda</span>
                             </a>
                         </div>
                         
@@ -522,7 +516,7 @@
                         <div x-data="{ open: {{ request()->routeIs('admin.comments*') ? 'true' : 'false' }} }">
                             <button @click="open = !open; if(open) openMenus.push('comments'); else openMenus = openMenus.filter(m => m !== 'comments')"
                                     @click="activeMenu = 'comments'"
-                                    class="w-full flex items-center justify-between px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group hover:bg-slate-600/50 hover:text-white {{ request()->routeIs('admin.comments*') ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg' : '' }}">
+                                    class="w-full flex items-center justify-between px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group hover:bg-slate-600/50 hover:text-white {{ request()->routeIs('admin.comments*') ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : '' }}">
                                 <div class="flex items-center">
                                     <div class="w-10 h-10 {{ request()->routeIs('admin.comments*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
                                         <i class="fas fa-comments text-sm {{ request()->routeIs('admin.comments*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
@@ -561,6 +555,24 @@
                                     @endif
                                 </a>
                             </div>
+                        </div>
+
+                        <!-- Buku Tamu -->
+                        <div>
+                            <a href="{{ route('admin.buku-tamu.index') }}"
+                               @click="activeMenu = 'buku-tamu'; openMenus = ['buku-tamu']"
+                               class="flex items-center px-4 py-3 text-slate-100 rounded-xl transition-all duration-200 font-medium text-sm group {{ request()->routeIs('admin.buku-tamu*') ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : 'hover:bg-slate-600/50 hover:text-white' }}">
+                                <div class="w-10 h-10 {{ request()->routeIs('admin.buku-tamu*') ? 'bg-white/20' : 'bg-slate-600/50 group-hover:bg-slate-500/50' }} rounded-xl flex items-center justify-center transition-colors">
+                                    <i class="fas fa-book text-sm {{ request()->routeIs('admin.buku-tamu*') ? 'text-white' : 'text-slate-300 group-hover:text-white' }}"></i>
+                                </div>
+                                <span class="ml-3">Buku Tamu</span>
+                                @php
+                                    $unreadGuestbook = \App\Models\BukuTamu::where('status', 'unread')->count();
+                                @endphp
+                                @if($unreadGuestbook > 0)
+                                    <span class="ml-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full">{{ $unreadGuestbook }}</span>
+                                @endif
+                            </a>
                         </div>
                         
                         <!-- User & Role Management (Admin only) -->
@@ -668,7 +680,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-search text-gray-400 text-sm"></i>
                                 </div>
-                                <input type="text" placeholder="Cari berita, agenda, guru..." 
+                                <input type="text" placeholder="Cari berita, agenda..." 
                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-200">
                             </div>
                         </div>

@@ -22,8 +22,6 @@
             <h2 class="text-lg font-semibold text-green-900 mb-2">Route Detection Test:</h2>
             <ul class="text-green-800 space-y-1">
                 <li>admin.dashboard: {{ request()->routeIs('admin.dashboard') ? '✅ TRUE' : '❌ FALSE' }}</li>
-                <li>admin.guru-staf*: {{ request()->routeIs('admin.guru-staf*') ? '✅ TRUE' : '❌ FALSE' }}</li>
-                <li>admin.guru-staf.create: {{ request()->routeIs('admin.guru-staf.create') ? '✅ TRUE' : '❌ FALSE' }}</li>
                 <li>admin.berita*: {{ request()->routeIs('admin.berita*') ? '✅ TRUE' : '❌ FALSE' }}</li>
                 <li>admin.agenda*: {{ request()->routeIs('admin.agenda*') ? '✅ TRUE' : '❌ FALSE' }}</li>
             </ul>
@@ -35,9 +33,9 @@
                 Kembali ke Dashboard
             </a>
             
-            <a href="{{ route('admin.guru-staf.create') }}" class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors ml-3">
-                <i class="fas fa-users mr-2"></i>
-                Test Guru Staf Create
+            <a href="{{ route('admin.berita.create') }}" class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors ml-3">
+                <i class="fas fa-newspaper mr-2"></i>
+                Test Berita Create
             </a>
         </div>
     </div>

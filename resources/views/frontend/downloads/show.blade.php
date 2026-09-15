@@ -3,7 +3,7 @@
 @section('title', $download->judul . ' - Download Area - ' . $schoolName)
 
 @section('page-header')
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $download->judul }}</h1>
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">{{ $download->judul }}</h1>
     <p class="text-xl text-blue-100 max-w-3xl mx-auto">
         Detail file download
     </p>

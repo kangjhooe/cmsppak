@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'CMS Pesantren'),
+    'name' => env('APP_NAME', 'CMS Lembaga Pendidikan'),
 
-    'default_school_name' => env('DEFAULT_SCHOOL_NAME', 'Pondok Pesantren'),
+    'default_school_name' => env('DEFAULT_SCHOOL_NAME', 'Lembaga Pendidikan'),
 
     /*
     |--------------------------------------------------------------------------

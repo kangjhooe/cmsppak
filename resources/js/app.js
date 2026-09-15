@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if we're in admin panel
     if (currentPath.includes('/admin/')) {
         // Auto-expand the appropriate menu section
-        const menuSections = ['guru-staf', 'berita', 'agenda', 'galeri', 'downloads', 'buku-tamu', 'users', 'roles'];
+        const menuSections = ['berita', 'agenda', 'galeri', 'downloads', 'buku-tamu', 'users', 'roles'];
         
         menuSections.forEach(section => {
             if (currentPath.includes(section)) {

@@ -11,10 +11,42 @@ use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $query = User::with('roles')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('role')) {
+            $query->role($request->role);
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'verified') {
+                $query->whereNotNull('email_verified_at');
+            } elseif ($request->status === 'unverified') {
+                $query->whereNull('email_verified_at');
+            }
+        }
+
+        $users = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => User::count(),
+            'admin' => User::whereHas('roles', fn ($q) => $q->where('name', 'admin'))->count(),
+            'verified' => User::whereNotNull('email_verified_at')->count(),
+            'unverified' => User::whereNull('email_verified_at')->count(),
+        ];
+
+        $roles = Role::orderBy('name')->get();
+
+        return view('admin.users.index', compact('users', 'stats', 'roles'));
     }
 
     public function create()

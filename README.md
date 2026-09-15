@@ -14,7 +14,6 @@ Content Management System (CMS) untuk website pondok pesantren "Al-Falah Krui" y
 - **Dashboard**: Ringkasan data pondok pesantren
 - **Manajemen User & Role**: Pengaturan user dan permission
 - **Profil Pondok Pesantren**: Edit identitas, visi-misi, sejarah, kontak
-- **Guru & Staf**: CRUD data guru dengan foto dan biodata
 - **Berita & Artikel**: Editor teks dengan upload gambar
 - **Agenda/Kalender**: Manajemen kegiatan pesantren
 - **Galeri**: Upload foto dan video dengan thumbnail
@@ -23,7 +22,6 @@ Content Management System (CMS) untuk website pondok pesantren "Al-Falah Krui" y
 ### 🌐 Frontend Publik
 - **Homepage**: Slider, berita terbaru, agenda terdekat
 - **Profil Pondok Pesantren**: Informasi lengkap pondok pesantren
-- **Guru & Staf**: Daftar pengajar dan tenaga kependidikan
 - **Berita**: Listing dan detail artikel
 - **Agenda**: Kalender kegiatan pondok pesantren
 - **Galeri**: Tampilan foto dan video
@@ -117,7 +115,6 @@ Setelah menjalankan seeder, tersedia akun default:
 - `roles` - Role pengguna
 - `permissions` - Permission sistem
 - `profiles` - Profil sekolah
-- `guru_staf` - Data guru dan staf
 - `berita` - Artikel dan berita
 - `agenda` - Jadwal kegiatan
 - `galeri` - Foto dan video
@@ -153,7 +150,6 @@ cmsbq/
 ### Frontend Routes
 - `/` - Homepage
 - `/profil` - Profil pondok pesantren
-- `/guru-staf` - Daftar guru & staf
 - `/berita` - Listing berita
 - `/berita/{slug}` - Detail berita
 - `/agenda` - Kalender agenda
@@ -163,7 +159,6 @@ cmsbq/
 ### Admin Routes (`/admin`)
 - `/admin/dashboard` - Dashboard admin
 - `/admin/profile` - Edit profil pondok pesantren
-- `/admin/guru-staf` - CRUD guru & staf
 - `/admin/berita` - CRUD berita
 - `/admin/agenda` - CRUD agenda
 - `/admin/galeri` - CRUD galeri

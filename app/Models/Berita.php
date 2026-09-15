@@ -57,11 +57,19 @@ class Berita extends Model
 
     public function getExcerptAttribute()
     {
+        if (!empty($this->ringkasan)) {
+            return Str::limit(strip_tags($this->ringkasan), 200);
+        }
+
         return Str::limit(strip_tags($this->konten), 200);
     }
 
     public function getShortExcerptAttribute()
     {
+        if (!empty($this->ringkasan)) {
+            return Str::limit(strip_tags($this->ringkasan), 120);
+        }
+
         return Str::limit(strip_tags($this->konten), 120);
     }
 

@@ -1,13 +1,13 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Custom Font Import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
 
-/* CSS Variables untuk Tema Pondok Pesantren Al-Falah */
+/* CSS Variables untuk Tema CMS */
 :root {
-    /* Pondok Pesantren Al-Falah Brand Colors */
+    /* CMS Brand Colors */
     --color-primary: #008000;   /* hijau dominan - untuk navbar, header, footer */
     --color-secondary: #CCFF99; /* hijau muda - untuk section headers, card outlines */
     --color-accent: #FFFF00;    /* kuning - untuk hover states, small highlights */
@@ -69,20 +69,35 @@
 /* Base Styles */
 @layer base {
     html {
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         scroll-behavior: smooth;
+        /* Global type scale: ~12.5% smaller than browser default 16px */
+        font-size: 14px;
+    }
+
+    h1, h2, h3, .font-display {
+        font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    }
+
+    /* Restore a touch of size only on very large desktops */
+    @media (min-width: 1536px) {
+        html {
+            font-size: 15px;
+        }
     }
     
     body {
         @apply bg-gray-50 text-gray-900;
         background-color: var(--color-background);
         color: var(--color-text-primary);
+        font-size: 0.9375rem; /* ~13px body at 14px root */
+        line-height: 1.6;
     }
 }
 
 /* ===== SIDEBAR COMPONENTS ===== */
 @layer components {
-    /* Sidebar Container - Pondok Pesantren Al-Falah Krui Theme */
+    /* Sidebar Container - CMS Theme */
     .sidebar-container {
         @apply fixed inset-y-0 left-0 z-50 shadow-2xl transform transition-all duration-300 ease-in-out;
         background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-dark), var(--color-primary));
@@ -100,7 +115,7 @@
         @apply mt-6 px-4 pb-6 overflow-y-auto h-[calc(100vh-5rem)] scrollbar-thin;
     }
     
-    /* Main Menu Items - Pondok Pesantren Al-Falah Krui Theme */
+    /* Main Menu Items - CMS Theme */
     .sidebar-link {
         @apply flex items-center px-4 py-3 rounded-xl transition-all duration-200 font-semibold text-sm cursor-pointer group;
         color: var(--color-text-light);
@@ -118,7 +133,7 @@
         box-shadow: var(--shadow-secondary);
     }
     
-    /* Submenu Container & Items - Pondok Pesantren Al-Falah Krui Theme */
+    /* Submenu Container & Items - CMS Theme */
     .sidebar-submenu-container {
         @apply ml-0 space-y-1;
     }
@@ -139,7 +154,7 @@
         color: var(--color-text-light);
     }
     
-    /* Section Headers - Pondok Pesantren Al-Falah Krui Theme */
+    /* Section Headers - CMS Theme */
     .sidebar-section-header {
         @apply px-3 text-xs font-bold uppercase tracking-wider mb-4;
         color: var(--color-highlight-light);
@@ -192,7 +207,7 @@
         @apply w-72;
     }
     
-    /* Toggle Button - Pondok Pesantren Al-Falah Krui Theme */
+    /* Toggle Button - CMS Theme */
     .sidebar-toggle-btn {
         @apply flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200;
         color: var(--color-accent-light);
@@ -217,7 +232,7 @@
     }
 }
 
-/* ===== CUSTOM SCROLLBAR - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== CUSTOM SCROLLBAR - CMS Theme ===== */
 @layer utilities {
     .scrollbar-thin {
         scrollbar-width: thin;
@@ -367,7 +382,7 @@
         color: var(--color-text-dark);
     }
     
-    /* Footer Components - Pondok Pesantren Al-Falah Krui Theme */
+    /* Footer Components - CMS Theme */
     .footer-dark {
         background: linear-gradient(to right, var(--color-primary-dark), var(--color-footer-bg), var(--color-primary-dark));
         color: var(--color-text-light);
@@ -821,7 +836,77 @@
     }
 }
 
-/* ===== FOCUS STATES - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== HOMEPAGE WIDGETS ===== */
+@keyframes homepageWidgetIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes prayerSlotIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes prayerNextPulse {
+    0%, 100% {
+        box-shadow: 0 4px 14px rgba(0, 51, 0, 0.18);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(0, 128, 0, 0.32);
+    }
+}
+
+@keyframes prayerIconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+}
+
+.homepage-widget-card {
+    animation: homepageWidgetIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.homepage-widget-card:hover {
+    transform: translateY(-2px);
+}
+
+.prayer-widget-icon {
+    animation: prayerIconFloat 2.8s ease-in-out infinite;
+}
+
+.prayer-slot {
+    animation: prayerSlotIn 0.45s ease-out both;
+}
+
+.prayer-slot--next {
+    animation: prayerSlotIn 0.45s ease-out both, prayerNextPulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .homepage-widget-card,
+    .prayer-slot,
+    .prayer-slot--next,
+    .prayer-widget-icon {
+        animation: none !important;
+    }
+
+    .homepage-widget-card:hover {
+        transform: none;
+    }
+}
+
+/* ===== FOCUS STATES - CMS Theme ===== */
 @layer utilities {
     .focus-ring {
         @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
@@ -856,7 +941,7 @@
 
 /* ===== BUTTON COMPONENTS ===== */
 @layer components {
-    /* Pondok Pesantren Al-Falah Krui Theme Buttons */
+    /* CMS Theme Buttons */
     .btn-primary {
         @apply bg-primary text-text-light px-6 py-3 rounded-xl font-semibold shadow-primary hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
         background: var(--color-primary);
@@ -952,7 +1037,7 @@
 
 /* ===== CARD COMPONENTS ===== */
 @layer components {
-    /* Pondok Pesantren Al-Falah Krui Theme Cards */
+    /* CMS Theme Cards */
     .card {
         @apply bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300;
     }
@@ -1081,7 +1166,7 @@
 
 /* ===== FORM COMPONENTS ===== */
 @layer components {
-    /* Pondok Pesantren Al-Falah Krui Theme Forms */
+    /* CMS Theme Forms */
     .form-input-modern {
         @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white shadow-sm;
     }
@@ -1192,7 +1277,7 @@
     }
 }
 
-/* ===== ALERT COMPONENTS - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== ALERT COMPONENTS - CMS Theme ===== */
 @layer components {
     .alert-modern {
         @apply p-4 rounded-xl border-l-4 shadow-lg;
@@ -1231,7 +1316,7 @@
     }
 }
 
-/* ===== BADGE COMPONENTS - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== BADGE COMPONENTS - CMS Theme ===== */
 @layer components {
     .badge {
         @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
@@ -1361,7 +1446,7 @@
 
 /* ===== NAVIGATION COMPONENTS ===== */
 @layer components {
-    /* Pondok Pesantren Al-Falah Krui Theme Navigation */
+    /* CMS Theme Navigation */
     .nav-tabs {
         @apply flex space-x-1 bg-gray-100 p-1 rounded-xl;
     }
@@ -1454,7 +1539,7 @@
     }
 }
 
-/* ===== PAGINATION COMPONENTS - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== PAGINATION COMPONENTS - CMS Theme ===== */
 @layer components {
     .pagination-modern {
         @apply flex items-center space-x-1;
@@ -1508,7 +1593,7 @@
     }
 }
 
-/* ===== UTILITY CLASSES - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== UTILITY CLASSES - CMS Theme ===== */
 @layer utilities {
     /* Section Styles */
     .section-title {
@@ -1564,7 +1649,7 @@
         -webkit-line-clamp: 6;
     }
     
-    /* Gradient Text - Pondok Pesantren Al-Falah Krui Theme */
+    /* Gradient Text - CMS Theme */
     .gradient-text {
         background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
         -webkit-background-clip: text;
@@ -1642,7 +1727,7 @@
     }
 }
 
-/* ===== ACCESSIBILITY & MEDIA QUERIES - Pondok Pesantren Al-Falah Krui Theme ===== */
+/* ===== ACCESSIBILITY & MEDIA QUERIES - CMS Theme ===== */
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     .sidebar-container {
@@ -1713,7 +1798,7 @@
     }
 }
 
-/* High Contrast Mode - Pondok Pesantren Al-Falah Krui Theme */
+/* High Contrast Mode - CMS Theme */
 @media (prefers-contrast: high) {
     .sidebar-link,
     .sidebar-submenu-link {
@@ -1987,34 +2072,156 @@
 
 /* ===== RESPONSIVE TYPOGRAPHY & SPACING ENHANCEMENTS ===== */
 @layer utilities {
-    /* Tablet adjustments */
-    @media (max-width: 1024px) {
-        .text-7xl,
+    /*
+     * Laptop / low-res desktop (e.g. 1366×768)
+     * Width sits above Tailwind lg (1024) so without this band
+     * pages still render full desktop type + tall section padding.
+     */
+    @media (max-width: 1440px) {
+        .text-7xl {
+            font-size: 2.75rem !important; /* ~38.5px @ 14px root */
+            line-height: 1.15 !important;
+        }
+
         .text-6xl {
-            font-size: 3.25rem !important;
-            line-height: 1.2 !important;
+            font-size: 2.35rem !important;
+            line-height: 1.15 !important;
         }
 
         .text-5xl {
-            font-size: 2.75rem !important;
+            font-size: 2rem !important;
             line-height: 1.2 !important;
         }
 
         .text-4xl {
-            font-size: 2.25rem !important;
+            font-size: 1.65rem !important;
             line-height: 1.25 !important;
+        }
+
+        .text-3xl {
+            font-size: 1.4rem !important;
+            line-height: 1.3 !important;
+        }
+
+        .text-2xl {
+            font-size: 1.2rem !important;
+            line-height: 1.35 !important;
+        }
+
+        .text-xl {
+            font-size: 1.05rem !important;
+            line-height: 1.5 !important;
+        }
+
+        .text-lg {
+            font-size: 0.98rem !important;
+            line-height: 1.55 !important;
+        }
+
+        .py-32 {
+            padding-top: 3.5rem !important;
+            padding-bottom: 3.5rem !important;
         }
 
         .py-24,
         .py-20 {
-            padding-top: 5rem !important;
-            padding-bottom: 5rem !important;
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .py-16 {
+            padding-top: 2.5rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+
+        .hero-title {
+            font-size: 2.25rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem !important;
+            line-height: 1.55 !important;
+        }
+
+        .prose,
+        .prose-lg {
+            font-size: 0.95rem !important;
+            line-height: 1.7 !important;
+        }
+
+        .prose h1,
+        .prose-lg h1 {
+            font-size: 1.65rem !important;
+        }
+
+        .prose h2,
+        .prose-lg h2 {
+            font-size: 1.4rem !important;
+        }
+
+        .prose h3,
+        .prose-lg h3 {
+            font-size: 1.2rem !important;
+        }
+    }
+
+    /* Short viewport height (classic 768px laptops) */
+    @media (max-height: 800px) and (min-width: 1024px) {
+        .py-32,
+        .lg\:py-32 {
+            padding-top: 2.5rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+
+        .py-24,
+        .py-20,
+        .lg\:py-20 {
+            padding-top: 2.25rem !important;
+            padding-bottom: 2.25rem !important;
+        }
+
+        .h-96,
+        .lg\:h-\[500px\],
+        .lg\:h-\[420px\],
+        .lg\:h-\[360px\] {
+            height: 18rem !important; /* 288px */
+        }
+    }
+
+    /* Tablet adjustments */
+    @media (max-width: 1024px) {
+        .text-7xl,
+        .text-6xl {
+            font-size: 2.5rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .text-5xl {
+            font-size: 2.1rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .text-4xl {
+            font-size: 1.75rem !important;
+            line-height: 1.25 !important;
+        }
+
+        .text-3xl {
+            font-size: 1.45rem !important;
+            line-height: 1.3 !important;
+        }
+
+        .py-24,
+        .py-20 {
+            padding-top: 3.25rem !important;
+            padding-bottom: 3.25rem !important;
         }
 
         .px-12,
         .px-10 {
-            padding-left: 2.5rem !important;
-            padding-right: 2.5rem !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
         }
     }
 

@@ -33,8 +33,16 @@ class BukuTamuController extends Controller
             $query->whereDate('created_at', '>=', $request->date_from);
         }
         
-        $bukuTamu = $query->latest()->paginate(15);
-        return view('admin.buku-tamu.index', compact('bukuTamu'));
+        $bukuTamu = $query->latest()->paginate(15)->withQueryString();
+
+        $stats = [
+            'total' => BukuTamu::count(),
+            'unread' => BukuTamu::where('status', 'unread')->count(),
+            'read' => BukuTamu::where('status', 'read')->count(),
+            'replied' => BukuTamu::where('status', 'replied')->count(),
+        ];
+
+        return view('admin.buku-tamu.index', compact('bukuTamu', 'stats'));
     }
 
     public function show(BukuTamu $bukuTamu)

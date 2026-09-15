@@ -8,10 +8,31 @@ use Illuminate\Http\Request;
 
 class ProgramUnggulanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $programUnggulan = ProgramUnggulan::orderBy('urutan', 'asc')->paginate(10);
-        return view('admin.program-unggulan.index', compact('programUnggulan'));
+        $query = ProgramUnggulan::query()->orderBy('urutan', 'asc');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $programUnggulan = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => ProgramUnggulan::count(),
+            'aktif' => ProgramUnggulan::where('status', 'aktif')->count(),
+            'nonaktif' => ProgramUnggulan::where('status', 'nonaktif')->count(),
+        ];
+
+        return view('admin.program-unggulan.index', compact('programUnggulan', 'stats'));
     }
 
     public function create()

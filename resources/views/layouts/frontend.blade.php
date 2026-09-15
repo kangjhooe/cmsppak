@@ -31,19 +31,32 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ $faviconPng }}">
     
     <!-- Web App Manifest -->
-    <link rel="manifest" href="{{ asset("site.webmanifest") }}">
+    <link rel="manifest" href="{{ route('webmanifest') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="{{ asset('js/agenda.js') }}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/agenda.css') }}">
     <link rel="stylesheet" href="{{ asset('css/modern-components.css') }}">
     <link rel="stylesheet" href="{{ asset('css/theme-consistency.css') }}">
     <style>
         html, body {
             background-color: white !important;
+        }
+        html {
+            font-size: 14px;
+        }
+        @media (min-width: 1536px) {
+            html { font-size: 15px; }
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+        .font-display,
+        h1, h2, h3 {
+            font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
         }
         .line-clamp-1 {
             overflow: hidden;
@@ -65,6 +78,7 @@
         }
     </style>
     @stack('styles')
+    @stack('scripts-head')
     @stack('meta')
 </head>
 <body class="bg-white font-sans antialiased">
@@ -75,7 +89,7 @@
          :class="{ 'shadow-md': scrolled }">
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 lg:h-18">
+            <div class="flex justify-between items-center h-14 lg:h-16">
                 <!-- Logo dan Nama Sekolah -->
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -85,19 +99,21 @@
                         <!-- Logo dari profil backend -->
                         @if($profileData && $profileData->logo_url)
                             <img src="{{ $profileData->logo_url }}" alt="Logo {{ $profileData->nama_sekolah ?? $schoolName }}" 
-                                 class="w-12 h-12 lg:w-14 lg:h-14 rounded-xl object-cover shadow-lg">
+                                 class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl object-cover shadow-lg">
                         @else
                             <!-- Fallback logo dengan gradient sederhana -->
-                            <div class="w-12 h-12 lg:w-14 lg:h-14 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-green-600 to-green-700">
-                                <i class="fas fa-graduation-cap text-white text-lg lg:text-xl"></i>
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-green-600 to-green-700">
+                                <i class="fas fa-graduation-cap text-white text-base lg:text-lg"></i>
                             </div>
                         @endif
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-sm sm:text-lg lg:text-xl font-bold text-gray-800 leading-tight">
+                        <h1 class="text-sm sm:text-base lg:text-lg font-bold text-gray-800 leading-tight">
                             {{ $profileData->nama_sekolah ?? $schoolName }}
                         </h1>
-                        <p class="text-xs lg:text-sm text-gray-600 font-medium hidden sm:block">Mengasuh dengan sepenuh hati</p>
+                        @if(!empty($schoolTagline) && $schoolTagline !== ($profileData->nama_sekolah ?? $schoolName))
+                        <p class="text-xs lg:text-sm text-gray-600 font-medium hidden sm:block">{{ $schoolTagline }}</p>
+                        @endif
                     </div>
                 </div>
                 
@@ -109,9 +125,6 @@
                     <a href="{{ route('profil') }}" class="nav-link-clean {{ request()->routeIs('profil') ? 'nav-link-active' : '' }}">
                         Profil
                     </a>
-                    {{-- <a href="{{ route('guru-staf') }}" class="nav-link-clean {{ request()->routeIs('guru-staf*') ? 'nav-link-active' : '' }}">
-                        <i class="fas fa-users mr-2"></i>Guru & Staf
-                    </a> --}}
                     <a href="{{ route('berita') }}" class="nav-link-clean {{ request()->routeIs('berita*') ? 'nav-link-active' : '' }}">
                         Berita
                     </a>
@@ -157,9 +170,6 @@
                 <a href="{{ route('profil') }}" class="mobile-nav-link-clean {{ request()->routeIs('profil') ? 'mobile-nav-link-active' : '' }}">
                     Profil
                 </a>
-                {{-- <a href="{{ route('guru-staf') }}" class="mobile-nav-link-clean {{ request()->routeIs('guru-staf*') ? 'mobile-nav-link-active' : '' }}">
-                    <i class="fas fa-users mr-3"></i>Guru & Staf
-                </a> --}}
                 <a href="{{ route('berita') }}" class="mobile-nav-link-clean {{ request()->routeIs('berita*') ? 'mobile-nav-link-active' : '' }}">
                     Berita
                 </a>
@@ -209,25 +219,35 @@
                             <h3 class="text-2xl font-bold text-white">
                                 {{ $profileData->nama_sekolah ?? $schoolName }}
                             </h3>
-                            <p class="footer-text">Mengasuh dengan sepenuh hati</p>
+                            @if(!empty($schoolTagline) && $schoolTagline !== ($profileData->nama_sekolah ?? $schoolName))
+                            <p class="footer-text">{{ $schoolTagline }}</p>
+                            @endif
                         </div>
                     </div>
                     <p class="leading-relaxed mb-6 footer-text">
-                        {{ $profileData->deskripsi ?? ($profileData->nama_sekolah ?? $schoolName) . ' yang berkomitmen untuk memberikan pendidikan berkualitas dan membentuk karakter santri yang unggul dalam prestasi dan akhlak.' }}
+                        {{ $schoolDescription ?? ($profileData->profil_hero_description ?? ($profileData->nama_sekolah ?? $schoolName)) }}
                     </p>
                     <div class="flex space-x-4">
-                        <a href="#" class="footer-social-icon-simple">
+                        @if($profileData?->facebook)
+                        <a href="{{ $profileData->facebook }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon-simple">
                             <i class="fab fa-facebook-f text-white"></i>
                         </a>
-                        <a href="#" class="footer-social-icon-simple">
+                        @endif
+                        @if($profileData?->twitter)
+                        <a href="{{ $profileData->twitter }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon-simple">
                             <i class="fab fa-twitter text-white"></i>
                         </a>
-                        <a href="#" class="footer-social-icon-simple">
+                        @endif
+                        @if($profileData?->instagram)
+                        <a href="{{ $profileData->instagram }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon-simple">
                             <i class="fab fa-instagram text-white"></i>
                         </a>
-                        <a href="#" class="footer-social-icon-simple">
+                        @endif
+                        @if($profileData?->youtube)
+                        <a href="{{ $profileData->youtube }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon-simple">
                             <i class="fab fa-youtube text-white"></i>
                         </a>
+                        @endif
                     </div>
                 </div>
 
@@ -237,7 +257,6 @@
                     <ul class="space-y-3">
                         <li><a href="{{ route('home') }}" class="footer-link">Beranda</a></li>
                         <li><a href="{{ route('profil') }}" class="footer-link">Profil {{ __('school') }}</a></li>
-                        {{-- <li><a href="{{ route('guru-staf') }}" class="footer-link">Guru & Staf</a></li> --}}
                         <li><a href="{{ route('berita') }}" class="footer-link">Berita</a></li>
                         <li><a href="{{ route('agenda') }}" class="footer-link">Agenda</a></li>
                         <li><a href="{{ route('galeri') }}" class="footer-link">Galeri</a></li>
@@ -248,38 +267,44 @@
                 <div>
                     <h4 class="text-lg font-semibold text-white mb-6">Kontak</h4>
                     <div class="space-y-4">
+                        @if($profileData?->alamat)
                         <div class="flex items-start space-x-3">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 footer-icon-bg-primary">
                                 <i class="fas fa-map-marker-alt text-white text-sm"></i>
                             </div>
                             <div>
                                 <p class="text-sm footer-text">
-                                    {{ $profileData->alamat ?? 'Jl. Contoh No. 123, Kota, Provinsi' }}
+                                    {{ $profileData->alamat }}
                                 </p>
                             </div>
                         </div>
+                        @endif
                         
+                        @if($profileData?->telepon)
                         <div class="flex items-start space-x-3">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 footer-icon-bg-primary">
                                 <i class="fas fa-phone text-white text-sm"></i>
                             </div>
                             <div>
                                 <p class="text-sm footer-text">
-                                    {{ $profileData->telepon ?? '+62 123 4567 890' }}
+                                    <a href="{{ $profileData->telepon_url }}" class="footer-link">{{ $profileData->telepon }}</a>
                                 </p>
                             </div>
                         </div>
+                        @endif
                         
+                        @if($profileData?->email)
                         <div class="flex items-start space-x-3">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 footer-icon-bg-primary">
                                 <i class="fas fa-envelope text-white text-sm"></i>
                             </div>
                             <div>
                                 <p class="text-sm footer-text">
-                                    {{ $profileData->email ?? 'info@mabarokatulqodiri.sch.id' }}
+                                    <a href="mailto:{{ $profileData->email }}" class="footer-link">{{ $profileData->email }}</a>
                                 </p>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -291,9 +316,9 @@
                         © {{ date('Y') }} {{ $profileData->nama_sekolah ?? $schoolName }}. All rights reserved.
                     </div>
                     <div class="flex space-x-6 text-sm">
-                        <a href="#" class="footer-link">Privacy Policy</a>
-                        <a href="#" class="footer-link">Terms of Service</a>
-                        <a href="#" class="footer-link">Cookie Policy</a>
+                        <a href="{{ route('privacy') }}" class="footer-link">Kebijakan Privasi</a>
+                        <a href="{{ route('terms') }}" class="footer-link">Syarat Layanan</a>
+                        <a href="{{ route('cookies') }}" class="footer-link">Kebijakan Cookie</a>
                     </div>
                 </div>
                 
@@ -309,7 +334,7 @@
                             untuk {{ $schoolName }} 
                             <button id="version-info-btn" 
                                     class="footer-link font-medium underline cursor-pointer">
-                                versi 1.2
+                                versi 1.3
                             </button>
                         </div>
                     </div>
@@ -355,26 +380,26 @@
                             <div class="inline-flex items-center px-6 py-3 rounded-2xl shadow-lg"
                                  style="background: linear-gradient(to right, #10b981, #047857);">
                                 <i class="fas fa-tag text-white mr-3"></i>
-                                <span class="text-white font-bold text-xl">Versi 1.2</span>
+                                <span class="text-white font-bold text-xl">Versi 1.3</span>
                                 <span class="ml-3 px-3 py-1 bg-white/25 rounded-full text-white text-sm font-medium">Stable</span>
                             </div>
                             <div class="mt-4 flex items-center justify-center space-x-4 text-gray-600">
                                 <div class="flex items-center">
                                     <i class="fas fa-calendar-alt text-emerald-500 mr-2"></i>
-                                    <span>Rilis: Januari 2025</span>
+                                    <span>Rilis: 15 September 2026</span>
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-code-branch text-teal-500 mr-2"></i>
-                                    <span>Build: 2025.01.20</span>
+                                    <span>Build: 2026.09.15</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Pembaruan Versi 1.2 -->
+                        <!-- Pembaruan Versi 1.3 -->
                         <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200">
                             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
                                 <i class="fas fa-sparkles text-emerald-500 mr-3 text-2xl"></i>
-                                Pembaruan Versi 1.2
+                                Pembaruan Versi 1.3
                             </h4>
                             <div class="space-y-3">
                                 <div class="flex items-start space-x-3">
@@ -382,8 +407,8 @@
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </div>
                                     <div>
-                                        <p class="text-gray-700 font-medium">Peningkatan Performa</p>
-                                        <p class="text-gray-600 text-sm">Optimasi query database dan caching untuk loading yang lebih cepat</p>
+                                        <p class="text-gray-700 font-medium">Slider Beranda yang Dikelola</p>
+                                        <p class="text-gray-600 text-sm">Hero slider beranda kini diatur dari admin: gambar, judul, tautan, urutan, dan status tampil</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start space-x-3">
@@ -391,8 +416,8 @@
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </div>
                                     <div>
-                                        <p class="text-gray-700 font-medium">Perbaikan UI/UX</p>
-                                        <p class="text-gray-600 text-sm">Peningkatan tampilan antarmuka dengan desain yang lebih modern dan responsif</p>
+                                        <p class="text-gray-700 font-medium">Widget Beranda</p>
+                                        <p class="text-gray-600 text-sm">Waktu sholat, kalender Hijriyah, agenda terdekat, tautan cepat, dan HTML kustom di sisi beranda</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start space-x-3">
@@ -400,8 +425,8 @@
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </div>
                                     <div>
-                                        <p class="text-gray-700 font-medium">Keamanan Ditingkatkan</p>
-                                        <p class="text-gray-600 text-sm">Pembaruan sistem keamanan dan perbaikan bug untuk stabilitas yang lebih baik</p>
+                                        <p class="text-gray-700 font-medium">Halaman Legal</p>
+                                        <p class="text-gray-600 text-sm">Kebijakan privasi, syarat layanan, dan kebijakan cookie yang lebih lengkap di footer</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start space-x-3">
@@ -409,8 +434,8 @@
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </div>
                                     <div>
-                                        <p class="text-gray-700 font-medium">Fitur Baru</p>
-                                        <p class="text-gray-600 text-sm">Penambahan fitur-fitur baru untuk meningkatkan pengalaman pengguna</p>
+                                        <p class="text-gray-700 font-medium">Beranda & Galeri</p>
+                                        <p class="text-gray-600 text-sm">Tampilan beranda diperbarui, galeri lebih fleksibel, dan tema halaman lebih konsisten</p>
                                     </div>
                                 </div>
                             </div>
@@ -423,12 +448,24 @@
                                 Riwayat Versi
                             </h4>
                             <div class="space-y-4">
-                                <!-- Versi 1.2 (Current) -->
+                                <!-- Versi 1.3 (Current) -->
                                 <div class="bg-white rounded-xl p-4 border-l-4 border-emerald-500 shadow-sm">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center space-x-3">
-                                            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-bold">v1.2</span>
+                                            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-bold">v1.3</span>
                                             <span class="text-gray-700 font-semibold">Versi Terkini</span>
+                                        </div>
+                                        <span class="text-gray-500 text-sm">15 September 2026</span>
+                                    </div>
+                                    <p class="text-gray-600 text-sm">Slider beranda, widget waktu sholat & Hijriyah, halaman legal, dan penyegaran tampilan</p>
+                                </div>
+
+                                <!-- Versi 1.2 -->
+                                <div class="bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm opacity-75">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center space-x-3">
+                                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">v1.2</span>
+                                            <span class="text-gray-600 text-sm">Versi Sebelumnya</span>
                                         </div>
                                         <span class="text-gray-500 text-sm">Januari 2025</span>
                                     </div>
@@ -436,10 +473,10 @@
                                 </div>
                                 
                                 <!-- Versi 1.1 -->
-                                <div class="bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm opacity-75">
+                                <div class="bg-white rounded-xl p-4 border-l-4 border-slate-300 shadow-sm opacity-75">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center space-x-3">
-                                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">v1.1</span>
+                                            <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-bold">v1.1</span>
                                             <span class="text-gray-600 text-sm">Versi Sebelumnya</span>
                                         </div>
                                         <span class="text-gray-500 text-sm">Januari 2025</span>
@@ -484,16 +521,6 @@
                                         <h5 class="font-semibold text-gray-800">Galeri Media</h5>
                                     </div>
                                     <p class="text-gray-600 text-sm">Galeri foto dengan lightbox, album, dan dukungan berbagai format media</p>
-                                </div>
-                                
-                                <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100 hover:shadow-lg transition-all duration-300 group">
-                                    <div class="flex items-center mb-4">
-                                        <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <i class="fas fa-users text-white text-lg"></i>
-                                        </div>
-                                        <h5 class="font-semibold text-gray-800">Guru & Staf</h5>
-                                    </div>
-                                    <p class="text-gray-600 text-sm">Manajemen profil guru dan staf dengan foto, biodata, dan riwayat pendidikan</p>
                                 </div>
                                 
                                 <div class="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-6 border border-teal-100 hover:shadow-lg transition-all duration-300 group">
@@ -716,6 +743,7 @@
             }
         });
     </script>
+    @stack('scripts')
 </body>
 </html>
 
@@ -727,6 +755,12 @@
 }
 
 @media (min-width: 1024px) {
+    .nav-link-clean {
+        @apply px-3 py-2;
+    }
+}
+
+@media (min-width: 1441px) {
     .nav-link-clean {
         @apply px-5 py-3;
     }
@@ -753,7 +787,7 @@
     transform: translateX(-50%);
     width: 20px;
     height: 2px;
-    background: #008000;
+    background: var(--color-primary);
     border-radius: 1px;
 }
 
@@ -816,7 +850,7 @@
 
 .nav-link-clean:hover,
 .mobile-nav-link-clean:hover {
-    color: #008000 !important; /* text-green-600 */
+    color: var(--color-primary) !important;
 }
 
 .nav-link-clean i,
@@ -827,7 +861,7 @@
 /* Active state - only color change, no background */
 .nav-link-active,
 .mobile-nav-link-active {
-    color: #008000 !important; /* text-green-600 */
+    color: var(--color-primary) !important;
     background: transparent !important;
 }
 
@@ -842,7 +876,7 @@
 
 /* Mobile Navigation menggunakan class yang sama dengan desktop */
 
-/* Legacy styles untuk kompatibilitas - Tema Pondok Pesantren */
+/* Legacy styles untuk kompatibilitas tema */
 .nav-link {
     @apply px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center;
     color: var(--color-text-dark);

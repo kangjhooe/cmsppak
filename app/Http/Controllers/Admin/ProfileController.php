@@ -12,7 +12,9 @@ class ProfileController extends Controller
     public function index()
     {
         $profile = Profile::first();
-        return view('admin.profile.index', compact('profile'));
+        $jenisLembagaOptions = \App\Helpers\InstitutionHelper::typeOptions();
+
+        return view('admin.profile.index', compact('profile', 'jenisLembagaOptions'));
     }
 
     public function store(Request $request)
@@ -22,6 +24,7 @@ class ProfileController extends Controller
         
         $request->validate([
             'nama_sekolah' => 'required|string|max:255',
+            'jenis_lembaga' => 'required|in:sekolah,madrasah,pesantren',
             'npsn' => 'nullable|string|max:20',
             'alamat' => 'required|string',
             'telepon' => 'nullable|string|max:20',
@@ -148,6 +151,6 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('admin.profile.index')
-                        ->with('success', 'Profil sekolah berhasil diperbarui');
+                        ->with('success', 'Profil lembaga berhasil diperbarui');
     }
 }

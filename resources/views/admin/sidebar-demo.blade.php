@@ -73,9 +73,9 @@
                 <i class="fas fa-calendar-plus mr-2"></i>
                 Tambah Agenda
             </a>
-            <a href="{{ route('admin.guru-staf.create') }}" class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200">
-                <i class="fas fa-user-plus mr-2"></i>
-                Tambah Guru/Staf
+            <a href="{{ route('admin.downloads.create') }}" class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200">
+                <i class="fas fa-download mr-2"></i>
+                Tambah Unduhan
             </a>
         </div>
     </div>

@@ -3,256 +3,282 @@
 @section('title', 'Manajemen Agenda - Admin Panel')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-pink-50/30">
-    <!-- Header Section -->
-    <div class="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 shadow-2xl relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-        </div>
-        
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                <div class="mb-8 lg:mb-0">
-                    <h1 class="text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-                        Manajemen Agenda
-                    </h1>
-                    <p class="text-xl lg:text-2xl text-purple-100 font-medium">
-                        Kelola semua agenda dan kegiatan sekolah
-                    </p>
-                    <p class="text-purple-100 mt-2">Jadwalkan dan atur kegiatan akademik dan non-akademik</p>
+@php
+    $hasFilters = request()->filled('search') || request()->filled('jenis') || request()->filled('status');
+@endphp
+<div class="bg-slate-50 pb-10">
+    <!-- Banner: pertahankan gradasi purple → pink → red -->
+    <div class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.12] pointer-events-none" style="background-image: radial-gradient(circle at 20% 50%, #fff 0, transparent 45%), radial-gradient(circle at 80% 20%, #fff 0, transparent 35%);"></div>
+        <div class="relative w-full px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 max-w-7xl mx-auto">
+                <div>
+                    <p class="text-purple-100 text-sm font-medium mb-2">Konten Website</p>
+                    <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Manajemen Agenda</h1>
+                    <p class="mt-2 text-purple-50/90 text-base max-w-xl">Kelola agenda dan kegiatan sekolah dalam satu tempat.</p>
                 </div>
-                
-                <div class="flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20">
-                    <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                        <i class="fas fa-calendar-alt text-white text-3xl"></i>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-sm text-purple-100 font-medium">Total Agenda</p>
-                        <p class="text-2xl font-bold text-white">{{ $agenda->total() ?? 0 }}</p>
-                        <p class="text-sm text-purple-100">Kegiatan</p>
-                    </div>
-                </div>
+                <a href="{{ route('admin.agenda.create') }}"
+                   class="inline-flex items-center justify-center gap-2 self-start md:self-auto px-5 py-2.5 rounded-xl bg-white text-purple-700 font-semibold text-sm shadow-lg shadow-purple-900/20 hover:bg-purple-50 transition-colors">
+                    <i class="fas fa-plus"></i>
+                    Tambah Agenda
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-calendar-alt text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Total Agenda</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $agenda->total() ?? 0 }}</p>
-                    </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-purple-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-purple-100 flex items-center justify-center">
+                    <i class="fas fa-calendar-alt text-purple-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-purple-600 font-semibold">
-                    <i class="fas fa-calendar mr-2"></i>
-                    <span>Semua Kegiatan</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Total Agenda</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['total'] }}</p>
                 </div>
             </div>
 
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-clock text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Akan Datang</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $agenda->filter(function($item) { return $item->tanggal_mulai && \Carbon\Carbon::parse($item->tanggal_mulai)->isFuture(); })->count() }}</p>
-                    </div>
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-sky-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-100 flex items-center justify-center">
+                    <i class="fas fa-clock text-sky-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-blue-600 font-semibold">
-                    <i class="fas fa-clock mr-2"></i>
-                    <span>Belum Mulai</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Akan Datang</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['upcoming'] }}</p>
                 </div>
             </div>
 
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-play text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Sedang Berlangsung</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $agenda->filter(function($item) { return $item->tanggal_mulai && \Carbon\Carbon::parse($item->tanggal_mulai)->isToday(); })->count() }}</p>
-                    </div>
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-emerald-200 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                    <i class="fas fa-play text-emerald-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-green-600 font-semibold">
-                    <i class="fas fa-play mr-2"></i>
-                    <span>Hari Ini</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Berlangsung</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['ongoing'] }}</p>
                 </div>
             </div>
 
-            <div class="card-modern group hover:scale-105 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-gray-500 via-gray-600 to-slate-600 rounded-2xl flex items-center justify-center shadow-xl">
-                        <i class="fas fa-check text-white text-2xl"></i>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-600 font-medium">Selesai</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $agenda->filter(function($item) { return $item->tanggal_mulai && \Carbon\Carbon::parse($item->tanggal_mulai)->isPast(); })->count() }}</p>
-                    </div>
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-5 flex items-center gap-4 hover:shadow-md hover:border-slate-300 transition-all duration-200">
+                <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+                    <i class="fas fa-check text-slate-600 text-lg sm:text-xl"></i>
                 </div>
-                <div class="flex items-center text-sm text-gray-600 font-semibold">
-                    <i class="fas fa-check mr-2"></i>
-                    <span>Sudah Lewat</span>
+                <div class="min-w-0">
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium truncate">Selesai</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">{{ $stats['completed'] }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="card-modern">
-            <div class="card-modern-header">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Daftar Agenda</h3>
-                        <p class="text-sm text-gray-600">Kelola semua agenda dan kegiatan sekolah</p>
-                    </div>
-                    <a href="{{ route('admin.agenda.create') }}" class="btn-primary">
-                        <i class="fas fa-plus mr-2"></i>Tambah Agenda
-                    </a>
-                </div>
-
-                @if(session('success'))
-                    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mt-4 flex items-center">
-                        <i class="fas fa-check-circle mr-2 text-green-600"></i>
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mt-4 flex items-center">
-                        <i class="fas fa-exclamation-circle mr-2 text-red-600"></i>
-                        {{ session('error') }}
-                    </div>
-                @endif
+        <!-- Main panel -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="px-5 sm:px-6 py-5 border-b border-slate-100">
+                <h2 class="text-lg font-semibold text-slate-900">Daftar Agenda</h2>
+                <p class="text-sm text-slate-500 mt-0.5">{{ $agenda->total() }} agenda terdaftar</p>
             </div>
 
-            <div class="card-modern-body">
-                <!-- Filter dan Pencarian -->
-                <div class="mb-6">
-                    <form action="{{ route('admin.agenda.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Agenda</label>
-                            <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                                   placeholder="Judul agenda..." 
-                                   class="form-input">
-                        </div>
-                        <div>
-                            <label for="jenis" class="block text-sm font-medium text-gray-700 mb-1">Jenis Agenda</label>
-                            <select name="jenis" id="jenis" class="form-select">
-                                <option value="">Semua Jenis</option>
-                                <option value="akademik" {{ request('jenis') == 'akademik' ? 'selected' : '' }}>Akademik</option>
-                                <option value="non-akademik" {{ request('jenis') == 'non-akademik' ? 'selected' : '' }}>Non-Akademik</option>
-                                <option value="rapat" {{ request('jenis') == 'rapat' ? 'selected' : '' }}>Rapat</option>
-                                <option value="kegiatan" {{ request('jenis') == 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select name="status" id="status" class="form-select">
-                                <option value="">Semua Status</option>
-                                <option value="upcoming" {{ request('status') == 'upcoming' ? 'selected' : '' }}>Akan Datang</option>
-                                <option value="ongoing" {{ request('status') == 'ongoing' ? 'selected' : '' }}>Sedang Berlangsung</option>
-                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit" class="btn-secondary w-full">
-                                <i class="fas fa-filter mr-2"></i>Filter
-                            </button>
-                        </div>
-                    </form>
+            @if(session('success'))
+                <div class="mx-5 sm:mx-6 mt-5 flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-emerald-800 text-sm">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
+                    {{ session('success') }}
                 </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mx-5 sm:mx-6 mt-5 flex items-center gap-3 rounded-xl bg-rose-50 border border-rose-100 px-4 py-3 text-rose-800 text-sm">
+                    <i class="fas fa-exclamation-circle text-rose-500"></i>
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <div class="p-5 sm:p-6">
+                <!-- Search toolbar -->
+                <form method="GET" action="{{ route('admin.agenda.index') }}" class="mb-6">
+                    <div class="flex flex-col gap-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-slate-400"></i>
+                            </div>
+                            <input
+                                type="text"
+                                name="search"
+                                id="search"
+                                value="{{ request('search') }}"
+                                placeholder="Cari judul, deskripsi, atau lokasi agenda..."
+                                class="w-full h-12 pl-11 {{ request('search') ? 'pr-11' : 'pr-4' }} rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800 placeholder:text-slate-400
+                                       focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all"
+                            >
+                            @if(request('search'))
+                                <a href="{{ route('admin.agenda.index', request()->except('search', 'page')) }}"
+                                   class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600"
+                                   title="Hapus pencarian">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            @endif
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative flex-1 sm:max-w-[200px]">
+                                <select name="jenis" id="jenis"
+                                        class="w-full h-11 appearance-none pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-slate-700
+                                               focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all">
+                                    <option value="">Semua Jenis</option>
+                                    <option value="akademik" {{ request('jenis') == 'akademik' ? 'selected' : '' }}>Akademik</option>
+                                    <option value="non_akademik" {{ request('jenis') == 'non_akademik' || request('jenis') == 'non-akademik' ? 'selected' : '' }}>Non-Akademik</option>
+                                    <option value="umum" {{ request('jenis') == 'umum' ? 'selected' : '' }}>Umum</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <div class="relative flex-1 sm:max-w-[200px]">
+                                <select name="status" id="status"
+                                        class="w-full h-11 appearance-none pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-slate-700
+                                               focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all">
+                                    <option value="">Semua Status</option>
+                                    <option value="upcoming" {{ request('status') == 'upcoming' ? 'selected' : '' }}>Akan Datang</option>
+                                    <option value="ongoing" {{ request('status') == 'ongoing' ? 'selected' : '' }}>Sedang Berlangsung</option>
+                                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <div class="flex gap-2 sm:ml-auto">
+                                <button type="submit"
+                                        class="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-purple-600 text-white text-sm font-semibold
+                                               hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
+                                               shadow-sm shadow-purple-600/25 transition-colors whitespace-nowrap">
+                                    <i class="fas fa-sliders-h"></i>
+                                    Filter
+                                </button>
+                                @if($hasFilters)
+                                    <a href="{{ route('admin.agenda.index') }}"
+                                       class="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold
+                                              hover:bg-slate-50 hover:text-slate-800 transition-colors whitespace-nowrap">
+                                        <i class="fas fa-undo text-xs"></i>
+                                        Reset
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    @if($hasFilters)
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            <span class="text-xs text-slate-500">Filter:</span>
+                            @if(request('search'))
+                                <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-purple-50 text-purple-700 text-xs font-medium border border-purple-100">
+                                    “{{ Str::limit(request('search'), 24) }}”
+                                </span>
+                            @endif
+                            @if(request('jenis'))
+                                <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-pink-50 text-pink-700 text-xs font-medium border border-pink-100">
+                                    @if(request('jenis') === 'non_akademik' || request('jenis') === 'non-akademik')
+                                        Non-Akademik
+                                    @else
+                                        {{ ucfirst(request('jenis')) }}
+                                    @endif
+                                </span>
+                            @endif
+                            @if(request('status'))
+                                <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-sky-50 text-sky-700 text-xs font-medium border border-sky-100">
+                                    @php
+                                        $statusLabels = [
+                                            'upcoming' => 'Akan Datang',
+                                            'ongoing' => 'Sedang Berlangsung',
+                                            'completed' => 'Selesai',
+                                            'cancelled' => 'Dibatalkan',
+                                        ];
+                                    @endphp
+                                    {{ $statusLabels[request('status')] ?? ucfirst(request('status')) }}
+                                </span>
+                            @endif
+                            <span class="text-xs text-slate-400 sm:ml-auto">{{ $agenda->total() }} hasil</span>
+                        </div>
+                    @endif
+                </form>
 
                 <!-- Table -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50 sticky top-0 z-10">
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50/80">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <div class="flex items-center">
-                                        <i class="fas fa-calendar mr-2"></i>Judul Agenda
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <i class="fas fa-tag mr-2"></i>Jenis
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <i class="fas fa-clock mr-2"></i>Tanggal & Waktu
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>Lokasi
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <i class="fas fa-toggle-on mr-2"></i>Status
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <i class="fas fa-cogs mr-2"></i>Aksi
-                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-14">No</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Judul Agenda</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tanggal & Waktu</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Lokasi</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-slate-100">
                             @forelse($agenda as $item)
-                            <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $item->judul }}</div>
-                                    <div class="text-sm text-gray-500 mt-1">{{ Str::limit($item->deskripsi, 80) }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                        {{ $item->jenis == 'akademik' ? 'bg-blue-100 text-blue-800' : 
-                                           ($item->jenis == 'non_akademik' ? 'bg-green-100 text-green-800' : 
-                                           ($item->jenis == 'umum' ? 'bg-purple-100 text-purple-800' : 'bg-yellow-100 text-yellow-800')) }}">
-                                        <i class="fas fa-tag mr-1"></i>
-                                        @if($item->jenis == 'non_akademik')
-                                            Non-Akademik
-                                        @else
-                                            {{ ucfirst($item->jenis) }}
-                                        @endif
+                            @php
+                                $autoStatus = $item->auto_status;
+                                $waktuMulai = $item->waktu_mulai ? substr($item->waktu_mulai, 0, 5) : '-';
+                                $waktuSelesai = $item->waktu_selesai ? substr($item->waktu_selesai, 0, 5) : '-';
+                            @endphp
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-sm font-semibold text-slate-600">
+                                        {{ $agenda->firstItem() + $loop->index }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">{{ $item->tanggal_mulai ? $item->tanggal_mulai->format('d-m-Y') : '-' }}</div>
-                                    <div class="text-sm text-gray-500">{{ $item->waktu_mulai ?? '-' }} - {{ $item->waktu_selesai ?? '-' }}</div>
+                                <td class="px-4 py-4">
+                                    <div class="min-w-0 max-w-xs">
+                                        <p class="text-sm font-semibold text-slate-900 truncate">{{ $item->judul }}</p>
+                                        <p class="text-sm text-slate-500 line-clamp-2">{{ Str::limit($item->deskripsi, 80) ?: 'Tidak ada deskripsi' }}</p>
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">{{ $item->lokasi ?? '-' }}</div>
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    @if($item->jenis == 'akademik')
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-sky-50 text-sky-700 border border-sky-100">Akademik</span>
+                                    @elseif($item->jenis == 'non_akademik')
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">Non-Akademik</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100">{{ ucfirst($item->jenis ?: 'Umum') }}</span>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @php
-                                        $now = \Carbon\Carbon::now();
-                                        $tanggal = $item->tanggal_mulai ? \Carbon\Carbon::parse($item->tanggal_mulai) : null;
-                                        $status = 'upcoming';
-                                        if ($tanggal && $tanggal->isPast()) {
-                                            $status = 'completed';
-                                        } elseif ($tanggal && $tanggal->isToday()) {
-                                            $status = 'ongoing';
-                                        }
-                                    @endphp
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                        {{ $status == 'upcoming' ? 'bg-blue-100 text-blue-800' : 
-                                           ($status == 'ongoing' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800') }}">
-                                        <i class="fas fa-circle mr-1 text-xs"></i>
-                                        {{ $status == 'upcoming' ? 'Akan Datang' : ($status == 'ongoing' ? 'Sedang Berlangsung' : 'Selesai') }}
-                                    </span>
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-slate-800">{{ $item->tanggal_mulai ? $item->tanggal_mulai->format('d-m-Y') : '-' }}</div>
+                                    <div class="text-xs text-slate-500">{{ $waktuMulai }} – {{ $waktuSelesai }}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <a href="{{ route('admin.agenda.edit', $item) }}" 
-                                           class="text-indigo-600 hover:text-indigo-800 p-2 rounded-lg hover:bg-indigo-50 transition-colors duration-150"
-                                           title="Edit">
+                                <td class="px-4 py-4">
+                                    <div class="text-sm text-slate-800 max-w-[140px] truncate" title="{{ $item->lokasi }}">
+                                        {{ $item->lokasi ?: '-' }}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    @if($autoStatus == 'upcoming')
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-sky-50 text-sky-700 border border-sky-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>Akan Datang
+                                        </span>
+                                    @elseif($autoStatus == 'ongoing')
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Berlangsung
+                                        </span>
+                                    @elseif($autoStatus == 'cancelled')
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 border border-rose-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Dibatalkan
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 border border-slate-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Selesai
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    <div class="flex items-center justify-center gap-1">
+                                        <a href="{{ route('admin.agenda.edit', $item) }}"
+                                           class="inline-flex items-center justify-center w-9 h-9 rounded-lg text-purple-600 hover:bg-purple-50 transition-colors" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="{{ route('admin.agenda.destroy', $item) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" 
-                                                    class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition-colors duration-150"
+                                            <button type="submit"
+                                                    class="inline-flex items-center justify-center w-9 h-9 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors"
                                                     onclick="return confirm('Yakin ingin menghapus agenda ini?')"
                                                     title="Hapus">
                                                 <i class="fas fa-trash"></i>
@@ -263,15 +289,27 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
-                                    <div class="flex flex-col items-center">
-                                        <i class="fas fa-calendar-times text-4xl text-gray-300 mb-4"></i>
-                                        <p class="text-lg font-medium text-gray-400">Belum ada agenda</p>
-                                        <p class="text-sm text-gray-300">Mulai buat agenda pertama Anda</p>
-                                        <a href="{{ route('admin.agenda.create') }}" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">
-                                            Tambah Agenda Pertama
-                                        </a>
+                                <td colspan="7" class="px-6 py-16 text-center">
+                                    <div class="mx-auto w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+                                        <i class="fas fa-calendar-times text-2xl text-slate-400"></i>
                                     </div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-1">
+                                        {{ $hasFilters ? 'Tidak ada agenda yang cocok' : 'Belum ada agenda' }}
+                                    </h3>
+                                    <p class="text-sm text-slate-500 mb-5">
+                                        {{ $hasFilters ? 'Coba ubah kata kunci atau reset filter.' : 'Mulai dengan menambahkan agenda pertama.' }}
+                                    </p>
+                                    @if($hasFilters)
+                                        <a href="{{ route('admin.agenda.index') }}"
+                                           class="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-semibold hover:bg-slate-50">
+                                            <i class="fas fa-undo text-xs"></i> Reset Filter
+                                        </a>
+                                    @else
+                                        <a href="{{ route('admin.agenda.create') }}"
+                                           class="inline-flex items-center gap-2 h-10 px-5 rounded-xl bg-purple-600 text-white text-sm font-semibold hover:bg-purple-700">
+                                            <i class="fas fa-plus"></i> Tambah Agenda
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforelse
@@ -279,11 +317,22 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
-                @if($agenda->hasPages())
-                    <div class="mt-6 border-t border-gray-200 pt-6">
-                        {{ $agenda->links() }}
+                @if($agenda->total() > 0)
+                <div class="mt-5 pt-5 border-t border-slate-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <p class="text-sm text-slate-500">
+                            Menampilkan
+                            <span class="font-semibold text-slate-800">{{ $agenda->firstItem() ?? 0 }}</span>
+                            –
+                            <span class="font-semibold text-slate-800">{{ $agenda->lastItem() ?? 0 }}</span>
+                            dari
+                            <span class="font-semibold text-slate-800">{{ $agenda->total() }}</span>
+                        </p>
+                        <div class="admin-list-pagination">
+                            {{ $agenda->onEachSide(1)->links() }}
+                        </div>
                     </div>
+                </div>
                 @endif
             </div>
         </div>
@@ -291,33 +340,25 @@
 </div>
 
 <style>
-/* Custom CSS untuk form dan button */
-.form-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200;
+.admin-list-pagination nav > div:first-child { display: none; }
+.admin-list-pagination p { display: none; }
+.admin-list-pagination nav { display: flex; justify-content: flex-end; }
+.admin-list-pagination span[aria-current="page"] span {
+    background-color: #9333ea !important;
+    border-color: #9333ea !important;
+    color: #fff !important;
+    border-radius: 0.5rem !important;
 }
-
-.form-select {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200;
+.admin-list-pagination a span,
+.admin-list-pagination span[aria-disabled="true"] span {
+    border-radius: 0.5rem !important;
+    min-width: 2.25rem;
+    justify-content: center;
 }
-
-.btn-primary {
-    @apply inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-widest hover:from-purple-700 hover:to-pink-700 active:from-purple-800 active:to-pink-800 focus:outline-none focus:border-purple-900 focus:ring focus:ring-purple-300 disabled:opacity-25 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
-}
-
-.btn-secondary {
-    @apply inline-flex items-center px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg font-semibold text-sm text-gray-700 uppercase tracking-widest hover:bg-gray-200 active:bg-gray-300 focus:outline-none focus:border-gray-500 focus:ring focus:ring-gray-300 transition-all duration-200 shadow-sm hover:shadow-md;
-}
-
-.card-modern {
-    @apply bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden;
-}
-
-.card-modern-header {
-    @apply p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white;
-}
-
-.card-modern-body {
-    @apply p-6;
+.admin-list-pagination a:hover span {
+    background-color: #faf5ff !important;
+    color: #7e22ce !important;
+    border-color: #e9d5ff !important;
 }
 </style>
 @endsection

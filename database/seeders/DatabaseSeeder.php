@@ -8,7 +8,6 @@ use App\Models\Profile;
 use App\Models\Berita;
 use App\Models\Agenda;
 use App\Models\Galeri;
-use App\Models\GuruStaf;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +28,6 @@ class DatabaseSeeder extends Seeder
             'manage_users',
             'manage_roles',
             'manage_profile',
-            'manage_guru_staf',
             'manage_berita',
             'manage_agenda',
             'manage_galeri',
@@ -47,7 +45,6 @@ class DatabaseSeeder extends Seeder
         $operatorRole->givePermissionTo([
             'view_dashboard',
             'manage_profile',
-            'manage_guru_staf',
             'manage_berita',
             'manage_agenda',
             'manage_galeri',
@@ -99,6 +96,7 @@ class DatabaseSeeder extends Seeder
         // Create Default Profile
         Profile::create([
             'nama_sekolah' => 'Pondok Pesantren Al-Falah Krui',
+            'jenis_lembaga' => 'pesantren',
             'npsn' => '12345678',
             'alamat' => 'Jalan Pesantren, Desa Padang Rindu, Kecamatan Pesisir Utara, Kabupaten Pesisir Barat',
             'telepon' => '081274928879',
@@ -232,44 +230,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($galeriData as $galeri) {
             Galeri::create($galeri);
-        }
-
-        // Create Sample Guru & Staf
-        $guruStafData = [
-            [
-                'nip' => '198001011990031001',
-                'nama_lengkap' => 'Dr. H. Ahmad Fauzi, M.Pd.',
-                'jabatan' => 'Kepala Sekolah',
-                'mata_pelajaran' => 'Pendidikan Agama Islam',
-                'biodata' => 'Lahir di Surabaya, 1 Januari 1980. Menyelesaikan S1 di UIN Sunan Ampel Surabaya, S2 di UNESA, dan S3 di UIN Malang.',
-                'email' => 'kepsek@alfalahkrui.sch.id',
-                'telepon' => '081274928880',
-                'status' => 'aktif'
-            ],
-            [
-                'nip' => '198505151995032002',
-                'nama_lengkap' => 'Siti Aminah, S.Pd.',
-                'jabatan' => 'Wakil Kepala Sekolah',
-                'mata_pelajaran' => 'Matematika',
-                'biodata' => 'Lahir di Malang, 15 Mei 1985. Menyelesaikan S1 di Universitas Negeri Malang jurusan Pendidikan Matematika.',
-                'email' => 'wakasek@alfalahkrui.sch.id',
-                'telepon' => '081274928881',
-                'status' => 'aktif'
-            ],
-            [
-                'nip' => '199002201998031003',
-                'nama_lengkap' => 'Muhammad Rizki, S.Pd.',
-                'jabatan' => 'Guru',
-                'mata_pelajaran' => 'Bahasa Indonesia',
-                'biodata' => 'Lahir di Sidoarjo, 20 Februari 1990. Menyelesaikan S1 di Universitas Negeri Surabaya jurusan Pendidikan Bahasa dan Sastra Indonesia.',
-                'email' => 'rizki@alfalahkrui.sch.id',
-                'telepon' => '081274928882',
-                'status' => 'aktif'
-            ]
-        ];
-
-        foreach ($guruStafData as $guruStaf) {
-            GuruStaf::create($guruStaf);
         }
 
         // Create Sample Downloads

@@ -2,8 +2,16 @@
 
 @section('title', 'Agenda - ' . $schoolName)
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/agenda.css') }}">
+@endpush
+
+@push('scripts-head')
+<script src="{{ asset('js/agenda.js') }}" defer></script>
+@endpush
+
 @section('page-header')
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Agenda & Kegiatan</h1>
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">Agenda & Kegiatan</h1>
     <p class="text-xl text-blue-100 max-w-3xl mx-auto">
         Informasi lengkap tentang agenda, kegiatan, dan event yang akan diselenggarakan di {{ $profile->nama_sekolah ?? $schoolName }}
     </p>

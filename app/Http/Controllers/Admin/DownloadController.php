@@ -10,10 +10,46 @@ use Illuminate\Support\Facades\Validator;
 
 class DownloadController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $downloads = Download::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.downloads.index', compact('downloads'));
+        $query = Download::query()->orderBy('created_at', 'desc');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('nama_file', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhere('kategori', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        if ($request->filled('tipe')) {
+            $query->where('tipe_file', $request->tipe);
+        }
+
+        $downloads = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => Download::count(),
+            'active' => Download::where('is_active', true)->count(),
+            'inactive' => Download::where('is_active', false)->count(),
+            'pdf' => Download::where('tipe_file', 'pdf')->count(),
+        ];
+
+        return view('admin.downloads.index', compact('downloads', 'stats'));
     }
 
     public function create()

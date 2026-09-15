@@ -1,11 +1,12 @@
 {
-    "name": "alfalahkrui/cms-pondok-pesantren",
+    "name": "cms/sekolah",
     "type": "project",
-    "description": "Content Management System untuk Pondok Pesantren Al-Falah Krui",
-    "keywords": ["laravel", "cms", "pondok-pesantren", "alfalah-krui"],
+    "description": "Content Management System untuk Sekolah",
+    "keywords": ["laravel", "cms", "sekolah"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "doctrine/dbal": "^4.4",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^3.0",
         "laravel/framework": "^12.0",
@@ -32,7 +33,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/JabatanHelper.php"
+            "app/Helpers/JabatanHelper.php",
+            "app/Helpers/InstitutionHelper.php"
         ]
     },
     "autoload-dev": {

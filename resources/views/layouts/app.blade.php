@@ -27,7 +27,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ $faviconPng }}">
     
     <!-- Web App Manifest -->
-    <link rel="manifest" href="{{ asset("site.webmanifest") }}">
+    <link rel="manifest" href="{{ route('webmanifest') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', $schoolName)</title>
@@ -45,7 +45,7 @@
     
     <style>
         .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
         }
         .menu-item {
             position: relative;
@@ -164,12 +164,6 @@
                         Profil
                     </a>
 
-                    <!-- Guru & Staf -->
-                    <a href="#" class="menu-item px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                        <i class="fas fa-users mr-2"></i>
-                        Guru & Staf
-                    </a>
-
                     <!-- Berita -->
                     <a href="#" class="menu-item px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                         <i class="fas fa-newspaper mr-2"></i>
@@ -218,9 +212,6 @@
                     <a href="#" class="px-4 py-3 rounded-lg text-white font-semibold text-center text-sm shadow-md" style="background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);">
                         <i class="fas fa-info-circle mr-2"></i>Profil
                     </a>
-                    <a href="#" class="px-4 py-3 rounded-lg text-white font-semibold text-center text-sm shadow-md" style="background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);">
-                        <i class="fas fa-users mr-2"></i>Guru & Staf
-                    </a>
                     <a href="#" class="px-4 py-3 rounded-lg text-white font-semibold text-center text-sm shadow-md" style="background: linear-gradient(135deg, var(--color-warning) 0%, #d97706 100%);">
                         <i class="fas fa-newspaper mr-2"></i>Berita
                     </a>
@@ -252,15 +243,21 @@
             <div class="mb-6">
                 <h3 class="text-xl font-semibold mb-4">Hubungi Kami</h3>
                 <div class="flex justify-center space-x-6 mb-4">
-                    <a href="tel:081274928879" class="text-gray-300 hover:text-white transition-colors duration-200">
+                    @if($profile?->telepon_url)
+                    <a href="{{ $profile->telepon_url }}" class="text-gray-300 hover:text-white transition-colors duration-200">
                         <i class="fas fa-phone text-xl"></i>
                     </a>
-                    <a href="https://wa.me/6281274928879" target="_blank" class="text-gray-300 hover:text-green-400 transition-colors duration-200">
+                    @endif
+                    @if($profile?->whatsapp_url)
+                    <a href="{{ $profile->whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-green-400 transition-colors duration-200">
                         <i class="fab fa-whatsapp text-xl"></i>
                     </a>
-                    <a href="mailto:info@mabarokatulqodiri.sch.id" class="text-gray-300 hover:text-white transition-colors duration-200">
+                    @endif
+                    @if($profile?->email)
+                    <a href="mailto:{{ $profile->email }}" class="text-gray-300 hover:text-white transition-colors duration-200">
                         <i class="fas fa-envelope text-xl"></i>
                     </a>
+                    @endif
                 </div>
                 
                 <!-- Detail Kontak -->
@@ -268,19 +265,19 @@
                     <div class="text-left">
                         <h4 class="font-semibold text-school-400 mb-2">Alamat Lengkap</h4>
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            {{ $profile->alamat ?? '' }}
+                            {{ $profile?->alamat ?: 'Alamat belum tersedia' }}
                         </p>
                     </div>
                     <div class="text-left">
                         <h4 class="font-semibold text-school-400 mb-2">Kontak</h4>
                         <div class="space-y-2 text-sm text-gray-300">
-                            @if($profile->telepon)
+                            @if($profile?->telepon)
                                 <p><i class="fas fa-phone mr-2 text-school-400"></i>{{ $profile->telepon }}</p>
                             @endif
-                            @if($profile->email)
+                            @if($profile?->email)
                                 <p><i class="fas fa-envelope mr-2 text-school-400"></i>{{ $profile->email }}</p>
                             @endif
-                            @if($profile->website)
+                            @if($profile?->website)
                                 <p><i class="fas fa-globe mr-2 text-school-400"></i>{{ $profile->website }}</p>
                             @endif
                         </div>
@@ -288,37 +285,47 @@
                 </div>
                 
                 <!-- Koordinat GPS -->
+                @if($profile?->koordinat_lat && $profile?->koordinat_lng)
                 <div class="bg-gray-700 rounded-lg p-4 mb-6">
                     <h4 class="font-semibold text-school-400 mb-2">Lokasi GPS</h4>
                     <div class="flex flex-wrap justify-center gap-4 text-sm">
                         <span class="bg-gray-600 px-3 py-1 rounded">
                             <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>
-                            Lat: -5.0371514
+                            Lat: {{ $profile->koordinat_lat }}
                         </span>
                         <span class="bg-gray-600 px-3 py-1 rounded">
                             <i class="fas fa-map-marker-alt mr-2 text-blue-400"></i>
-                            Lng: 103.7562727
+                            Lng: {{ $profile->koordinat_lng }}
                         </span>
+                        @if($profile->koordinat_alt)
                         <span class="bg-gray-600 px-3 py-1 rounded">
                             <i class="fas fa-mountain mr-2 text-green-400"></i>
-                            Alt: 82m dpl
+                            Alt: {{ $profile->koordinat_alt }}m dpl
                         </span>
+                        @endif
                     </div>
                     <div class="flex justify-center gap-3 mt-3">
-                        <a href="https://maps.google.com/?q=-5.0371514,103.7562727" 
-                           target="_blank" 
+                        @if($profile->google_maps_url)
+                        <a href="{{ $profile->google_maps_url }}" 
+                           target="_blank"
+                           rel="noopener noreferrer"
                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
                             <i class="fab fa-google mr-2"></i>
                             Google Maps
                         </a>
-                        <a href="https://waze.com/ul?ll=-5.0371514,103.7562727&navigate=yes" 
-                           target="_blank" 
+                        @endif
+                        @if($profile->waze_url)
+                        <a href="{{ $profile->waze_url }}" 
+                           target="_blank"
+                           rel="noopener noreferrer"
                            class="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200">
                             <i class="fas fa-car mr-2"></i>
                             Waze
                         </a>
+                        @endif
                     </div>
                 </div>
+                @endif
             </div>
             
             <div class="border-t border-gray-700 pt-6">
@@ -334,7 +341,7 @@
                     <span class="text-gray-400">cms</span>
                     <button onclick="showFeatures()" 
                             class="text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200 cursor-pointer">
-                        v1.2
+                        v1.3
                     </button>
                 </div>
             </div>
@@ -368,7 +375,7 @@
                                         <p class="text-lg text-blue-100 mt-1">{{ $schoolName }}</p>
                                     </div>
                                 </div>
-                                <p class="text-blue-100 text-base">Versi 1.2 - Sistem Manajemen Konten {{ __('school') }} Terdepan</p>
+                                <p class="text-blue-100 text-base">Versi 1.3 - Sistem Manajemen Konten {{ __('school') }} Terdepan</p>
                             </div>
                             <button onclick="hideFeatures()" class="text-white hover:text-yellow-300 text-2xl transition-all duration-300 hover:scale-110 bg-white/20 p-2 rounded-full backdrop-blur-sm">
                                 <i class="fas fa-times"></i>
@@ -379,11 +386,11 @@
                 
                 <!-- Content Modal dengan Warna yang Lebih Menarik -->
                 <div class="p-6 bg-gradient-to-br from-gray-50 to-blue-50">
-                    <!-- Pembaruan Versi 1.2 -->
+                    <!-- Pembaruan Versi 1.3 -->
                     <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200 mb-6">
                         <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
                             <i class="fas fa-sparkles text-emerald-500 mr-3 text-2xl"></i>
-                            Pembaruan Versi 1.2
+                            Pembaruan Versi 1.3
                         </h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div class="flex items-start space-x-3">
@@ -391,8 +398,8 @@
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-700 font-medium">Peningkatan Performa</p>
-                                    <p class="text-gray-600 text-sm">Optimasi query database dan caching untuk loading yang lebih cepat</p>
+                                    <p class="text-gray-700 font-medium">Slider Beranda yang Dikelola</p>
+                                    <p class="text-gray-600 text-sm">Hero slider beranda kini diatur dari admin: gambar, judul, tautan, urutan, dan status tampil</p>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
@@ -400,8 +407,8 @@
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-700 font-medium">Perbaikan UI/UX</p>
-                                    <p class="text-gray-600 text-sm">Peningkatan tampilan antarmuka dengan desain yang lebih modern dan responsif</p>
+                                    <p class="text-gray-700 font-medium">Widget Beranda</p>
+                                    <p class="text-gray-600 text-sm">Waktu sholat, kalender Hijriyah, agenda terdekat, tautan cepat, dan HTML kustom di sisi beranda</p>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
@@ -409,8 +416,8 @@
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-700 font-medium">Keamanan Ditingkatkan</p>
-                                    <p class="text-gray-600 text-sm">Pembaruan sistem keamanan dan perbaikan bug untuk stabilitas yang lebih baik</p>
+                                    <p class="text-gray-700 font-medium">Halaman Legal</p>
+                                    <p class="text-gray-600 text-sm">Kebijakan privasi, syarat layanan, dan kebijakan cookie yang lebih lengkap di footer</p>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
@@ -418,8 +425,8 @@
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-700 font-medium">Fitur Baru</p>
-                                    <p class="text-gray-600 text-sm">Penambahan fitur-fitur baru untuk meningkatkan pengalaman pengguna</p>
+                                    <p class="text-gray-700 font-medium">Beranda & Galeri</p>
+                                    <p class="text-gray-600 text-sm">Tampilan beranda diperbarui, galeri lebih fleksibel, dan tema halaman lebih konsisten</p>
                                 </div>
                             </div>
                         </div>
@@ -431,13 +438,25 @@
                             <i class="fas fa-history text-gray-500 mr-3 text-2xl"></i>
                             Riwayat Versi
                         </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Versi 1.2 (Current) -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Versi 1.3 (Current) -->
                             <div class="bg-white rounded-xl p-4 border-l-4 border-emerald-500 shadow-sm">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center space-x-2">
-                                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-bold">v1.2</span>
+                                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-bold">v1.3</span>
                                         <span class="text-gray-700 font-semibold text-sm">Versi Terkini</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-xs mb-2">15 September 2026</p>
+                                <p class="text-gray-600 text-sm">Slider beranda, widget waktu sholat & Hijriyah, halaman legal, dan penyegaran tampilan</p>
+                            </div>
+
+                            <!-- Versi 1.2 -->
+                            <div class="bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm opacity-75">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">v1.2</span>
+                                        <span class="text-gray-600 text-sm">Versi Sebelumnya</span>
                                     </div>
                                 </div>
                                 <p class="text-gray-600 text-xs mb-2">Januari 2025</p>
@@ -445,10 +464,10 @@
                             </div>
                             
                             <!-- Versi 1.1 -->
-                            <div class="bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm opacity-75">
+                            <div class="bg-white rounded-xl p-4 border-l-4 border-slate-300 shadow-sm opacity-75">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center space-x-2">
-                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">v1.1</span>
+                                        <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-bold">v1.1</span>
                                         <span class="text-gray-600 text-sm">Versi Sebelumnya</span>
                                     </div>
                                 </div>
@@ -492,18 +511,6 @@
                                         <div>
                                             <h4 class="font-bold text-gray-800 text-base group-hover:text-green-600 transition-colors duration-300">Profil {{ __('school') }}</h4>
                                             <p class="text-gray-600 mt-1 text-sm">Visi, misi, sejarah, dan struktur organisasi yang lengkap dan terstruktur</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="group bg-white rounded-xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-purple-500">
-                                    <div class="flex items-start">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
-                                            <i class="fas fa-users text-white text-sm"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 text-base group-hover:text-purple-600 transition-colors duration-300">Guru & Staf</h4>
-                                            <p class="text-gray-600 mt-1 text-sm">Informasi lengkap tenaga pendidik dengan foto dan biodata yang menarik</p>
                                         </div>
                                     </div>
                                 </div>

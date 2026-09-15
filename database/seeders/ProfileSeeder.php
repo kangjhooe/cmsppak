@@ -14,6 +14,7 @@ class ProfileSeeder extends Seeder
             ['id' => 1],
             [
                 'nama_sekolah' => 'Pondok Pesantren Al-Falah Krui',
+                'jenis_lembaga' => 'pesantren',
                 'npsn' => '12345678',
                 'alamat' => 'Jalan Raya Krui, Desa Krui, Kecamatan Pesisir Utara, Kabupaten Pesisir Barat, Lampung',
                 'telepon' => '081274928879',

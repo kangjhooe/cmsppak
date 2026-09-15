@@ -1,8 +1,8 @@
 {
     "$schema": "https://json.schemastore.org/package.json",
-    "name": "cms-pondok-pesantren-alfalah-krui",
-    "version": "1.0.0",
-    "description": "Content Management System untuk Pondok Pesantren Al-Falah Krui",
+    "name": "cms-sekolah",
+    "version": "1.3.0",
+    "description": "Content Management System untuk Sekolah",
     "private": true,
     "type": "module",
     "scripts": {

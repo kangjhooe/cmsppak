@@ -83,6 +83,29 @@
                     <!-- Tab Content: Informasi Dasar -->
                     <div id="content-basic" class="tab-content">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Jenis Lembaga -->
+                        <div class="md:col-span-2">
+                            <label for="jenis_lembaga" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-university text-emerald-600 mr-2"></i>
+                                Jenis Lembaga
+                            </label>
+                            <select name="jenis_lembaga" id="jenis_lembaga"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
+                                @foreach($jenisLembagaOptions ?? [] as $value => $label)
+                                    <option value="{{ $value }}" {{ old('jenis_lembaga', $profile?->jenis_lembaga ?? 'pesantren') === $value ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="mt-2 text-xs text-gray-500">
+                                Menyesuaikan istilah di situs: {{ __('kepala_sekolah') }}, {{ __('siswa') }}, dan {{ __('npsn_label') }}.
+                                Widget waktu sholat dan kalender Hijriah tetap bisa diaktifkan lewat Widget Beranda.
+                            </p>
+                            @error('jenis_lembaga')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Nama {{ __('school') }} -->
                         <div>
                             <label for="nama_sekolah" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -98,16 +121,16 @@
                             @enderror
                         </div>
 
-                        <!-- NPSN -->
+                        <!-- Nomor identitas lembaga -->
                         <div>
                             <label for="npsn" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <i class="fas fa-id-card text-indigo-600 mr-2"></i>
-                                NSPP
+                                {{ __('npsn_label') }}
                             </label>
                             <input type="text" name="npsn" id="npsn" 
                                    value="{{ old('npsn', $profile->npsn ?? '') }}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" 
-                                   placeholder="Nomor Pokok Sekolah Nasional">
+                                   placeholder="{{ __('npsn_hint') }}">
                             @error('npsn')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -362,32 +385,32 @@
                             @enderror
                         </div>
 
-                        <!-- Kepala {{ __('school') }} -->
+                        <!-- {{ __('kepala_sekolah') }} -->
                         <div>
                             <label for="kepala_sekolah" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <i class="fas fa-user-tie text-blue-600 mr-2"></i>
-                                Kepala {{ __('school') }}
+                                {{ __('kepala_sekolah') }}
                             </label>
                             <input type="text" name="kepala_sekolah" id="kepala_sekolah" 
                                    value="{{ old('kepala_sekolah', $profile->kepala_sekolah ?? '') }}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" 
-                                   placeholder="Nama kepala {{ __('school') }}">
+                                   placeholder="Nama {{ strtolower(__('kepala_sekolah')) }}">
                             @error('kepala_sekolah')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Foto Kepala {{ __('school') }} -->
+                        <!-- Foto {{ __('kepala_sekolah') }} -->
                         <div>
                             <label for="foto_kepala_madrasah" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <i class="fas fa-camera text-purple-600 mr-2"></i>
-                                Foto Kepala {{ __('school') }}
+                                Foto {{ __('kepala_sekolah') }}
                             </label>
                             <div class="space-y-3">
                                 @if($profile && $profile->foto_kepala_madrasah)
                                     <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
                                         <img src="{{ asset('storage/' . $profile->foto_kepala_madrasah) }}" 
-                                             alt="Foto Kepala Madrasah" 
+                                             alt="Foto {{ __('kepala_sekolah') }}" 
                                              class="w-16 h-16 object-cover rounded-full border-2 border-purple-300">
                                         <div class="flex-1">
                                             <p class="text-sm text-gray-600">Foto saat ini:</p>
@@ -401,6 +424,62 @@
                                 <p class="text-xs text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB</p>
                             </div>
                             @error('foto_kepala_madrasah')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="jumlah_siswa" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-users text-teal-600 mr-2"></i>
+                                Jumlah {{ __('siswa') }}
+                            </label>
+                            <input type="number" name="jumlah_siswa" id="jumlah_siswa" min="0"
+                                   value="{{ old('jumlah_siswa', $profile->jumlah_siswa ?? '') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                   placeholder="0">
+                            @error('jumlah_siswa')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="jumlah_guru" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-chalkboard-teacher text-cyan-600 mr-2"></i>
+                                Jumlah {{ __('guru') }}
+                            </label>
+                            <input type="number" name="jumlah_guru" id="jumlah_guru" min="0"
+                                   value="{{ old('jumlah_guru', $profile->jumlah_guru ?? '') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                   placeholder="0">
+                            @error('jumlah_guru')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="jumlah_kelas" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-door-open text-amber-600 mr-2"></i>
+                                Jumlah Kelas
+                            </label>
+                            <input type="number" name="jumlah_kelas" id="jumlah_kelas" min="0"
+                                   value="{{ old('jumlah_kelas', $profile->jumlah_kelas ?? '') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                   placeholder="0">
+                            @error('jumlah_kelas')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="tahun_berdiri" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-calendar-alt text-orange-600 mr-2"></i>
+                                Tahun Berdiri
+                            </label>
+                            <input type="number" name="tahun_berdiri" id="tahun_berdiri" min="1900" max="2100"
+                                   value="{{ old('tahun_berdiri', $profile->tahun_berdiri ?? '') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                   placeholder="{{ date('Y') }}">
+                            @error('tahun_berdiri')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -625,7 +704,7 @@
                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                                     <label for="profil_show_principal" class="ml-2 text-sm text-gray-700">
                                         <i class="fas fa-user-tie text-yellow-500 mr-1"></i>
-                                        Tampilkan Kepala Sekolah
+                                        Tampilkan {{ __('kepala_sekolah') }}
                                     </label>
                                 </div>
                                 <div class="flex items-center">

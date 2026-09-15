@@ -3,8 +3,8 @@
 @section('title', 'Profil ' . __('school') . ' - ' . $schoolName)
 
 @section('page-header')
-            <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem; color: white; line-height: 1.2; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">{{ $profile->profil_hero_title ?? 'Profil ' . __('school') }}</h1>
-    <p style="font-size: 1.125rem; color: #dcfce7; max-width: 64rem; margin: 0 auto; line-height: 1.6; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">{{ $profile->profil_hero_subtitle ?? $profile->nama_sekolah ?? $schoolName }}</p>
+            <h1 style="font-size: 1.65rem; font-weight: bold; margin-bottom: 0.75rem; color: white; line-height: 1.25; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">{{ $profile->profil_hero_title ?? 'Profil ' . __('school') }}</h1>
+    <p style="font-size: 0.98rem; color: #dcfce7; max-width: 64rem; margin: 0 auto; line-height: 1.55; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">{{ $profile->profil_hero_subtitle ?? $profile->nama_sekolah ?? $schoolName }}</p>
 @endsection
 
 @section('content')
@@ -20,7 +20,7 @@
                              src="{{ $profile->logo_url ?? asset('images/default-logo.png') }}" 
                              alt="Logo {{ $profile->nama_sekolah ?? $schoolName }}">
                     </div>
-                    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem; color: white; line-height: 1.2; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">
+                    <h2 style="font-size: 1.65rem; font-weight: bold; margin-bottom: 0.75rem; color: white; line-height: 1.2; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">
                         {{ $profile->profil_hero_subtitle ?? $profile->nama_sekolah ?? $schoolName }}
                     </h2>
                     <p style="font-size: 1.125rem; color: #dcfce7; max-width: 64rem; margin: 0 auto; line-height: 1.6; white-space: normal; overflow: visible; text-overflow: unset; -webkit-line-clamp: unset; display: block; -webkit-box-orient: unset; max-width: none; width: auto; height: auto; min-height: auto; max-height: none;" class="hero-text">
@@ -28,61 +28,39 @@
                     </p>
                     @if($profile->npsn)
                         <div class="mt-4 inline-block bg-white bg-opacity-20 px-4 py-2 rounded-full">
-                            <span class="text-sm">NSPP: {{ $profile->npsn }}</span>
+                            <span class="text-sm">{{ __('npsn_label') }}: {{ $profile->npsn }}</span>
                         </div>
                     @endif
                 </div>
             </div>
         </section>
 
-        <!-- Kepala {{ __('school') }} -->
+        <!-- {{ __('kepala_sekolah') }} -->
         @if($profile->shouldShowSection('profil_show_principal'))
-        @php
-            $kepalaMadrasah = $profile->getKepalaMadrasahData();
-        @endphp
-        @if($profile->foto_kepala_madrasah || $kepalaMadrasah || $profile->kepala_sekolah)
+        @if($profile->foto_kepala_madrasah || $profile->kepala_sekolah)
         <section class="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
             <div class="bg-gradient-to-r from-yellow-600 to-orange-700 px-8 py-6">
                 <h2 class="text-2xl font-bold text-white flex items-center">
                     <i class="fas fa-user-tie mr-3"></i>
-                    Kepala {{ __('school') }}
+                    {{ __('kepala_sekolah') }}
                 </h2>
             </div>
             <div class="p-8">
                 <div class="text-center">
                     @if($profile->foto_kepala_madrasah)
-                        <!-- Foto dari upload admin -->
                         <div class="w-48 h-48 rounded-full overflow-hidden mx-auto mb-8 border-6 border-yellow-400 shadow-2xl transform hover:scale-105 transition-transform duration-300">
                             <img src="{{ $profile->foto_kepala_madrasah_url }}" 
-                                 alt="{{ $profile->kepala_sekolah ?? 'Kepala ' . $schoolName }}" 
+                                 alt="{{ $profile->kepala_sekolah ?? __('kepala_sekolah') }}" 
                                  class="w-full h-full object-cover">
                         </div>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-3">{{ $profile->kepala_sekolah ?? 'Kepala ' . $schoolName }}</h3>
-                        <p class="text-lg text-gray-600 mb-6">Kepala {{ __('school') }} {{ $schoolName }}</p>
-                    @elseif($kepalaMadrasah && $kepalaMadrasah->foto)
-                        <!-- Foto dari data guru-staf -->
-                        <div class="w-48 h-48 rounded-full overflow-hidden mx-auto mb-8 border-6 border-yellow-400 shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                            <img src="{{ asset('storage/' . $kepalaMadrasah->foto) }}" 
-                                 alt="{{ $kepalaMadrasah->nama_lengkap }}" 
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-3">{{ $kepalaMadrasah->nama_lengkap }}</h3>
-                        <p class="text-lg text-gray-600 mb-4">Kepala {{ __('school') }} {{ $schoolName }}</p>
-                        @if($kepalaMadrasah->nip)
-                            <p class="text-sm text-gray-500 mb-4">NIP: {{ $kepalaMadrasah->nip }}</p>
-                        @endif
-                        @if($kepalaMadrasah->biodata)
-                            <div class="max-w-3xl mx-auto">
-                                <p class="text-gray-600 text-base leading-relaxed">{{ Str::limit($kepalaMadrasah->biodata, 300) }}</p>
-                            </div>
-                        @endif
+                        <h3 class="text-3xl font-bold text-gray-900 mb-3">{{ $profile->kepala_sekolah ?? __('kepala_sekolah') }}</h3>
+                        <p class="text-lg text-gray-600 mb-6">{{ __('kepala_sekolah') }} {{ $schoolName }}</p>
                     @else
-                        <!-- Default icon jika tidak ada foto -->
                         <div class="w-48 h-48 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
                             <i class="fas fa-user-tie text-white text-6xl"></i>
                         </div>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-3">{{ $profile->kepala_sekolah ?? 'Kepala ' . $schoolName }}</h3>
-                        <p class="text-lg text-gray-600">Kepala {{ __('school') }} {{ $schoolName }}</p>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-3">{{ $profile->kepala_sekolah ?? __('kepala_sekolah') }}</h3>
+                        <p class="text-lg text-gray-600">{{ __('kepala_sekolah') }} {{ $schoolName }}</p>
                     @endif
                 </div>
             </div>
@@ -106,7 +84,7 @@
                             <i class="fas fa-users text-2xl"></i>
                         </div>
                         <div class="text-3xl font-bold mb-2">{{ number_format($profile->jumlah_siswa ?? 100) }}</div>
-                        <div class="text-green-100">Total Santri</div>
+                        <div class="text-green-100">Total {{ __('siswa') }}</div>
                     </div>
                     
                     <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl text-center text-white shadow-lg transform hover:scale-105 transition-transform duration-300">
@@ -114,7 +92,7 @@
                             <i class="fas fa-chalkboard-teacher text-2xl"></i>
                         </div>
                         <div class="text-3xl font-bold mb-2">{{ number_format($profile->jumlah_guru ?? 25) }}</div>
-                        <div class="text-green-100">Total Guru</div>
+                        <div class="text-green-100">Total {{ __('guru') }}</div>
                     </div>
                     
                     <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl text-center text-white shadow-lg transform hover:scale-105 transition-transform duration-300">
@@ -157,7 +135,7 @@
                             <h3 class="text-xl font-bold text-gray-900">Visi</h3>
                         </div>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ $profile->visi ?? 'Membentuk generasi yang beriman, bertaqwa, berakhlak mulia, dan berprestasi tinggi dalam bidang akademik dan non-akademik.' }}
+                            {{ $profile->visi ?: 'Visi belum tersedia.' }}
                         </p>
                     </div>
                     
@@ -502,10 +480,14 @@
                             <i class="fas fa-phone text-white text-2xl"></i>
                         </div>
                         <h3 class="font-semibold text-gray-900 mb-2">Telepon Darurat</h3>
-                        <p class="text-gray-600 mb-3">081274928879</p>
-                        <a href="tel:081274928879" class="inline-block bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
+                        @if($profile?->telepon)
+                        <p class="text-gray-600 mb-3">{{ $profile->telepon }}</p>
+                        <a href="{{ $profile->telepon_url }}" class="inline-block bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
                             <i class="fas fa-phone mr-2"></i>Hubungi
                         </a>
+                        @else
+                        <p class="text-gray-600 mb-3">Nomor telepon belum tersedia</p>
+                        @endif
                     </div>
                     
                     <div class="text-center p-6 bg-gradient-to-br from-red-50 to-pink-50 rounded-xl border border-red-200">
@@ -663,7 +645,7 @@ h1.hero-text, h2.hero-text, p.hero-text {
 
 /* Gradient text untuk judul section */
 .gradient-text {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -783,18 +765,18 @@ h1.hero-text, h2.hero-text, p.hero-text {
 }
 
 .struktur-content h1 {
-    font-size: 2rem;
+    font-size: 1.65rem;
     border-bottom: 3px solid #059669;
     padding-bottom: 0.5rem;
 }
 
 .struktur-content h2 {
-    font-size: 1.75rem;
+    font-size: 1.4rem;
     color: #059669;
 }
 
 .struktur-content h3 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #047857;
 }
 

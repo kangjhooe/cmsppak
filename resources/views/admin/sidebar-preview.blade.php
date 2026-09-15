@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const alpineComponent = document.querySelector('[x-data]').__x.$data;
         if (alpineComponent) {
-            alpineComponent.activeMenu = 'guru-staf';
+            alpineComponent.activeMenu = 'berita';
         }
     }, 1000);
     

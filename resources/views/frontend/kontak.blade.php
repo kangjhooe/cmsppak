@@ -3,7 +3,7 @@
 @section('title', 'Kontak - ' . ($profile->nama_sekolah ?? $schoolName))
 
 @section('page-header')
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Hubungi Kami</h1>
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">Hubungi Kami</h1>
     <p class="text-xl text-green-100 max-w-3xl mx-auto">
         Kami siap membantu dan menjawab pertanyaan Anda seputar {{ $profile->nama_sekolah ?? $schoolName }}
     </p>
@@ -263,7 +263,7 @@
                                    required 
                                    class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
                             <label for="setuju" class="ml-2 text-sm text-gray-700">
-                                Saya setuju dengan <a href="#" class="text-green-600 hover:text-green-800">kebijakan privasi</a> dan <a href="#" class="text-green-600 hover:text-green-800">syarat penggunaan</a>
+                                Saya setuju dengan <a href="{{ route('privacy') }}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800">kebijakan privasi</a> dan <a href="{{ route('terms') }}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800">syarat layanan</a>
                             </label>
                         </div>
                         

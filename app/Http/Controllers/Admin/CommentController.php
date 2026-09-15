@@ -36,7 +36,7 @@ class CommentController extends Controller
             $query->whereDate('created_at', '>=', $request->date_from);
         }
         
-        $comments = $query->paginate(15);
+        $comments = $query->paginate(15)->withQueryString();
         
         // Statistik komentar
         $stats = [

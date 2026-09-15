@@ -7,14 +7,13 @@
     sidebarOpen: false, 
     sidebarCollapsed: false,
     activeMenu: '{{ 
-        request()->routeIs('admin.guru-staf*') ? 'guru-staf' : 
-        (request()->routeIs('admin.berita*') ? 'berita' : 
+        request()->routeIs('admin.berita*') ? 'berita' : 
         (request()->routeIs('admin.agenda*') ? 'agenda' : 
         (request()->routeIs('admin.galeri*') ? 'galeri' : 
         (request()->routeIs('admin.downloads*') ? 'downloads' : 
         (request()->routeIs('admin.buku-tamu*') ? 'buku-tamu' : 
         (request()->routeIs('admin.users*') ? 'users' : 
-        (request()->routeIs('admin.roles*') ? 'roles' : ''))))))) 
+        (request()->routeIs('admin.roles*') ? 'roles' : '')))))) 
     }}',
     toggleSidebar() {
         this.sidebarCollapsed = !this.sidebarCollapsed;
@@ -93,35 +92,6 @@
                     <div class="px-3 mb-4">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Manajemen Konten</p>
                         <div class="w-8 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 mt-2 rounded-full"></div>
-                    </div>
-                    
-                    <!-- Guru & Staf Menu -->
-                    <div class="space-y-2">
-                        <button @click="toggleMenu('guru-staf')" 
-                                class="w-full flex items-center justify-between px-4 py-3 text-slate-100 rounded-xl hover:bg-green-500/20 hover:text-white transition-all duration-200 font-semibold text-sm {{ request()->routeIs('admin.guru-staf*') ? 'bg-green-500 text-white shadow-lg' : '' }}">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-                                    <i class="fas fa-users text-white text-sm"></i>
-                                </div>
-                                <span class="text-sm font-semibold ml-3">Guru & Staf</span>
-                            </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-300" 
-                               :class="{'rotate-180': activeMenu === 'guru-staf'}"></i>
-                        </button>
-                        
-                        <!-- Submenu Guru & Staf -->
-                        <div x-show="activeMenu === 'guru-staf'" x-transition class="ml-4 space-y-1 border-l-2 border-green-500/30 pl-4">
-                            <a href="{{ route('admin.guru-staf.index') }}" 
-                               class="flex items-center px-4 py-2.5 text-slate-200 rounded-lg hover:bg-green-500/20 hover:text-white transition-all duration-200 text-sm {{ request()->routeIs('admin.guru-staf.index') ? 'bg-green-500/20 text-white' : '' }}">
-                                <i class="fas fa-list text-xs mr-3"></i>
-                                <span>Daftar Guru & Staf</span>
-                            </a>
-                            <a href="{{ route('admin.guru-staf.create') }}" 
-                               class="flex items-center px-4 py-2.5 text-slate-200 rounded-lg hover:bg-green-500/20 hover:text-white transition-all duration-200 text-sm {{ request()->routeIs('admin.guru-staf.create') ? 'bg-green-500/20 text-white' : '' }}">
-                                <i class="fas fa-plus text-xs mr-3"></i>
-                                <span>Tambah Baru</span>
-                            </a>
-                        </div>
                     </div>
                     
                     <!-- Berita Menu -->
@@ -363,7 +333,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400 text-sm"></i>
                         </div>
-                        <input type="text" placeholder="Cari berita, agenda, guru..." 
+                        <input type="text" placeholder="Cari berita, agenda..." 
                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-200">
                     </div>
                 </div>

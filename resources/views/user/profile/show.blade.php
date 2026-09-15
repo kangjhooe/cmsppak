@@ -169,18 +169,18 @@
             </div>
         </div>
 
-        <!-- Informasi Pondok Pesantren (jika user adalah admin/operator) -->
+        <!-- Informasi sekolah (jika user adalah admin/operator) -->
         @if(($user->role === 'admin' || $user->role === 'operator') && $profile)
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg mb-6">
             <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-6 text-white">
-                <h2 class="text-2xl font-bold">Informasi Pondok Pesantren</h2>
+                <h2 class="text-2xl font-bold">Informasi {{ __('school') }}</h2>
                 <p class="text-green-100">Data profil institusi yang Anda kelola</p>
             </div>
             <div class="px-6 py-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="text-center p-4 bg-green-50 rounded-lg">
                         <div class="text-2xl font-bold text-green-600">{{ $profile->nama_sekolah ?? $schoolName ?? '' }}</div>
-                        <div class="text-sm text-gray-600">Nama Pondok Pesantren</div>
+                        <div class="text-sm text-gray-600">Nama {{ __('school') }}</div>
                     </div>
                     <div class="text-center p-4 bg-blue-50 rounded-lg">
                         <div class="text-2xl font-bold text-blue-600">{{ $profile->npsn ?? 'N/A' }}</div>
@@ -193,7 +193,7 @@
                 </div>
                 <div class="mt-4 text-center">
                     <a href="{{ route('admin.profile.index') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                        <i class="fas fa-edit mr-2"></i>Kelola Profil Pondok Pesantren
+                        <i class="fas fa-edit mr-2"></i>Kelola Profil {{ __('school') }}
                     </a>
                 </div>
             </div>

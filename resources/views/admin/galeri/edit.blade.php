@@ -254,7 +254,9 @@
                                                 <div class="mb-3">
                                                     @if($item->jenis == 'foto' && $item->file_path)
                                                         <img src="{{ asset('storage/' . $item->file_path) }}" class="w-full h-24 object-cover rounded-lg" alt="{{ $item->judul }}">
-                                                    @elseif($item->jenis == 'youtube' && $item->youtube_url)
+                                                    @elseif($item->jenis == 'youtube' && $item->youtube_thumbnail_url)
+                                                        <img src="{{ $item->youtube_thumbnail_url }}" class="w-full h-24 object-cover rounded-lg" alt="{{ $item->judul }}">
+                                                    @elseif($item->jenis == 'youtube')
                                                         <div class="w-full h-24 bg-gradient-to-br from-red-50 to-red-100 rounded-lg flex items-center justify-center">
                                                             <i class="fab fa-youtube text-red-500 text-2xl"></i>
                                                         </div>
@@ -265,19 +267,18 @@
                                                     @endif
                                                 </div>
                                                 
-                                                <!-- Actions -->
+                                                <!-- Actions: Hapus uses form= to avoid nested <form> (which browsers ignore and would DELETE the whole gallery) -->
                                                 <div class="flex items-center justify-between">
-                                                    <a href="{{ route('admin.galeri.items.edit', $item) }}" 
+                                                    <a href="{{ route('admin.galeri.items.edit', ['galeri' => $galeri, 'galeriItem' => $item]) }}" 
                                                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                                         <i class="fas fa-edit mr-1"></i>Edit
                                                     </a>
-                                                    <form action="{{ route('admin.galeri.items.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                                            <i class="fas fa-trash mr-1"></i>Hapus
-                                                        </button>
-                                                    </form>
+                                                    <button type="submit"
+                                                            form="delete-galeri-item-{{ $item->id }}"
+                                                            class="text-red-600 hover:text-red-800 text-sm font-medium"
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
+                                                        <i class="fas fa-trash mr-1"></i>Hapus
+                                                    </button>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -292,7 +293,7 @@
                                     <div class="text-center">
                                         <!-- Media Type Selection -->
                                         <div class="mb-4">
-                                            <select name="media_types[]" 
+                                            <select name="media_types[{{ $i }}]" 
                                                     class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 media-type-select bg-white hover:border-gray-300"
                                                     onchange="toggleMediaType(this)">
                                                 <option value="file">📁 Upload File</option>
@@ -303,10 +304,10 @@
                                         <!-- File Upload Area -->
                                         <div class="upload-area mb-4 file-upload-section">
                                             <input type="file" 
-                                                   name="media_files[]" 
+                                                   name="media_files[{{ $i }}]" 
                                                    id="media_file_{{ $i }}"
                                                    class="hidden media-file-input" 
-                                                   accept="image/*,video/*"
+                                                   accept="image/*"
                                                    >
                                             
                                             <label for="media_file_{{ $i }}" class="cursor-pointer block">
@@ -327,7 +328,7 @@
                                         <!-- YouTube URL Area -->
                                         <div class="youtube-url-section mb-4 hidden">
                                             <input type="url" 
-                                                   name="youtube_urls[]" 
+                                                   name="youtube_urls[{{ $i }}]" 
                                                    placeholder="Masukkan URL YouTube"
                                                    class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 youtube-url-input bg-white hover:border-gray-300"
                                                    >
@@ -342,7 +343,7 @@
                                             <!-- Judul Media -->
                                             <div>
                                                 <input type="text" 
-                                                       name="media_titles[]" 
+                                                       name="media_titles[{{ $i }}]" 
                                                        placeholder="Judul media"
                                                        class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 bg-white hover:border-gray-300"
                                                        >
@@ -351,7 +352,7 @@
                                             <!-- Urutan -->
                                             <div>
                                                 <input type="number" 
-                                                       name="media_orders[]" 
+                                                       name="media_orders[{{ $i }}]" 
                                                        value="{{ $i + 1 }}"
                                                        min="1" 
                                                        max="12"
@@ -424,6 +425,19 @@
                             </div>
                         </div>
                     </form>
+
+                    {{-- Separate delete forms (must stay outside #galeriForm; nested forms are invalid HTML) --}}
+                    @if($galeri->items && $galeri->items->count() > 0)
+                        @foreach($galeri->items as $item)
+                            <form id="delete-galeri-item-{{ $item->id }}"
+                                  action="{{ route('admin.galeri.items.destroy', ['galeri' => $galeri, 'galeriItem' => $item]) }}"
+                                  method="POST"
+                                  class="hidden">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>
@@ -594,27 +608,24 @@
                 isValid = false;
             }
             
-            // Validate media files (minimum 4) - check both existing items and new uploads
-            const existingItems = document.querySelectorAll('.bg-white.rounded-xl.p-4.shadow-sm.border.border-gray-200');
-            const fileInputs = document.querySelectorAll('.media-file-input');
-            const youtubeInputs = document.querySelectorAll('.youtube-url-input');
-            let mediaCount = existingItems.length;
-            
-            fileInputs.forEach(input => {
-                if (input.files && input.files.length > 0) {
-                    mediaCount++;
+            // Existing + new uploads (count by slot type)
+            const existingItems = document.querySelectorAll('[id^="delete-galeri-item-"]').length;
+            let newMediaCount = 0;
+            document.querySelectorAll('.media-upload-item').forEach(item => {
+                const type = item.querySelector('.media-type-select')?.value || 'file';
+                if (type === 'youtube') {
+                    const url = item.querySelector('.youtube-url-input')?.value?.trim();
+                    if (url) newMediaCount++;
+                } else {
+                    const fileInput = item.querySelector('.media-file-input');
+                    if (fileInput?.files?.length > 0) newMediaCount++;
                 }
             });
+            const mediaCount = existingItems + newMediaCount;
             
-            youtubeInputs.forEach(input => {
-                if (input.value.trim()) {
-                    mediaCount++;
-                }
-            });
-            
-            // Only require minimum 4 media if user is trying to upload media
-            if (mediaCount > 0 && mediaCount < 4) {
-                errorMessages.push('Minimal 4 media harus diupload');
+            // Edit: no forced min-4 if only updating info; only warn if adding partial new set with total < 4
+            if (newMediaCount > 0 && mediaCount < 4) {
+                errorMessages.push('Total media minimal 4 (foto atau YouTube)');
                 isValid = false;
             }
             

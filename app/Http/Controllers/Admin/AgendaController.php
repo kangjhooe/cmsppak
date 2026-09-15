@@ -8,10 +8,38 @@ use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $agenda = Agenda::latest()->paginate(10);
-        return view('admin.agenda.index', compact('agenda'));
+        $query = Agenda::query()->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhere('lokasi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('jenis')) {
+            $jenis = $request->jenis === 'non-akademik' ? 'non_akademik' : $request->jenis;
+            $query->where('jenis', $jenis);
+        }
+
+        if ($request->filled('status')) {
+            $query->byAutoStatus($request->status);
+        }
+
+        $agenda = $query->paginate(10)->withQueryString();
+
+        $stats = [
+            'total' => Agenda::count(),
+            'upcoming' => Agenda::byAutoStatus('upcoming')->count(),
+            'ongoing' => Agenda::byAutoStatus('ongoing')->count(),
+            'completed' => Agenda::byAutoStatus('completed')->count(),
+        ];
+
+        return view('admin.agenda.index', compact('agenda', 'stats'));
     }
 
     public function create()

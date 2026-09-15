@@ -83,17 +83,17 @@ class Galeri extends Model
     }
 
     /**
-     * Get item pertama untuk thumbnail
+     * Get item pertama untuk thumbnail (prefer foto, then youtube, then any)
      */
     public function getThumbnailItemAttribute()
     {
-        // Jika activeItems sudah di-load, gunakan yang sudah ada
-        if ($this->relationLoaded('activeItems')) {
-            return $this->activeItems->first();
-        }
-        
-        // Jika belum di-load, lakukan query
-        return $this->activeItems()->first();
+        $items = $this->relationLoaded('activeItems')
+            ? $this->activeItems
+            : $this->activeItems()->get();
+
+        return $items->firstWhere('jenis', 'foto')
+            ?? $items->firstWhere('jenis', 'youtube')
+            ?? $items->first();
     }
 
     /**
@@ -102,8 +102,8 @@ class Galeri extends Model
     public function getThumbnailUrlAttribute()
     {
         $item = $this->thumbnailItem;
-        if ($item) {
-            return asset('storage/' . $item->file_path);
+        if ($item && $item->preview_url) {
+            return $item->preview_url;
         }
         return asset('images/default-galeri.jpg');
     }

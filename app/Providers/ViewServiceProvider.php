@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
+use App\Helpers\InstitutionHelper;
 use App\Models\Profile;
 
 class ViewServiceProvider extends ServiceProvider
@@ -24,6 +25,8 @@ class ViewServiceProvider extends ServiceProvider
     {
         // Check if profiles table exists before accessing it
         if (!Schema::hasTable('profiles')) {
+            InstitutionHelper::applyTranslations(null);
+
             return;
         }
 
@@ -33,15 +36,21 @@ class ViewServiceProvider extends ServiceProvider
             $profile = null;
         }
 
+        InstitutionHelper::applyTranslations($profile);
+
         $schoolName = data_get($profile, 'nama_sekolah', config('app.name'));
         $schoolTagline = data_get($profile, 'profil_hero_subtitle', $schoolName);
         $schoolDescription = data_get($profile, 'profil_hero_description', data_get($profile, 'deskripsi', $schoolTagline));
+        $institutionType = InstitutionHelper::currentJenis($profile);
+        $institutionTerms = InstitutionHelper::terms($institutionType, $profile);
 
         $sharedData = [
             'profile' => $profile,
             'schoolName' => $schoolName,
             'schoolTagline' => $schoolTagline,
             'schoolDescription' => $schoolDescription,
+            'institutionType' => $institutionType,
+            'institutionTerms' => $institutionTerms,
         ];
 
         // Share profile data to all frontend views

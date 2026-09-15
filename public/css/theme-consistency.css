@@ -180,6 +180,17 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1440px) {
+    html {
+        font-size: 14px;
+    }
+
+    body {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+    }
+}
+
 @media (max-width: 768px) {
     .mobile-primary {
         background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);

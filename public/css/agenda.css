@@ -5,22 +5,22 @@
     overflow: hidden;
 }
 
-/* Enhanced button styles for agenda - menggunakan warna logo hijau */
+/* Enhanced button styles for agenda */
 .agenda-btn-primary {
-    background: linear-gradient(135deg, #008000 0%, #006600 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.2);
+    box-shadow: var(--shadow-primary, 0 4px 15px rgba(0, 128, 0, 0.2));
 }
 
 .agenda-btn-primary:hover {
-    background: linear-gradient(135deg, #00A000 0%, #008000 100%);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 128, 0, 0.3);
 }
 
-/* Icon container styles - menggunakan warna logo hijau */
+/* Icon container styles */
 .agenda-icon-container {
-    background: linear-gradient(135deg, #008000 0%, #006600 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     transition: all 0.3s ease;
 }
 
@@ -29,9 +29,9 @@
     box-shadow: 0 8px 20px rgba(0, 128, 0, 0.3);
 }
 
-/* Info icon containers - menggunakan warna hijau muda dari logo */
+/* Info icon containers */
 .agenda-info-icon {
-    background: linear-gradient(135deg, #f0fff0 0%, #e0ffe0 100%);
+    background: linear-gradient(135deg, var(--color-background, #f0fff0) 0%, #e0ffe0 100%);
     transition: all 0.3s ease;
 }
 
@@ -56,14 +56,14 @@
 }
 
 .agenda-date-badge {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    box-shadow: var(--shadow-primary, 0 10px 25px rgba(0, 128, 0, 0.3));
     transition: all 0.3s ease;
 }
 
 .agenda-date-badge:hover {
     transform: scale(1.05);
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 128, 0, 0.4);
 }
 
 .agenda-status-badge {
@@ -86,25 +86,25 @@
 }
 
 .agenda-filter-button {
-    background: linear-gradient(135deg, #008000 0%, #006600 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     transition: all 0.3s ease;
 }
 
 .agenda-filter-button:hover {
-    background: linear-gradient(135deg, #00A000 0%, #008000 100%);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(0, 128, 0, 0.3);
 }
 
 .agenda-detail-button {
-    background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     transition: all 0.3s ease;
 }
 
 .agenda-detail-button:hover {
-    background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
     transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 128, 0, 0.3);
 }
 
 /* Countdown Timer Styles */
@@ -201,7 +201,7 @@
 
 /* Gradient text animation */
 .gradient-text {
-    background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+    background: linear-gradient(-45deg, var(--color-primary), var(--color-secondary), var(--color-accent), #FFFFFF);
     background-size: 400% 400%;
     animation: gradient 3s ease infinite;
     -webkit-background-clip: text;
@@ -286,12 +286,12 @@
 }
 
 .agenda-container::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
     border-radius: 10px;
 }
 
 .agenda-container::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-secondary-dark));
 }
 
 /* Countdown specific animations */

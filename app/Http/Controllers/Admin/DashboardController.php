@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
-use App\Models\GuruStaf;
 use App\Models\Agenda;
 use App\Models\BukuTamu;
 use App\Models\Download;
 use App\Models\GaleriItem;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -21,7 +21,6 @@ class DashboardController extends Controller
         $data = [
             'total_users' => User::count(),
             'total_berita' => Berita::count(),
-            'total_guru_staf' => GuruStaf::count(),
             'total_agenda' => Agenda::count(),
             'total_downloads' => Download::count(),
             'total_buku_tamu' => BukuTamu::count(),
@@ -41,10 +40,6 @@ class DashboardController extends Controller
                 ->limit(5)
                 ->get(),
             
-            // Statistik guru & staf
-            'guru_staf_aktif' => GuruStaf::where('status', 'aktif')->count(),
-            'guru_staf_nonaktif' => GuruStaf::where('status', 'nonaktif')->count(),
-            
             // Statistik galeri
             'galeri_foto' => GaleriItem::where('jenis', 'foto')->where('status', 'active')->count(),
             
@@ -58,6 +53,9 @@ class DashboardController extends Controller
             'pesan_sudah_dibaca' => BukuTamu::where('status', 'read')->count(),
             'pesan_sudah_dibalas' => BukuTamu::where('status', 'replied')->count(),
             'pesan_terbaru' => BukuTamu::latest()->limit(5)->get(),
+
+            // Komentar
+            'komentar_pending' => Comment::where('status', 'pending')->count(),
             
             // Statistik bulanan
             'berita_bulan_ini' => Berita::whereMonth('created_at', Carbon::now()->month)->count(),
