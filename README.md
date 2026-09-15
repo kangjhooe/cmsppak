@@ -1,6 +1,8 @@
 # CMS Pondok Pesantren Al-Falah Krui
 
-Content Management System (CMS) untuk website pondok pesantren "Al-Falah Krui" yang dibangun menggunakan Laravel 10.
+**Versi 1.3** — 15 September 2026
+
+Content Management System (CMS) untuk website pondok pesantren "Al-Falah Krui" yang dibangun menggunakan Laravel.
 
 ## Fitur Utama
 
